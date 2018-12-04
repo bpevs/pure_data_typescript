@@ -3,14 +3,13 @@
  * @description Defines window properties
  *
  * @example
- *  #X obj 30 27 midiin;
- *  #X obj 26 59 midiout;
- *  #X connect 0 0 1 0;
- *  #X connect 0 1 1 1;
  */
 
 
 export class PDCanvas {
+  public readonly chunkType = "N"
+  public readonly elementType = "canvas"
+
   public name: string
   public openOnLoad: boolean
   public xPos: number
@@ -25,5 +24,9 @@ export class PDCanvas {
     this.xSize = Number(xSize)
     this.ySize = Number(ySize)
     this.openOnLoad = Boolean(openOnLoad)
+  }
+
+  public toString() {
+    return `#N canvas ${this.xPos} ${this.yPos} ${this.xSize} ${this.ySize} ${this.name} ${this.openOnLoad}`
   }
 }

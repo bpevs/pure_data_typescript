@@ -12,11 +12,14 @@
  */
 
 export class PDFloatatom {
+  public readonly chunkType = "X"
+  public readonly elementType = "floatatom"
+
   public lowerLimit: number
-  public label: string
+  public label?: string
   public labelPos: number
-  public receive: string
-  public send: string
+  public receive?: string
+  public send?: string
   public upperLimit: number
   public width: number
   public xPos: number
@@ -24,13 +27,22 @@ export class PDFloatatom {
 
   constructor([ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send ]: string[]) {
     this.lowerLimit = Number(lowerLimit)
-    this.label = String(label === "-" ? "" : label)
+    this.label = String(label === "-" ? undefined : label)
     this.labelPos = Number(labelPos)
-    this.receive = String(receive === "-" ? "" : receive)
-    this.send = String(send === "-" ? "" : send)
+    this.receive = String(receive === "-" ? undefined : receive)
+    this.send = String(send === "-" ? undefined : send)
     this.upperLimit = Number(upperLimit)
     this.width = Number(width)
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
+  }
+
+  public toString() {
+    let str = `#X floatatom ${this.xPos} ${this.yPos} ${this.width}` +
+      ` ${this.lowerLimit} ${this.upperLimit} ${this.labelPos}`
+    str += (this.label || "-")
+    str += (this.receive || "-")
+    str += (this.send || "-")
+    return str
   }
 }

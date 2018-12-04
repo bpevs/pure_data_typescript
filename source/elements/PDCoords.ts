@@ -12,6 +12,9 @@
  */
 
 export class PDCoords {
+  public readonly chunkType = "X"
+  public readonly elementType = "coords"
+
   public graphOnParent: boolean
   public height: number
   public width: number
@@ -28,5 +31,10 @@ export class PDCoords {
     this.width = Number(width)
     this.height = Number(height)
     this.graphOnParent = Boolean(graphOnParent)
+  }
+
+  public toString() {
+    return `#X coords ${this.xFrom} ${this.yTo} ${this.xTo} ${this.yFrom}` +
+      ` ${this.width} ${this.height} ${this.graphOnParent ? 1 : 0}`
   }
 }
