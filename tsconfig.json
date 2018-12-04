@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": ".",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "scripthost"
+    ],
+    "module": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "/node_modules/*"
+      ]
+    },
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "target": "es5"
+  },
+  "exclude": [
+    "node_modules",
+    "/node_modules",
+    "**/*dist/**/*",
+    "**/*.test.js"
+  ],
+  "include": [
+    "./source/**/*"
+  ]
+}
