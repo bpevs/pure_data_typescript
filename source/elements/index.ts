@@ -1,3 +1,4 @@
+export * from "./PDArray.js"
 export * from "./PDCanvas.js"
 export * from "./PDConnect.js"
 export * from "./PDCoords.js"

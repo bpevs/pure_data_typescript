@@ -1,7 +1,7 @@
 import { deserializeFromFile, serializeToFile } from "./utilities/serialization.js"
 
 
-fetch("/example/example.pd")
+fetch("/example/BPD_fft.pd")
   .then(res => res.text())
   .then(text => {
     const deserialized = deserializeFromFile(text)
