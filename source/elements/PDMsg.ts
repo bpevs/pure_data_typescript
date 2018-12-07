@@ -1,4 +1,4 @@
-const body = document.getElementsByTagName("body")[0]
+import { context as ctx, OBJECT_HEIGHT } from "../constants.js"
 
 /**
  * @class PDMsg
@@ -23,19 +23,16 @@ export class PDMsg {
   }
 
   public render() {
-    const node = document.createElement("p")
+    ctx.lineWidth = "1.5"
+    ctx.strokeStyle = "black"
+    ctx.strokeRect(this.xPos - 5, this.yPos - 15, this.text.length * 9 + 10, OBJECT_HEIGHT)
 
-    Object.assign(node.style, {
-      border: "1px solid black",
-      cursor: "default",
-      left: String(this.xPos) + "px",
-      padding: "2px",
-      position: "fixed",
-      top: String(this.yPos) + "px",
-    })
+    ctx.fillStyle = "black"
+    ctx.font = "10pt monaco"
+    ctx.fillText(this.text, this.xPos, this.yPos)
 
-    node.appendChild(document.createTextNode(this.text))
-    body.appendChild(node)
+    ctx.fillRect(this.xPos - 5, this.yPos - 16, 8, 4)
+    ctx.fillRect(this.xPos - 5, this.yPos + 5, 8, 4)
   }
 
   public toString() {
