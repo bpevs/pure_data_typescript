@@ -1,3 +1,5 @@
+const body = document.getElementsByTagName("body")[0]
+
 /**
  * @class PDMsg
  * @description Defines a message
@@ -18,6 +20,22 @@ export class PDMsg {
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
     this.text = params.join(" ")
+  }
+
+  public render() {
+    const node = document.createElement("p")
+
+    Object.assign(node.style, {
+      border: "1px solid black",
+      cursor: "default",
+      left: String(this.xPos) + "px",
+      padding: "2px",
+      position: "fixed",
+      top: String(this.yPos) + "px",
+    })
+
+    node.appendChild(document.createTextNode(this.text))
+    body.appendChild(node)
   }
 
   public toString() {
