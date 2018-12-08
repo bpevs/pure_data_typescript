@@ -1,16 +1,16 @@
 import { drawBox } from "../utilities/drawBox.js"
 
 /**
- * @class PDMsg
+ * @class PDtext
  * @description Defines a message
  *
  * @example
- *  #X msg 61 48 read audio.wav;
+ *  #X text 61 48 read audio.wav;
  */
 
-export class PDMsg {
+export class PDText {
   public readonly chunkType = "X"
-  public readonly elementType = "msg"
+  public readonly elementType = "text"
 
   public text: string // The content of the message
   public xPos: number // Horizontal position within the window
@@ -24,16 +24,14 @@ export class PDMsg {
 
   public render() {
     drawBox({
-      inlets: ["bang"],
-      outlets: ["signal"],
       text: this.text,
-      type: "msg",
+      type: "text",
       xPos: this.xPos,
       yPos: this.yPos,
     })
   }
 
   public toString() {
-    return `#X msg ${this.xPos} ${this.yPos} ${this.text}`
+    return `#X text ${this.xPos} ${this.yPos} ${this.text}`
   }
 }

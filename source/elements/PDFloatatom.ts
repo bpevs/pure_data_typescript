@@ -1,3 +1,5 @@
+import { drawBox } from "../utilities/drawBox.js"
+
 /**
  * @class PDFloatatom
  * @description Defines a number box
@@ -27,14 +29,25 @@ export class PDFloatatom {
 
   constructor([ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send ]: string[]) {
     this.lowerLimit = Number(lowerLimit)
-    this.label = String(label === "-" ? undefined : label)
+    this.label = String(label)
     this.labelPos = Number(labelPos)
-    this.receive = String(receive === "-" ? undefined : receive)
-    this.send = String(send === "-" ? undefined : send)
+    this.receive = String(receive)
+    this.send = String(send)
     this.upperLimit = Number(upperLimit)
     this.width = Number(width)
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
+  }
+
+  public render() {
+    drawBox({
+      inlets: ["bang"],
+      outlets: ["signal"],
+      text: this.label || "",
+      type: "floatatom",
+      xPos: this.xPos,
+      yPos: this.yPos,
+    })
   }
 
   public toString() {

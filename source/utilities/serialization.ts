@@ -6,7 +6,7 @@
  */
 
 
-import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg } from "../elements/index.js"
+import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDText } from "../elements/index.js"
 
 
 let prev: PDArray | null = null
@@ -36,6 +36,7 @@ export function deserializeFromFile(text: string) {
           case "connect": return new PDConnect(params)
           case "coords": return new PDCoords(params)
           case "floatatom": return new PDFloatatom(params)
+          case "text": return new PDText(params)
           case "array":
             prev = new PDArray(params)
             return prev
