@@ -7,9 +7,63 @@
       * {
         font-family: Courier, monospace;
       }
+      body {
+        margin: 0;
+      }
+      .header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #ccc;
+        width: 100%;
+        display: block;
+        margin: 0;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+        height: 1rem;
+      }
+      .header input,
+      .header button {
+        margin-left: 1rem;
+      }
+      .header button {
+        float: right;
+        margin-right: 3rem;
+      }
+      .context-menu {
+        background: white;
+        position: fixed;
+        margin: 0;
+        padding: 0;
+      }
+      .context-menu ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        border: 1px solid black;
+      }
+      .context-menu li {
+        padding: 0.25em 0.5em 0.25em 0.5em;
+        text-align: justify
+      }
+      .context-menu li:hover {
+        color: white;
+        background: black;
+        cursor: pointer;
+      }
+      #pd {
+        top: 3rem;
+        left: 0;
+        position: absolute;
+      }
     </style>
   </head>
   <body>
+    <div class="header">
+      <input type="checkbox">DSP</input>
+      <input type="checkbox">Edit Mode</input>
+      <button id="export">export</button>
+    </div>
     <canvas id="pd"></canvas>
     <script type="module" src="/dist/index.js"></script>
   </body>

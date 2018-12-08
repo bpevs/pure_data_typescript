@@ -1,4 +1,5 @@
-import { context as ctx, OBJECT_HEIGHT } from "../constants"
+import { canvas, context as ctx, OBJECT_HEIGHT } from "../constants"
+import { PDFloatatom, PDMsg, PDText } from "../elements"
 
 export type wireType = "control" | "signal"
 
@@ -60,6 +61,18 @@ export function msgOutline(xPos: number, yPos: number, length: number) {
 
 export function rectOutline(xPos: number, yPos: number, length: number) {
   ctx.strokeRect(xPos, yPos, length + 10, OBJECT_HEIGHT)
+}
+
+export function renderPatch(patch: any[]) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  patch.forEach(item => {
+    if (
+      item instanceof PDMsg
+      || item instanceof PDFloatatom
+      || item instanceof PDText
+    ) item.render()
+  })
 }
 
 export function text(xPos: number, yPos: number, text: string) {
