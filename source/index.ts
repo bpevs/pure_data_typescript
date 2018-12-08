@@ -1,11 +1,11 @@
-import { PDFloatatom, PDMsg, PDText } from "./elements/index.js"
-import { deserializeFromFile, serializeToFile } from "./utilities/serialization.js"
+import { PDFloatatom, PDMsg, PDText } from "./elements"
+import { mouseon } from "./utilities/mouseListener"
+import { deserializeFromFile } from "./utilities/serialization"
 
 fetch("/example/BPD_midikeys.pd")
   .then(res => res.text())
   .then(text => {
     const deserialized = deserializeFromFile(text)
-    const serialized = serializeToFile(deserialized)
 
     deserialized.forEach(item => {
       if (
@@ -16,7 +16,9 @@ fetch("/example/BPD_midikeys.pd")
     })
 
     console.log(deserialized)
-    console.log(text)
-    console.log(serialized)
   })
   .catch(error => console.log(error))
+
+mouseon.forEach((evt) => {
+  console.log(evt)
+})

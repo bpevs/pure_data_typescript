@@ -1,7 +1,7 @@
 # Ignore Build Files
-coverage
 dist
 node_modules
+.rpt2_cache
 
 # Ignore system-created files
 npm-debug.log
