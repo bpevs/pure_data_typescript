@@ -6,7 +6,7 @@
  */
 
 
-import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDText } from "../elements/index.js"
+import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDText } from "../elements"
 
 
 let prev: PDArray | null = null

@@ -1,4 +1,4 @@
-import { drawBox } from "../utilities/drawBox.js"
+import { drawBox } from "../utilities/drawBox"
 
 /**
  * @class PDMsg
@@ -24,7 +24,7 @@ export class PDMsg {
 
   public render() {
     drawBox({
-      inlets: ["bang"],
+      inlets: ["control"],
       outlets: ["signal"],
       text: this.text,
       type: "msg",

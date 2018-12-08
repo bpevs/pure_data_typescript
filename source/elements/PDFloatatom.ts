@@ -1,4 +1,4 @@
-import { drawBox } from "../utilities/drawBox.js"
+import { drawBox } from "../utilities/drawBox"
 
 /**
  * @class PDFloatatom
@@ -41,7 +41,7 @@ export class PDFloatatom {
 
   public render() {
     drawBox({
-      inlets: ["bang"],
+      inlets: ["control"],
       outlets: ["signal"],
       text: this.label || "",
       type: "floatatom",

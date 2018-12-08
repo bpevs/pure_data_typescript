@@ -1,5 +1,5 @@
 import { PDFloatatom, PDMsg, PDText } from "./elements"
-import { mouseon } from "./utilities/mouseListener"
+import { mouseon } from "./interfaces/mouseListener"
 import { deserializeFromFile } from "./utilities/serialization"
 
 fetch("/example/BPD_midikeys.pd")

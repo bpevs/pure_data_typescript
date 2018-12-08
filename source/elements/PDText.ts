@@ -1,4 +1,4 @@
-import { drawBox } from "../utilities/drawBox.js"
+import { drawBox } from "../utilities/drawBox"
 
 /**
  * @class PDtext
