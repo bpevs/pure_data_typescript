@@ -1,8 +1,4 @@
-import { canvas, context as ctx, OBJECT_HEIGHT } from "../constants"
-import { PDFloatatom, PDMsg, PDObj, PDText } from "../elements"
-
-
-export type wireType = "control" | "signal"
+import { context as ctx, OBJECT_HEIGHT, PORTLET_HEIGHT, PORTLET_WIDTH, wireType } from "../globals"
 
 
 // Initialize draw settings
@@ -22,47 +18,41 @@ export function getDisplayLength(drawText: string, inlets: string[], outlets: st
 
 
 export function inlets(xPos: number, yPos: number, inlets: string[], outlets: string[]) {
-  const inletHeight = 3
-  const inletWidth = 8
   const inletY = yPos
-  const outletY = yPos + OBJECT_HEIGHT - inletHeight
+  const outletY = yPos + OBJECT_HEIGHT - PORTLET_HEIGHT
   const inletDistance = length / inlets.length
   const outletDistance = length / outlets.length
 
   inlets.forEach((type: wireType, index: number) => {
     if (type === "signal") {
-      ctx.fillRect(xPos + index * inletDistance, inletY, inletWidth, inletHeight)
+      ctx.fillRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     } else {
-      ctx.strokeRect(xPos + index * inletDistance, inletY, inletWidth, inletHeight)
+      ctx.strokeRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     }
   })
 
   outlets.forEach((type: wireType, index: number) => {
     if (type === "signal") {
-      ctx.fillRect(xPos + index * outletDistance, outletY, inletWidth, inletHeight)
+      ctx.fillRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     } else {
-      ctx.strokeRect(xPos + index * outletDistance, outletY, inletWidth, inletHeight)
+      ctx.strokeRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     }
   })
+}
+
+// Colors are 0-63, multiplied to separate, then added into big int
+// This func turns them into rgba(0-256, 0-256, 0-256)
+export function parseColor(str: string) {
+  const num = Number(str).toString(2).slice(1).padStart(18, "0")
+  const r = parseInt(num.slice(0, 6), 2) * 4
+  const g = parseInt(num.slice(6, 12), 2) * 4
+  const b = Math.max(0, parseInt(num.slice(12), 2) * 4) || 256
+  return `rgb(${r}, ${g}, ${b})`
 }
 
 
 export function rectOutline(xPos: number, yPos: number, length: number) {
   ctx.strokeRect(xPos, yPos, Math.max(length + 10, 30), OBJECT_HEIGHT)
-}
-
-
-export function renderPatch(patch: any[]) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-  patch.forEach(item => {
-    if (
-      item instanceof PDMsg
-      || item instanceof PDFloatatom
-      || item instanceof PDText
-      || item instanceof PDObj
-    ) item.render()
-  })
 }
 
 

@@ -1,4 +1,4 @@
-import { context as ctx } from "../constants"
+import { context as ctx } from "../globals"
 import * as draw from "../utilities/drawHelpers"
 
 

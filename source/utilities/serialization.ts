@@ -7,6 +7,7 @@
 
 
 import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDObj, PDText } from "../elements"
+import { objects } from "../objects"
 let prev: PDArray | null = null
 let subPatchName: string | null = null
 
@@ -49,8 +50,12 @@ export function deserializeFromFile(text: string) {
           case "coords": return new PDCoords(params)
           case "floatatom": return new PDFloatatom(params)
           case "msg": return new PDMsg(params)
-          case "obj": return new PDObj(params)
           case "text": return new PDText(params)
+          case "obj": {
+            const objectType = params[2]
+            if (objects[objectType]) return new objects[objectType](params)
+            else return new PDObj(params)
+          }
           default: return { chunk, element, params }
         }
       }

@@ -12,7 +12,7 @@
  */
 
 
-import { context as ctx, OBJECT_HEIGHT } from "../constants"
+import { context as ctx, OBJECT_HEIGHT } from "../globals"
 import * as draw from "../utilities/drawHelpers"
 
 

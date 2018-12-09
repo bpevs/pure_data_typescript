@@ -1,20 +1,32 @@
-import { ContextMenu } from "./elements/ContextMenu"
-import { downloadPatch } from "./utilities/downloadPatch"
-import { renderPatch } from "./utilities/drawHelpers"
-import { loadPatch } from "./utilities/loadPatch"
+import { state } from "./globals"
+import { ContextMenu } from "./utilities/ContextMenu"
+import { downloadPatch, loadPatch } from "./utilities/fileTransport"
+import { renderPatch } from "./utilities/renderPatch"
 import { deserializeFromFile } from "./utilities/serialization"
 
 
-const exportButton = document.getElementById("export")
-const patchCanvas = document.getElementById("pd")
+document.addEventListener("DOMContentLoaded", function initialize() {
+  listenForHeaderChanges()
+  listenForCanvasChanges()
+})
 
 
-let patch: any[]
+function listenForHeaderChanges() {
+  const modeCheckbox = document.getElementById("mode") as HTMLInputElement
+  modeCheckbox.checked = state.mode === "edit"
 
-if (exportButton) exportButton.addEventListener("click", () => downloadPatch(patch))
+  modeCheckbox.addEventListener("click", function toggleMode() {
+    state.mode = state.mode === "edit" ? "interactive" : "edit"
+  })
+
+  const exportButton = document.getElementById("export") as HTMLButtonElement
+  exportButton.addEventListener("click", () => downloadPatch(state.currentPatch))
+}
 
 
-if (patchCanvas) {
+function listenForCanvasChanges() {
+  const patchCanvas = document.getElementById("pd") as HTMLCanvasElement
+
   // When dragging a file over canvas, update UI
   patchCanvas.addEventListener("dragover", (e: any) => {
       e.stopPropagation()
@@ -25,8 +37,8 @@ if (patchCanvas) {
   // When dropping a file over canvas, render it as a patch
   patchCanvas.addEventListener("drop", async (e: any) => {
     const patchText = String(await loadPatch(e))
-    patch = deserializeFromFile(patchText)
-    renderPatch(patch)
+    state.currentPatch = deserializeFromFile(patchText)
+    renderPatch(state.currentPatch)
   })
 
   // On right-click on canvas, render custom contextmenu
