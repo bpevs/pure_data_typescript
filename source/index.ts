@@ -1,38 +1,49 @@
-import { context as ctx } from "./constants"
-import { downloadPatch } from "./interfaces/downloadPatch"
-import { loadPatch } from "./interfaces/loadPatch"
-import { drawContextMenu } from "./utilities/drawContextMenu"
+import { ContextMenu } from "./elements/ContextMenu"
+import { downloadPatch } from "./utilities/downloadPatch"
 import { renderPatch } from "./utilities/drawHelpers"
+import { loadPatch } from "./utilities/loadPatch"
 import { deserializeFromFile } from "./utilities/serialization"
 
 
-let patch: any[]
 const exportButton = document.getElementById("export")
 const patchCanvas = document.getElementById("pd")
 
-ctx.fillStyle = "black"
-ctx.font = "10pt monaco"
-ctx.fillText("Drop file to start", window.innerWidth / 2.2, window.innerHeight / 2.8)
+
+let patch: any[]
+
 
 if (exportButton) exportButton.addEventListener("click", () => downloadPatch(patch))
 
+
 if (patchCanvas) {
+  // When dragging a file over canvas, update UI
   patchCanvas.addEventListener("dragover", (e: any) => {
       e.stopPropagation()
       e.preventDefault()
       e.dataTransfer.dropEffect = "copy"
   })
 
+  // When dropping a file over canvas, render it as a patch
   patchCanvas.addEventListener("drop", async (e: any) => {
-    const patchText = await loadPatch(e)
-    patch = deserializeFromFile(String(patchText))
+    const patchText = String(await loadPatch(e))
+    patch = deserializeFromFile(patchText)
     renderPatch(patch)
   })
+
+  // On right-click on canvas, render custom contextmenu
+  const menu = new ContextMenu()
 
   patchCanvas.addEventListener("contextmenu", (e: any) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log("CONTEXT", e)
-    drawContextMenu(e.pageX, e.pageY)
+
+    menu.render(e.pageX, e.pageY, [
+      { name: "Properties", method: () => { console.log("Properties") } },
+      { name: "Object ⌘1", method: () => { console.log("Object ⌘1") } },
+      { name: "Message ⌘2", method: () => { console.log("Message ⌘2")} },
+      { name: "Number ⌘3", method: () => { console.log("Number ⌘3")} },
+      { name: "Symbol ⌘4", method: () => { console.log("Symbol ⌘4")} },
+      { name: "Comment ⌘5", method: () => { console.log("Comment ⌘5")} },
+    ])
   })
 }

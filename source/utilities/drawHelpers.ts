@@ -1,18 +1,16 @@
 import { canvas, context as ctx, OBJECT_HEIGHT } from "../constants"
-import { PDFloatatom, PDMsg, PDText } from "../elements"
+import { PDFloatatom, PDMsg, PDObj, PDText } from "../elements"
+
 
 export type wireType = "control" | "signal"
 
-export function floatatomOutline(xPos: number, yPos: number, length: number) {
-  ctx.beginPath()
-  ctx.moveTo(xPos, yPos)
-  ctx.lineTo(xPos + length, yPos)
-  ctx.lineTo(xPos + length + 5, yPos + 5)
-  ctx.lineTo(xPos + length + 5, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos)
-  ctx.stroke()
-}
+
+// Initialize draw settings
+ctx.lineWidth = "1"
+ctx.fillStyle = "black"
+ctx.font = "10pt monaco"
+ctx.fillText("Drop file to start", window.innerWidth / 2.2, window.innerHeight / 2.8)
+
 
 // Determine the longest visual length item to render
 export function getDisplayLength(drawText: string, inlets: string[], outlets: string[]) {
@@ -21,6 +19,7 @@ export function getDisplayLength(drawText: string, inlets: string[], outlets: st
   const outletLength = outlets.length * 20
   return Math.max(textLength, inletLength, outletLength)
 }
+
 
 export function inlets(xPos: number, yPos: number, inlets: string[], outlets: string[]) {
   const inletHeight = 3
@@ -47,21 +46,11 @@ export function inlets(xPos: number, yPos: number, inlets: string[], outlets: st
   })
 }
 
-export function msgOutline(xPos: number, yPos: number, length: number) {
-  ctx.beginPath()
-  ctx.moveTo(xPos, yPos)
-  ctx.lineTo(xPos + length + 5, yPos)
-  ctx.lineTo(xPos + length, yPos + (OBJECT_HEIGHT / 4))
-  ctx.lineTo(xPos + length, yPos + (OBJECT_HEIGHT * 3 / 4))
-  ctx.lineTo(xPos + length + 5, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos)
-  ctx.stroke()
-}
 
 export function rectOutline(xPos: number, yPos: number, length: number) {
   ctx.strokeRect(xPos, yPos, length + 10, OBJECT_HEIGHT)
 }
+
 
 export function renderPatch(patch: any[]) {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -71,9 +60,11 @@ export function renderPatch(patch: any[]) {
       item instanceof PDMsg
       || item instanceof PDFloatatom
       || item instanceof PDText
+      || item instanceof PDObj
     ) item.render()
   })
 }
+
 
 export function text(xPos: number, yPos: number, text: string) {
   ctx.fillStyle = "black"

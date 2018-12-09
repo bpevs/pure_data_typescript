@@ -6,10 +6,9 @@
  */
 
 
-import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDText } from "../elements"
-
-
+import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDObj, PDText } from "../elements"
 let prev: PDArray | null = null
+
 
 export function deserializeFromFile(text: string) {
   return text
@@ -32,14 +31,15 @@ export function deserializeFromFile(text: string) {
 
       if (chunk === "X") {
         switch (element) {
-          case "msg": return new PDMsg(params)
-          case "connect": return new PDConnect(params)
-          case "coords": return new PDCoords(params)
-          case "floatatom": return new PDFloatatom(params)
-          case "text": return new PDText(params)
           case "array":
             prev = new PDArray(params)
             return prev
+          case "connect": return new PDConnect(params)
+          case "coords": return new PDCoords(params)
+          case "floatatom": return new PDFloatatom(params)
+          case "msg": return new PDMsg(params)
+          case "obj": return new PDObj(params)
+          case "text": return new PDText(params)
           default: return { chunk, element, params }
         }
       }

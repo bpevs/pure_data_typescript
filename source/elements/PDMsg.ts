@@ -1,5 +1,3 @@
-import { drawBox } from "../utilities/drawBox"
-
 /**
  * @class PDMsg
  * @description Defines a message
@@ -8,9 +6,17 @@ import { drawBox } from "../utilities/drawBox"
  *  #X msg 61 48 read audio.wav;
  */
 
+
+import { context as ctx, OBJECT_HEIGHT } from "../constants"
+import * as draw from "../utilities/drawHelpers"
+
+
 export class PDMsg {
   public readonly chunkType = "X"
   public readonly elementType = "msg"
+  public readonly color = "black"
+  public readonly inlets = [ "control" ]
+  public readonly outlets = [ "signal" ]
 
   public text: string // The content of the message
   public xPos: number // Horizontal position within the window
@@ -23,17 +29,30 @@ export class PDMsg {
   }
 
   public render() {
-    drawBox({
-      inlets: ["control"],
-      outlets: ["signal"],
-      text: this.text,
-      type: "msg",
-      xPos: this.xPos,
-      yPos: this.yPos,
-    })
+    const displayText = this.text.replace(/\\/g, "")
+    const length = draw.getDisplayLength(displayText, this.inlets, this.outlets)
+
+    ctx.strokeStyle = this.color
+    drawMsgOutline(this.xPos, this.yPos, length)
+    draw.text(this.xPos, this.yPos, displayText)
+    draw.inlets(this.xPos, this.yPos, this.inlets, this.outlets)
   }
 
   public toString() {
     return `#X msg ${this.xPos} ${this.yPos} ${this.text}`
   }
+}
+
+
+// Message box has a custom shaped outline
+function drawMsgOutline(xPos: number, yPos: number, length: number) {
+  ctx.beginPath()
+  ctx.moveTo(xPos, yPos)
+  ctx.lineTo(xPos + length + 5, yPos)
+  ctx.lineTo(xPos + length, yPos + (OBJECT_HEIGHT / 4))
+  ctx.lineTo(xPos + length, yPos + (OBJECT_HEIGHT * 3 / 4))
+  ctx.lineTo(xPos + length + 5, yPos + OBJECT_HEIGHT)
+  ctx.lineTo(xPos, yPos + OBJECT_HEIGHT)
+  ctx.lineTo(xPos, yPos)
+  ctx.stroke()
 }

@@ -1,4 +1,6 @@
-import { drawBox } from "../utilities/drawBox"
+import { context as ctx } from "../constants"
+import * as draw from "../utilities/drawHelpers"
+
 
 /**
  * @class PDtext
@@ -7,6 +9,7 @@ import { drawBox } from "../utilities/drawBox"
  * @example
  *  #X text 61 48 read audio.wav;
  */
+
 
 export class PDText {
   public readonly chunkType = "X"
@@ -23,12 +26,10 @@ export class PDText {
   }
 
   public render() {
-    drawBox({
-      text: this.text,
-      type: "text",
-      xPos: this.xPos,
-      yPos: this.yPos,
-    })
+    const displayText = this.text.replace(/\\/g, "")
+
+    ctx.strokeStyle = "black"
+    draw.text(this.xPos, this.yPos, displayText)
   }
 
   public toString() {

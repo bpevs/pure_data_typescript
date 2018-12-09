@@ -1,4 +1,4 @@
-import { serializeToFile } from "../utilities/serialization"
+import { serializeToFile } from "./serialization"
 
 
 export function downloadPatch(patch: any[]) {
