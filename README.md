@@ -12,7 +12,7 @@ npm run start
 # Open on http://localhost:8080/
 ```
 
-
 # Other Relevant Links/Resources
 - [Pure Data FLOSS Manual](http://write.flossmanuals.net/pure-data)
 
+![Some stuff works](./screenshots/screenshot1.png)
