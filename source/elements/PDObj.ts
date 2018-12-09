@@ -10,15 +10,16 @@
 
 
 import { context as ctx } from "../constants"
+import { definitions } from "../objects/basic"
 import * as draw from "../utilities/drawHelpers"
-
+import { parseColor } from "../utilities/parseColor"
 
 export class PDObj {
   public readonly chunkType = "X"
   public readonly elementType = "obj"
-  public readonly inlets = []
-  public readonly outlets = []
-  public readonly color = "black"
+  public color = "black"
+  public inlets = []
+  public outlets = []
   public length = 0
 
   public xPos: number
@@ -33,18 +34,10 @@ export class PDObj {
     this.yPos = Number(yPos)
     this.name = String(name || "")
     this.params = params
-
-    this.displayText = this.name.replace(/\\/g, "")
-    this.length = draw.getDisplayLength(this.displayText, this.inlets, this.outlets)
   }
 
   public render() {
-    if (this.name !== "cnv") {
-      ctx.strokeStyle = this.color
-      draw.rectOutline(this.xPos, this.yPos, this.length)
-      draw.text(this.xPos, this.yPos, this.displayText)
-      draw.inlets(this.xPos, this.yPos, this.inlets, this.outlets)
-    } else {
+    if (this.name === "cnv") {
       const width = this.params[1]
       const height = this.params[2]
       const label = this.params[5] !== "empty" ? this.params[5] : ""
@@ -55,21 +48,23 @@ export class PDObj {
       ctx.fillStyle = parseColor(backgroundColor)
       ctx.fillRect(this.xPos, this.yPos, width, height)
       draw.text(this.xPos + xOff, this.yPos + yOff, label, fontSize)
+    } else {
+      if (definitions[this.name]) {
+        this.inlets = definitions[this.name].in
+        this.outlets = definitions[this.name].out
+      }
+
+      this.displayText = this.name.replace(/\\/g, "")
+      this.length = draw.getDisplayLength(this.displayText, this.inlets, this.outlets)
+
+      ctx.strokeStyle = this.color
+      draw.rectOutline(this.xPos, this.yPos, this.length)
+      draw.text(this.xPos, this.yPos, this.displayText)
+      draw.inlets(this.xPos, this.yPos, this.inlets, this.outlets)
     }
   }
 
   public toString() {
     return `#X msg ${this.xPos} ${this.yPos} ${this.name} ${this.params.join(" ")}`
   }
-}
-
-
-// Colors are 0-127, multiplied to separate, then added into big int
-// This func turns them into rgba(0-256, 0-256, 0-256)
-function parseColor(str: string) {
-  const num = Number(str).toString(2).slice(1).padStart(18, "0")
-  const r = parseInt(num.slice(0, 6), 2) * 4
-  const g = parseInt(num.slice(6, 12), 2) * 4
-  const b = Math.max(0, parseInt(num.slice(12), 2) * 4) || 256
-  return `rgb(${r}, ${g}, ${b})`
 }

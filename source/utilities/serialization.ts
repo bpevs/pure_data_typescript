@@ -13,8 +13,7 @@ let subPatchName: string | null = null
 
 export function deserializeFromFile(text: string) {
   return text
-    .replace(/\r/, "")
-    .split(/;\n/)
+    .split(/;\r?\n/)
     .filter(Boolean)
     .map(line => {
       const [ chunk, element, ...params ] = line.substring(1).split(/\s+/)
