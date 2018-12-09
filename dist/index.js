@@ -15,6 +15,20 @@
     See the Apache Version 2.0 License for specific language governing permissions
     and limitations under the License.
     ***************************************************************************** */
+    /* global Reflect, Promise */
+
+    var extendStatics = function(d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+
+    function __extends(d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
 
     function __awaiter(thisArg, _arguments, P, generator) {
         return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,6 +66,30 @@
             if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
         }
     }
+
+    var state = {
+        currentPatch: [],
+        mode: "interactive",
+    };
+    // UI CONSTANTS
+    var OBJECT_HEIGHT = 18;
+    var PORTLET_HEIGHT = 3;
+    var PORTLET_WIDTH = 8;
+    // Canvas Setup
+    var canvas = document.getElementById("pd");
+    var context = canvas.getContext("2d");
+    var dpr = window.devicePixelRatio || 1;
+    var bsr = context.webkitBackingStorePixelRatio ||
+        context.mozBackingStorePixelRatio ||
+        context.msBackingStorePixelRatio ||
+        context.oBackingStorePixelRatio ||
+        context.backingStorePixelRatio || 1;
+    var PIXEL_RATIO = dpr / bsr;
+    canvas.width = window.innerWidth * PIXEL_RATIO;
+    canvas.height = window.innerHeight * PIXEL_RATIO;
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+    context.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
 
     var body = document.getElementsByTagName("body")[0];
     var ContextMenu = /** @class */ (function () {
@@ -212,22 +250,6 @@
         return PDCoords;
     }());
 
-    var canvas = document.getElementById("pd");
-    var context = canvas.getContext("2d");
-    var dpr = window.devicePixelRatio || 1;
-    var bsr = context.webkitBackingStorePixelRatio ||
-        context.mozBackingStorePixelRatio ||
-        context.msBackingStorePixelRatio ||
-        context.oBackingStorePixelRatio ||
-        context.backingStorePixelRatio || 1;
-    var PIXEL_RATIO = dpr / bsr;
-    var OBJECT_HEIGHT = 18;
-    canvas.width = window.innerWidth * PIXEL_RATIO;
-    canvas.height = window.innerHeight * PIXEL_RATIO;
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
-    context.setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
-
     // Initialize draw settings
     context.lineWidth = "1";
     context.fillStyle = "black";
@@ -241,41 +263,38 @@
         return Math.max(textLength, inletLength, outletLength);
     }
     function inlets(xPos, yPos, inlets, outlets) {
-        var inletHeight = 3;
-        var inletWidth = 8;
         var inletY = yPos;
-        var outletY = yPos + OBJECT_HEIGHT - inletHeight;
+        var outletY = yPos + OBJECT_HEIGHT - PORTLET_HEIGHT;
         var inletDistance = length / inlets.length;
         var outletDistance = length / outlets.length;
         inlets.forEach(function (type, index) {
             if (type === "signal") {
-                context.fillRect(xPos + index * inletDistance, inletY, inletWidth, inletHeight);
+                context.fillRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
             else {
-                context.strokeRect(xPos + index * inletDistance, inletY, inletWidth, inletHeight);
+                context.strokeRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
         });
         outlets.forEach(function (type, index) {
             if (type === "signal") {
-                context.fillRect(xPos + index * outletDistance, outletY, inletWidth, inletHeight);
+                context.fillRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
             else {
-                context.strokeRect(xPos + index * outletDistance, outletY, inletWidth, inletHeight);
+                context.strokeRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
         });
+    }
+    // Colors are 0-63, multiplied to separate, then added into big int
+    // This func turns them into rgba(0-256, 0-256, 0-256)
+    function parseColor(str) {
+        var num = Number(str).toString(2).slice(1).padStart(18, "0");
+        var r = parseInt(num.slice(0, 6), 2) * 4;
+        var g = parseInt(num.slice(6, 12), 2) * 4;
+        var b = Math.max(0, parseInt(num.slice(12), 2) * 4) || 256;
+        return "rgb(" + r + ", " + g + ", " + b + ")";
     }
     function rectOutline(xPos, yPos, length) {
         context.strokeRect(xPos, yPos, Math.max(length + 10, 30), OBJECT_HEIGHT);
-    }
-    function renderPatch(patch) {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        patch.forEach(function (item) {
-            if (item instanceof PDMsg
-                || item instanceof PDFloatatom
-                || item instanceof PDText
-                || item instanceof PDObj)
-                item.render();
-        });
     }
     function text(xPos, yPos, text, size) {
         context.fillStyle = "black";
@@ -415,81 +434,71 @@
         return PDText;
     }());
 
-    var definitions = {
+    var generics = {
         "%": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: function (_a) {
                 var inlet1 = _a[0], inlet2 = _a[1];
                 return inlet1 % inlet2;
             },
-            out: ["control"],
+            outlets: ["control"],
         },
         "*": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: function (_a) {
                 var inlet1 = _a[0], inlet2 = _a[1];
                 return inlet1 * inlet2;
             },
-            out: ["control"],
+            outlets: ["control"],
         },
         "+": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: function (_a) {
                 var inlet1 = _a[0], inlet2 = _a[1];
                 return inlet1 + inlet2;
             },
-            out: ["control"],
+            outlets: ["control"],
         },
         "-": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: function (_a) {
                 var inlet1 = _a[0], inlet2 = _a[1];
                 return inlet1 - inlet2;
             },
-            out: ["control"],
+            outlets: ["control"],
         },
         "/": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: function (_a) {
                 var inlet1 = _a[0], inlet2 = _a[1];
                 return inlet1 / inlet2;
             },
-            out: ["control"],
+            outlets: ["control"],
         },
         "max": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: Math.max,
-            out: ["control"],
+            outlets: ["control"],
         },
         "min": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: Math.min,
-            out: ["control"],
+            outlets: ["control"],
         },
         "mod": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: function (_a) {
                 var inlet1 = _a[0], inlet2 = _a[1];
                 return inlet1 % inlet2;
             },
-            out: ["control"],
+            outlets: ["control"],
         },
         "pow": {
-            in: ["control", "control"],
+            inlets: ["control", "control"],
             method: Math.pow,
-            out: ["control"],
+            outlets: ["control"],
         },
     };
-
-    // Colors are 0-63, multiplied to separate, then added into big int
-    // This func turns them into rgba(0-256, 0-256, 0-256)
-    function parseColor(str) {
-        var num = Number(str).toString(2).slice(1).padStart(18, "0");
-        var r = parseInt(num.slice(0, 6), 2) * 4;
-        var g = parseInt(num.slice(6, 12), 2) * 4;
-        var b = Math.max(0, parseInt(num.slice(12), 2) * 4) || 256;
-        return "rgb(" + r + ", " + g + ", " + b + ")";
-    }
 
     /**
      * @class PDObject
@@ -515,36 +524,66 @@
             this.params = params;
         }
         PDObj.prototype.render = function () {
-            if (this.name === "cnv") {
-                var width = this.params[1];
-                var height = this.params[2];
-                var label = this.params[5] !== "empty" ? this.params[5] : "";
-                var xOff = Number(this.params[7]);
-                var yOff = Number(this.params[8]) + 30;
-                var fontSize = Number(this.params[9]) - 8;
-                var backgroundColor = this.params[10];
-                context.fillStyle = parseColor(backgroundColor);
-                context.fillRect(this.xPos, this.yPos, width, height);
-                text(this.xPos + xOff, this.yPos + yOff, label, fontSize);
+            if (generics[this.name]) {
+                this.inlets = generics[this.name].inlets;
+                this.outlets = generics[this.name].outlets;
             }
-            else {
-                if (definitions[this.name]) {
-                    this.inlets = definitions[this.name].in;
-                    this.outlets = definitions[this.name].out;
-                }
-                this.displayText = this.name.replace(/\\/g, "");
-                this.length = getDisplayLength(this.displayText, this.inlets, this.outlets);
-                context.strokeStyle = this.color;
-                rectOutline(this.xPos, this.yPos, this.length);
-                text(this.xPos, this.yPos, this.displayText);
-                inlets(this.xPos, this.yPos, this.inlets, this.outlets);
-            }
+            this.displayText = this.name.replace(/\\/g, "");
+            this.length = getDisplayLength(this.displayText, this.inlets, this.outlets);
+            context.strokeStyle = this.color;
+            rectOutline(this.xPos, this.yPos, this.length);
+            text(this.xPos, this.yPos, this.displayText);
+            inlets(this.xPos, this.yPos, this.inlets, this.outlets);
         };
         PDObj.prototype.toString = function () {
             return "#X msg " + this.xPos + " " + this.yPos + " " + this.name + " " + this.params.join(" ");
         };
         return PDObj;
     }());
+
+    /**
+     * @class PDObject
+     * @description An object
+     *
+     *
+     * @example
+     *  #X obj 30 27 midiin;
+     *  #X obj 26 59 midiout;
+     */
+    var PDObjCnv = /** @class */ (function (_super) {
+        __extends(PDObjCnv, _super);
+        function PDObjCnv(params) {
+            var _this = _super.call(this, params) || this;
+            _this.chunkType = "X";
+            _this.elementType = "obj";
+            _this.objectType = "cnv";
+            _this.color = "black";
+            _this.inlets = [];
+            _this.outlets = [];
+            _this.width = Number(params[4]);
+            _this.height = Number(params[5]);
+            _this.label = params[8] !== "empty" ? _this.params[8] : "";
+            _this.xLabelOffset = Number(params[9]);
+            _this.yLabelOffset = Number(params[10]) + 30;
+            _this.fontSize = Number(params[12]) - 8;
+            _this.bgColor = params[13];
+            _this.labelColor = params[14];
+            return _this;
+        }
+        PDObjCnv.prototype.render = function () {
+            context.fillStyle = parseColor(this.bgColor);
+            context.fillRect(this.xPos, this.yPos, this.width, this.height);
+            text(this.xPos + this.xLabelOffset, this.yPos + this.yLabelOffset, this.label, this.fontSize);
+        };
+        PDObjCnv.prototype.toString = function () {
+            return "#X msg " + this.xPos + " " + this.yPos + " " + this.name + " " + this.params.join(" ");
+        };
+        return PDObjCnv;
+    }(PDObj));
+
+    var objects = {
+        cnv: PDObjCnv,
+    };
 
     /**
      * Utilities for parsing to and from*.pd files
@@ -589,8 +628,14 @@
                     case "coords": return new PDCoords(params);
                     case "floatatom": return new PDFloatatom(params);
                     case "msg": return new PDMsg(params);
-                    case "obj": return new PDObj(params);
                     case "text": return new PDText(params);
+                    case "obj": {
+                        var objectType = params[2];
+                        if (objects[objectType])
+                            return new objects[objectType](params);
+                        else
+                            return new PDObj(params);
+                    }
                     default: return { chunk: chunk, element: element, params: params };
                 }
             }
@@ -621,7 +666,6 @@
             window.URL.revokeObjectURL(blobURL);
         }
     }
-
     var loadPatch = function (e) {
         e.stopPropagation();
         e.preventDefault();
@@ -638,13 +682,33 @@
         });
     };
 
-    var _this = undefined;
-    var exportButton = document.getElementById("export");
-    var patchCanvas = document.getElementById("pd");
-    var patch;
-    if (exportButton)
-        exportButton.addEventListener("click", function () { return downloadPatch(patch); });
-    if (patchCanvas) {
+    function renderPatch(patch) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        patch.forEach(function (item) {
+            if (item instanceof PDMsg
+                || item instanceof PDFloatatom
+                || item instanceof PDText
+                || item instanceof PDObj)
+                item.render();
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function initialize() {
+        listenForHeaderChanges();
+        listenForCanvasChanges();
+    });
+    function listenForHeaderChanges() {
+        var modeCheckbox = document.getElementById("mode");
+        modeCheckbox.checked = state.mode === "edit";
+        modeCheckbox.addEventListener("click", function toggleMode() {
+            state.mode = state.mode === "edit" ? "interactive" : "edit";
+        });
+        var exportButton = document.getElementById("export");
+        exportButton.addEventListener("click", function () { return downloadPatch(state.currentPatch); });
+    }
+    function listenForCanvasChanges() {
+        var _this = this;
+        var patchCanvas = document.getElementById("pd");
         // When dragging a file over canvas, update UI
         patchCanvas.addEventListener("dragover", function (e) {
             e.stopPropagation();
@@ -661,18 +725,18 @@
                         return [4 /*yield*/, loadPatch(e)];
                     case 1:
                         patchText = _a.apply(void 0, [_b.sent()]);
-                        patch = deserializeFromFile(patchText);
-                        renderPatch(patch);
+                        state.currentPatch = deserializeFromFile(patchText);
+                        renderPatch(state.currentPatch);
                         return [2 /*return*/];
                 }
             });
         }); });
         // On right-click on canvas, render custom contextmenu
-        var menu_1 = new ContextMenu();
+        var menu = new ContextMenu();
         patchCanvas.addEventListener("contextmenu", function (e) {
             e.stopPropagation();
             e.preventDefault();
-            menu_1.render(e.pageX, e.pageY, [
+            menu.render(e.pageX, e.pageY, [
                 { name: "Properties", method: function () { console.log("Properties"); } },
                 { name: "Object ⌘1", method: function () { console.log("Object ⌘1"); } },
                 { name: "Message ⌘2", method: function () { console.log("Message ⌘2"); } },
