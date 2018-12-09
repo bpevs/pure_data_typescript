@@ -262,25 +262,28 @@
         var outletLength = outlets.length * 20;
         return Math.max(textLength, inletLength, outletLength);
     }
-    function inlets(xPos, yPos, inlets, outlets) {
+    function inlets(length, xPos, yPos, inlets, outlets) {
         var inletY = yPos;
         var outletY = yPos + OBJECT_HEIGHT - PORTLET_HEIGHT;
-        var inletDistance = length / inlets.length;
-        var outletDistance = length / outlets.length;
+        var actualLength = Math.max(length, 20) - PORTLET_WIDTH;
+        var inletDistance = actualLength / Math.max(1, inlets.length - 2);
+        var outletDistance = actualLength / Math.max(1, outlets.length - 2);
         inlets.forEach(function (type, index) {
+            var nextInletLocation = xPos + index * inletDistance;
             if (type === "signal") {
-                context.fillRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT);
+                context.fillRect(nextInletLocation, inletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
             else {
-                context.strokeRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT);
+                context.strokeRect(nextInletLocation, inletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
         });
         outlets.forEach(function (type, index) {
+            var nextOutletLocation = xPos + index * outletDistance;
             if (type === "signal") {
-                context.fillRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT);
+                context.fillRect(nextOutletLocation, outletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
             else {
-                context.strokeRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT);
+                context.strokeRect(nextOutletLocation, outletY, PORTLET_WIDTH, PORTLET_HEIGHT);
             }
         });
     }
@@ -294,7 +297,7 @@
         return "rgb(" + r + ", " + g + ", " + b + ")";
     }
     function rectOutline(xPos, yPos, length) {
-        context.strokeRect(xPos, yPos, Math.max(length + 10, 30), OBJECT_HEIGHT);
+        context.strokeRect(xPos, yPos, Math.max(length, 20), OBJECT_HEIGHT);
     }
     function text(xPos, yPos, text, size) {
         context.fillStyle = "black";
@@ -338,7 +341,7 @@
             context.strokeStyle = this.color;
             drawOutline(this.xPos, this.yPos, length);
             text(this.xPos, this.yPos, displayText);
-            inlets(this.xPos, this.yPos, this.inlets, this.outlets);
+            inlets(length, this.xPos, this.yPos, this.inlets, this.outlets);
         };
         PDFloatatom.prototype.toString = function () {
             var str = "#X floatatom " + this.xPos + " " + this.yPos + " " + this.width +
@@ -387,7 +390,7 @@
             context.strokeStyle = this.color;
             drawMsgOutline(this.xPos, this.yPos, length);
             text(this.xPos, this.yPos, displayText);
-            inlets(this.xPos, this.yPos, this.inlets, this.outlets);
+            inlets(length, this.xPos, this.yPos, this.inlets, this.outlets);
         };
         PDMsg.prototype.toString = function () {
             return "#X msg " + this.xPos + " " + this.yPos + " " + this.text;
@@ -434,70 +437,71 @@
         return PDText;
     }());
 
+    var ctrl = "control";
     var generics = {
-        "%": {
-            inlets: ["control", "control"],
-            method: function (_a) {
-                var inlet1 = _a[0], inlet2 = _a[1];
-                return inlet1 % inlet2;
-            },
-            outlets: ["control"],
-        },
-        "*": {
-            inlets: ["control", "control"],
-            method: function (_a) {
-                var inlet1 = _a[0], inlet2 = _a[1];
-                return inlet1 * inlet2;
-            },
-            outlets: ["control"],
-        },
-        "+": {
-            inlets: ["control", "control"],
-            method: function (_a) {
-                var inlet1 = _a[0], inlet2 = _a[1];
-                return inlet1 + inlet2;
-            },
-            outlets: ["control"],
-        },
-        "-": {
-            inlets: ["control", "control"],
-            method: function (_a) {
-                var inlet1 = _a[0], inlet2 = _a[1];
-                return inlet1 - inlet2;
-            },
-            outlets: ["control"],
-        },
-        "/": {
-            inlets: ["control", "control"],
-            method: function (_a) {
-                var inlet1 = _a[0], inlet2 = _a[1];
-                return inlet1 / inlet2;
-            },
-            outlets: ["control"],
-        },
-        "max": {
-            inlets: ["control", "control"],
-            method: Math.max,
-            outlets: ["control"],
-        },
-        "min": {
-            inlets: ["control", "control"],
-            method: Math.min,
-            outlets: ["control"],
-        },
-        "mod": {
-            inlets: ["control", "control"],
-            method: function (_a) {
-                var inlet1 = _a[0], inlet2 = _a[1];
-                return inlet1 % inlet2;
-            },
-            outlets: ["control"],
-        },
-        "pow": {
-            inlets: ["control", "control"],
-            method: Math.pow,
-            outlets: ["control"],
-        },
+        "%": [[ctrl, ctrl], [ctrl], function (_a) {
+                var a = _a[0], b = _a[1];
+                return a % b;
+            }],
+        "*": [[ctrl, ctrl], [ctrl], function (_a) {
+                var a = _a[0], b = _a[1];
+                return a * b;
+            }],
+        "+": [[ctrl, ctrl], [ctrl], function (_a) {
+                var a = _a[0], b = _a[1];
+                return a + b;
+            }],
+        "-": [[ctrl, ctrl], [ctrl], function (_a) {
+                var a = _a[0], b = _a[1];
+                return a - b;
+            }],
+        "/": [[ctrl, ctrl], [ctrl], function (_a) {
+                var a = _a[0], b = _a[1];
+                return a / b;
+            }],
+        "abs": [[ctrl], [ctrl], Math.abs],
+        "atan": [[ctrl], [ctrl], Math.atan],
+        "atan2": [[ctrl, ctrl], [ctrl], Math.atan2],
+        "cos": [[ctrl], [ctrl], Math.cos],
+        "dbtopow": [[ctrl], [ctrl], function (a) { return a <= 0 ? 0 : Math.exp(Math.LN10 * (a - 100) / 10); }],
+        "dbtorms": [[ctrl], [ctrl], function (a) { return a <= 0 ? 0 : Math.exp(Math.LN10 * (a - 100) / 20); }],
+        "del": [[ctrl, ctrl], [ctrl], function () { return; }],
+        "delay": [[ctrl, ctrl], [ctrl], function () { return; }],
+        "exp": [[ctrl], [ctrl], Math.exp],
+        "ftom": [[ctrl], [ctrl], function () { return; }],
+        "inlet": [[], [ctrl], function () { return; }],
+        "key": [[], [ctrl], function () { return; }],
+        "keyup": [[], [ctrl], function () { return; }],
+        "loadbang": [[], [ctrl], function () { return; }],
+        "log": [[ctrl], [ctrl], Math.log],
+        "max": [[ctrl, ctrl], [ctrl], Math.max],
+        "metro": [[ctrl], [ctrl], function () { return; }],
+        "min": [[ctrl, ctrl], [ctrl], Math.min],
+        "mod": [[ctrl, ctrl], [ctrl], function (_a) {
+                var a = _a[0], b = _a[1];
+                return a % b;
+            }],
+        "mtof": [[ctrl], [ctrl], function () { return; }],
+        "outlet": [[ctrl], [], function () { return; }],
+        "pow": [[ctrl, ctrl], [ctrl], Math.pow],
+        "powtodb": [[ctrl], [ctrl], function (a) { return a <= 0 ? 0 : 10 * Math.log(a) / Math.LN10 + 100; }],
+        "print": [[ctrl], [], function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                console.log(args);
+            }],
+        "r": [[ctrl], [], function () { return; }],
+        "receive": [[ctrl], [], function () { return; }],
+        "rmstodb": [[ctrl], [ctrl], function (a) { return a <= 0 ? 0 : 20 * Math.log(a) / Math.LN10 + 100; }],
+        "s": [[ctrl], [], function () { return; }],
+        "send": [[ctrl], [], function () { return; }],
+        "sin": [[ctrl], [ctrl], Math.sin],
+        "spigot": [[ctrl, ctrl], [ctrl]],
+        "sqrt": [[ctrl], [ctrl], Math.sqrt],
+        "tan": [[ctrl], [ctrl], Math.tan],
+        "wrap": [[ctrl], [], function (a) { return a - Math.floor(a); }],
     };
 
     /**
@@ -525,15 +529,16 @@
         }
         PDObj.prototype.render = function () {
             if (generics[this.name]) {
-                this.inlets = generics[this.name].inlets;
-                this.outlets = generics[this.name].outlets;
+                this.inlets = generics[this.name][0];
+                this.outlets = generics[this.name][1];
+                this.behavior = generics[this.name][2];
             }
             this.displayText = this.name.replace(/\\/g, "");
             this.length = getDisplayLength(this.displayText, this.inlets, this.outlets);
             context.strokeStyle = this.color;
             rectOutline(this.xPos, this.yPos, this.length);
             text(this.xPos, this.yPos, this.displayText);
-            inlets(this.xPos, this.yPos, this.inlets, this.outlets);
+            inlets(this.length, this.xPos, this.yPos, this.inlets, this.outlets);
         };
         PDObj.prototype.toString = function () {
             return "#X msg " + this.xPos + " " + this.yPos + " " + this.name + " " + this.params.join(" ");
