@@ -415,6 +415,82 @@
         return PDText;
     }());
 
+    var definitions = {
+        "%": {
+            in: ["control", "control"],
+            method: function (_a) {
+                var inlet1 = _a[0], inlet2 = _a[1];
+                return inlet1 % inlet2;
+            },
+            out: ["control"],
+        },
+        "*": {
+            in: ["control", "control"],
+            method: function (_a) {
+                var inlet1 = _a[0], inlet2 = _a[1];
+                return inlet1 * inlet2;
+            },
+            out: ["control"],
+        },
+        "+": {
+            in: ["control", "control"],
+            method: function (_a) {
+                var inlet1 = _a[0], inlet2 = _a[1];
+                return inlet1 + inlet2;
+            },
+            out: ["control"],
+        },
+        "-": {
+            in: ["control", "control"],
+            method: function (_a) {
+                var inlet1 = _a[0], inlet2 = _a[1];
+                return inlet1 - inlet2;
+            },
+            out: ["control"],
+        },
+        "/": {
+            in: ["control", "control"],
+            method: function (_a) {
+                var inlet1 = _a[0], inlet2 = _a[1];
+                return inlet1 / inlet2;
+            },
+            out: ["control"],
+        },
+        "max": {
+            in: ["control", "control"],
+            method: Math.max,
+            out: ["control"],
+        },
+        "min": {
+            in: ["control", "control"],
+            method: Math.min,
+            out: ["control"],
+        },
+        "mod": {
+            in: ["control", "control"],
+            method: function (_a) {
+                var inlet1 = _a[0], inlet2 = _a[1];
+                return inlet1 % inlet2;
+            },
+            out: ["control"],
+        },
+        "pow": {
+            in: ["control", "control"],
+            method: Math.pow,
+            out: ["control"],
+        },
+    };
+
+    // Colors are 0-63, multiplied to separate, then added into big int
+    // This func turns them into rgba(0-256, 0-256, 0-256)
+    function parseColor(str) {
+        var num = Number(str).toString(2).slice(1).padStart(18, "0");
+        var r = parseInt(num.slice(0, 6), 2) * 4;
+        var g = parseInt(num.slice(6, 12), 2) * 4;
+        var b = Math.max(0, parseInt(num.slice(12), 2) * 4) || 256;
+        return "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+
     /**
      * @class PDObject
      * @description An object
@@ -429,25 +505,17 @@
             var xPos = _a[0], yPos = _a[1], name = _a[2], params = _a.slice(3);
             this.chunkType = "X";
             this.elementType = "obj";
+            this.color = "black";
             this.inlets = [];
             this.outlets = [];
-            this.color = "black";
             this.length = 0;
             this.xPos = Number(xPos);
             this.yPos = Number(yPos);
             this.name = String(name || "");
             this.params = params;
-            this.displayText = this.name.replace(/\\/g, "");
-            this.length = getDisplayLength(this.displayText, this.inlets, this.outlets);
         }
         PDObj.prototype.render = function () {
-            if (this.name !== "cnv") {
-                context.strokeStyle = this.color;
-                rectOutline(this.xPos, this.yPos, this.length);
-                text(this.xPos, this.yPos, this.displayText);
-                inlets(this.xPos, this.yPos, this.inlets, this.outlets);
-            }
-            else {
+            if (this.name === "cnv") {
                 var width = this.params[1];
                 var height = this.params[2];
                 var label = this.params[5] !== "empty" ? this.params[5] : "";
@@ -459,21 +527,24 @@
                 context.fillRect(this.xPos, this.yPos, width, height);
                 text(this.xPos + xOff, this.yPos + yOff, label, fontSize);
             }
+            else {
+                if (definitions[this.name]) {
+                    this.inlets = definitions[this.name].in;
+                    this.outlets = definitions[this.name].out;
+                }
+                this.displayText = this.name.replace(/\\/g, "");
+                this.length = getDisplayLength(this.displayText, this.inlets, this.outlets);
+                context.strokeStyle = this.color;
+                rectOutline(this.xPos, this.yPos, this.length);
+                text(this.xPos, this.yPos, this.displayText);
+                inlets(this.xPos, this.yPos, this.inlets, this.outlets);
+            }
         };
         PDObj.prototype.toString = function () {
             return "#X msg " + this.xPos + " " + this.yPos + " " + this.name + " " + this.params.join(" ");
         };
         return PDObj;
     }());
-    // Colors are 0-127, multiplied to separate, then added into big int
-    // This func turns them into rgba(0-256, 0-256, 0-256)
-    function parseColor(str) {
-        var num = Number(str).toString(2).slice(1).padStart(18, "0");
-        var r = parseInt(num.slice(0, 6), 2) * 4;
-        var g = parseInt(num.slice(6, 12), 2) * 4;
-        var b = Math.max(0, parseInt(num.slice(12), 2) * 4) || 256;
-        return "rgb(" + r + ", " + g + ", " + b + ")";
-    }
 
     /**
      * Utilities for parsing to and from*.pd files
@@ -485,8 +556,7 @@
     var subPatchName = null;
     function deserializeFromFile(text) {
         return text
-            .replace(/\r/, "")
-            .split(/;\n/)
+            .split(/;\r?\n/)
             .filter(Boolean)
             .map(function (line) {
             var _a = line.substring(1).split(/\s+/), chunk = _a[0], element = _a[1], params = _a.slice(2);
