@@ -138,7 +138,8 @@
             var xPos = _a[0], yPos = _a[1], xSize = _a[2], ySize = _a[3], name = _a[4], openOnLoad = _a[5];
             this.chunkType = "N";
             this.elementType = "canvas";
-            this.name = name;
+            this.isSubPatch = isNaN(parseInt(name, 10));
+            this.name = this.isSubPatch ? name : null;
             this.xPos = Number(xPos);
             this.yPos = Number(yPos);
             this.xSize = Number(xSize);
@@ -264,7 +265,7 @@
         });
     }
     function rectOutline(xPos, yPos, length) {
-        context.strokeRect(xPos, yPos, length + 10, OBJECT_HEIGHT);
+        context.strokeRect(xPos, yPos, Math.max(length + 10, 30), OBJECT_HEIGHT);
     }
     function renderPatch(patch) {
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -276,9 +277,9 @@
                 item.render();
         });
     }
-    function text(xPos, yPos, text) {
+    function text(xPos, yPos, text, size) {
         context.fillStyle = "black";
-        context.font = "7pt monaco";
+        context.font = size ? size + "pt monaco" : "7pt monaco";
         context.fillText(text, xPos + 2, yPos + OBJECT_HEIGHT - 6);
     }
 
@@ -431,28 +432,32 @@
             this.inlets = [];
             this.outlets = [];
             this.color = "black";
+            this.length = 0;
             this.xPos = Number(xPos);
             this.yPos = Number(yPos);
             this.name = String(name || "");
             this.params = params;
+            this.displayText = this.name.replace(/\\/g, "");
+            this.length = getDisplayLength(this.displayText, this.inlets, this.outlets);
         }
         PDObj.prototype.render = function () {
             if (this.name !== "cnv") {
-                var displayText = this.name.replace(/\\/g, "");
-                var length_1 = getDisplayLength(displayText, this.inlets, this.outlets);
                 context.strokeStyle = this.color;
-                rectOutline(this.xPos, this.yPos, length_1);
-                text(this.xPos, this.yPos, displayText);
+                rectOutline(this.xPos, this.yPos, this.length);
+                text(this.xPos, this.yPos, this.displayText);
                 inlets(this.xPos, this.yPos, this.inlets, this.outlets);
             }
             else {
                 var width = this.params[1];
                 var height = this.params[2];
-                var label = this.params[5];
-                if (label === "HELLO")
-                    console.log("HELLO");
-                context.fillStyle = parseColor(this.params[10]);
+                var label = this.params[5] !== "empty" ? this.params[5] : "";
+                var xOff = Number(this.params[7]);
+                var yOff = Number(this.params[8]) + 30;
+                var fontSize = Number(this.params[9]) - 8;
+                var backgroundColor = this.params[10];
+                context.fillStyle = parseColor(backgroundColor);
                 context.fillRect(this.xPos, this.yPos, width, height);
+                text(this.xPos + xOff, this.yPos + yOff, label, fontSize);
             }
         };
         PDObj.prototype.toString = function () {
@@ -466,7 +471,7 @@
         var num = Number(str).toString(2).slice(1).padStart(18, "0");
         var r = parseInt(num.slice(0, 6), 2) * 4;
         var g = parseInt(num.slice(6, 12), 2) * 4;
-        var b = (parseInt(num.slice(12), 2) * 4) || 256;
+        var b = Math.max(0, parseInt(num.slice(12), 2) * 4) || 256;
         return "rgb(" + r + ", " + g + ", " + b + ")";
     }
 
@@ -477,6 +482,7 @@
      * @param text *.pd file text
      */
     var prev = null;
+    var subPatchName = null;
     function deserializeFromFile(text) {
         return text
             .replace(/\r/, "")
@@ -484,6 +490,14 @@
             .filter(Boolean)
             .map(function (line) {
             var _a = line.substring(1).split(/\s+/), chunk = _a[0], element = _a[1], params = _a.slice(2);
+            // Ignore subPatches for now
+            if (subPatchName) {
+                var endsGraph = subPatchName === "(subpatch)" && params[2] === "graph";
+                var endsSubPatch = element === "restore" && subPatchName === params[3];
+                if (!endsGraph && !endsSubPatch)
+                    return;
+                subPatchName = null;
+            }
             if (prev && chunk === "A") {
                 // Special case; array's "element" type is included in prev line
                 prev.addData([element].concat(params));
@@ -491,7 +505,10 @@
             }
             prev = null;
             if (chunk === "N" && element === "canvas") {
-                return new PDCanvas(params);
+                var canvas = new PDCanvas(params);
+                if (canvas.isSubPatch)
+                    subPatchName = canvas.name;
+                return canvas;
             }
             if (chunk === "X") {
                 switch (element) {
