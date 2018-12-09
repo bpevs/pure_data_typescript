@@ -52,7 +52,7 @@ export class PDFloatatom {
     ctx.strokeStyle = this.color
     drawOutline(this.xPos, this.yPos, length)
     draw.text(this.xPos, this.yPos, displayText)
-    draw.inlets(this.xPos, this.yPos, this.inlets, this.outlets)
+    draw.inlets(length, this.xPos, this.yPos, this.inlets, this.outlets)
   }
 
   public toString() {

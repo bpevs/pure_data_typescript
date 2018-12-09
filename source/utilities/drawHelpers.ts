@@ -17,25 +17,29 @@ export function getDisplayLength(drawText: string, inlets: string[], outlets: st
 }
 
 
-export function inlets(xPos: number, yPos: number, inlets: string[], outlets: string[]) {
+export function inlets(length: number, xPos: number, yPos: number, inlets: string[], outlets: string[]) {
   const inletY = yPos
   const outletY = yPos + OBJECT_HEIGHT - PORTLET_HEIGHT
-  const inletDistance = length / inlets.length
-  const outletDistance = length / outlets.length
+  const actualLength = Math.max(length, 20) - PORTLET_WIDTH
+  const inletDistance = actualLength / Math.max(1, inlets.length - 2)
+  const outletDistance = actualLength / Math.max(1, outlets.length - 2)
+
 
   inlets.forEach((type: wireType, index: number) => {
+    const nextInletLocation = xPos + index * inletDistance
     if (type === "signal") {
-      ctx.fillRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT)
+      ctx.fillRect(nextInletLocation, inletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     } else {
-      ctx.strokeRect(xPos + index * inletDistance, inletY, PORTLET_WIDTH, PORTLET_HEIGHT)
+      ctx.strokeRect(nextInletLocation, inletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     }
   })
 
   outlets.forEach((type: wireType, index: number) => {
+    const nextOutletLocation = xPos + index * outletDistance
     if (type === "signal") {
-      ctx.fillRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT)
+      ctx.fillRect(nextOutletLocation, outletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     } else {
-      ctx.strokeRect(xPos + index * outletDistance, outletY, PORTLET_WIDTH, PORTLET_HEIGHT)
+      ctx.strokeRect(nextOutletLocation, outletY, PORTLET_WIDTH, PORTLET_HEIGHT)
     }
   })
 }
@@ -52,7 +56,7 @@ export function parseColor(str: string) {
 
 
 export function rectOutline(xPos: number, yPos: number, length: number) {
-  ctx.strokeRect(xPos, yPos, Math.max(length + 10, 30), OBJECT_HEIGHT)
+  ctx.strokeRect(xPos, yPos, Math.max(length, 20), OBJECT_HEIGHT)
 }
 
 

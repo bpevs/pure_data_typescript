@@ -17,6 +17,7 @@ import * as draw from "../utilities/drawHelpers"
 export class PDObj {
   public readonly chunkType = "X"
   public readonly elementType = "obj"
+  public behavior: (...args: any[]) => any | void
   public color = "black"
   public inlets = []
   public outlets = []
@@ -38,8 +39,9 @@ export class PDObj {
 
   public render() {
     if (generics[this.name]) {
-      this.inlets = generics[this.name].inlets
-      this.outlets = generics[this.name].outlets
+      this.inlets = generics[this.name][0]
+      this.outlets = generics[this.name][1]
+      this.behavior = generics[this.name][2]
     }
 
     this.displayText = this.name.replace(/\\/g, "")
@@ -48,7 +50,7 @@ export class PDObj {
     ctx.strokeStyle = this.color
     draw.rectOutline(this.xPos, this.yPos, this.length)
     draw.text(this.xPos, this.yPos, this.displayText)
-    draw.inlets(this.xPos, this.yPos, this.inlets, this.outlets)
+    draw.inlets(this.length, this.xPos, this.yPos, this.inlets, this.outlets)
   }
 
   public toString() {
