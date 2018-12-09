@@ -48,7 +48,7 @@ export function inlets(xPos: number, yPos: number, inlets: string[], outlets: st
 
 
 export function rectOutline(xPos: number, yPos: number, length: number) {
-  ctx.strokeRect(xPos, yPos, length + 10, OBJECT_HEIGHT)
+  ctx.strokeRect(xPos, yPos, Math.max(length + 10, 30), OBJECT_HEIGHT)
 }
 
 
@@ -66,8 +66,8 @@ export function renderPatch(patch: any[]) {
 }
 
 
-export function text(xPos: number, yPos: number, text: string) {
+export function text(xPos: number, yPos: number, text: string, size?: number) {
   ctx.fillStyle = "black"
-  ctx.font = "7pt monaco"
+  ctx.font = size ? `${size}pt monaco` : "7pt monaco"
   ctx.fillText(text, xPos + 2, yPos + OBJECT_HEIGHT - 6)
 }

@@ -11,7 +11,6 @@ const patchCanvas = document.getElementById("pd")
 
 let patch: any[]
 
-
 if (exportButton) exportButton.addEventListener("click", () => downloadPatch(patch))
 
 

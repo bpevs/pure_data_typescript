@@ -10,8 +10,9 @@
 export class PDCanvas {
   public readonly chunkType = "N"
   public readonly elementType = "canvas"
+  public readonly isSubPatch: boolean
 
-  public name: string
+  public name: null | string
   public openOnLoad: boolean
   public xPos: number
   public xSize: number
@@ -19,7 +20,8 @@ export class PDCanvas {
   public ySize: number
 
   constructor([ xPos, yPos, xSize, ySize, name, openOnLoad ]: string[]) {
-    this.name = name
+    this.isSubPatch = isNaN(parseInt(name, 10))
+    this.name = this.isSubPatch ? name : null
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
     this.xSize = Number(xSize)

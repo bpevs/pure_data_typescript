@@ -8,6 +8,7 @@
 
 import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDObj, PDText } from "../elements"
 let prev: PDArray | null = null
+let subPatchName: string | null = null
 
 
 export function deserializeFromFile(text: string) {
@@ -17,6 +18,15 @@ export function deserializeFromFile(text: string) {
     .filter(Boolean)
     .map(line => {
       const [ chunk, element, ...params ] = line.substring(1).split(/\s+/)
+
+      // Ignore subPatches for now
+      if (subPatchName) {
+        const endsGraph = subPatchName === "(subpatch)" && params[2] === "graph"
+        const endsSubPatch = element === "restore" && subPatchName === params[3]
+        if (!endsGraph && !endsSubPatch) return
+        subPatchName = null
+      }
+
       if (prev && chunk === "A") {
         // Special case; array's "element" type is included in prev line
         prev.addData([ element, ...params ])
@@ -26,7 +36,9 @@ export function deserializeFromFile(text: string) {
       prev = null
 
       if (chunk === "N" && element === "canvas") {
-        return new PDCanvas(params)
+        const canvas = new PDCanvas(params)
+        if (canvas.isSubPatch) subPatchName = canvas.name
+        return canvas
       }
 
       if (chunk === "X") {
