@@ -1,0 +1,11 @@
+{
+  "name": "@pure-data/canvas",
+  "version": "0.0.1",
+  "description": "Pure-Data canvas renderer",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Ben Pevsner",
+  "license": "BSD-3-Clause"
+}

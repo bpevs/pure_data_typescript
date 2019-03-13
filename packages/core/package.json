@@ -1,0 +1,11 @@
+{
+  "name": "@pure-data/core",
+  "version": "0.0.1",
+  "description": "Unofficial Javascript SDK for Pure Data Lang",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Ben Pevsner",
+  "license": "BSD-3-Clause"
+}

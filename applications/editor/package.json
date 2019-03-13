@@ -1,0 +1,26 @@
+{
+  "name": "pure-data-typescript",
+  "author": "Ben Pevsner",
+  "version": "1.0.0",
+  "description": "Pure Data Environment Implementation in Typescript",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "run-p build watch serve",
+    "build": "rollup -c",
+    "serve": "static ./ -c 1",
+    "watch": "rollup -c -w"
+  },
+  "dependencies": {
+    "zen-observable": "^0.8.11"
+  },
+  "devDependencies": {
+    "node-static": "^0.7.11",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^0.67.4",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-typescript2": "^0.18.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.2.1"
+  }
+}

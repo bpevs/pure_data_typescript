@@ -7,8 +7,8 @@ Inspired by [Pure Data](https://puredata.info/), [WebPd](https://github.com/sebp
 
 # How to run
 ```sh
-npm install
-npm run start
+yarn
+yarn start
 # Open on http://localhost:8080/
 ```
 
