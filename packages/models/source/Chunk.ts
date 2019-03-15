@@ -1,13 +1,13 @@
-export type constMap = { [key: string]: symbol }
+export interface ConstMap { [key: string]: symbol }
 
-export const chunkTypes: constMap = {
+export const chunkTypes: ConstMap = {
   ARRAY: Symbol("ARRAY"),
   NEW_WINDOW: Symbol("NEW_WINDOW"),
   OBJECT: Symbol("OBJECT"),
   UNKNOWN: Symbol("UNKNOWN"),
 }
 
-export const chunkTypeRecordMap: constMap = {
+export const chunkTypeRecordMap: ConstMap = {
   A: chunkTypes.ARRAY,
   N: chunkTypes.NEW_WINDOW,
   X: chunkTypes.OBJECT,

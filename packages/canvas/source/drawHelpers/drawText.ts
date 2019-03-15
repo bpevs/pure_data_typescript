@@ -5,7 +5,7 @@ export function text(
   xPos: number,
   yPos: number,
   text: string,
-  size?: number
+  size?: number,
 ) {
   const { context, objectHeight } = renderer
   context.fillStyle = "black"

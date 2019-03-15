@@ -1,0 +1,14 @@
+# Ignore Directories that aren't dist
+coverage
+source
+node_modules
+
+# Ignore system-created files
+npm-debug.log
+.DS_Store
+.Spotlight-V100
+.Trashes
+.vscode
+.next
+._*
+**/*.log

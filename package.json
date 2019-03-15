@@ -2,10 +2,14 @@
   "name": "pure-data",
   "author": "Ben Pevsner",
   "version": "0.0.1",
-  "private": "true",
+  "private": true,
   "description": "Pure Data Typescript Implementation",
   "license": "BSD-3-Clause",
   "main": "dist/index.js",
+  "workspaces": [
+    "applications/*",
+    "packages/*"
+  ],
   "scripts": {
     "cleanup": "lerna clean --yes && rm -rf ./node_modules",
     "default": "lerna bootstrap --ci && yarn build && yarn test:lint && yarn test:ci",
@@ -16,16 +20,16 @@
     "start:react": "yarn bootstrap && lerna run storybook",
     "test": "run-p --aggregate-output test:lint test:unit",
     "test:coverage": "yarn test:unit -- --coverage",
-    "test:ci": "jest --env=jsdom --colors --ci --maxWorkers=1",
+    "test:ci": "jest --colors --ci --maxWorkers=1",
     "test:lint": "tslint --project ./tsconfig.json",
-    "test:unit": "jest --env=jsdom --colors",
-    "test:watch": "jest --env=jsdom --colors --watch"
+    "test:unit": "jest --colors",
+    "test:watch": "jest --colors --watch"
   },
   "devDependencies": {
     "@types/jest": "^24.0.0",
     "husky": "^1.2.0",
-    "jest": "^24.1.0",
-    "jest-cli": "^24.1.0",
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0",
     "node-static": "^0.7.11",
     "lerna": "^3.5.1",
     "npm-run-all": "^4.1.5",
@@ -41,14 +45,16 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run test:lint",
-      "pre-push": "npm-run-all test:lint build",
-      "pre-publish": "npm-run-all test build"
+      "pre-push": "npm-run-all test:lint",
+      "pre-publish": "npm-run-all test"
     }
   },
   "jest": {
+    "clearMocks": true,
     "collectCoverageFrom": [
-      "packages/**/*.ts"
+      "**/packages/**/*.ts"
     ],
+    "coverageDirectory": "./coverage",
     "coveragePathIgnorePatterns": [
       "node_modules",
       "dist",
@@ -57,9 +63,6 @@
     "moduleFileExtensions": [
       "ts",
       "js"
-    ],
-    "setupFiles": [
-      "<rootDir>/jestsetup.js"
     ],
     "testMatch": [
       "**/*.test.js"

@@ -8,7 +8,7 @@ interface IContextMethod {
 
 export class ContextMenu {
   private ref: HTMLElement | null = null
-  private listeners: any[] = []
+  private readonly listeners: any[] = []
 
   constructor() {
     body.addEventListener("click", this.removeMenu)
@@ -34,7 +34,7 @@ export class ContextMenu {
     this.ref = menu
   }
 
-  private removeMenu = () => {
+  private readonly removeMenu = () => {
     if (this.ref) {
       body.removeChild(this.ref)
       this.ref = null

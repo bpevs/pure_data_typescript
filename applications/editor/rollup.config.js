@@ -13,13 +13,13 @@ export default {
   plugins: [
     resolve({
       jsnext: true,
-      main: true
+      main: true,
     }),
     commonjs({
-      include: 'node_modules/**',
+      include: "node_modules/**",
     }),
     typescript({
-      typescript: require("typescript")
-    })
-  ]
+      typescript: require("typescript"),
+    }),
+  ],
 }

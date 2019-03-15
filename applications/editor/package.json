@@ -11,6 +11,8 @@
     "watch": "rollup -c -w"
   },
   "dependencies": {
+    "@pure-data/canvas": "file:../../packages/canvas",
+    "@pure-data/core": "file:../../packages/core",
     "zen-observable": "^0.8.11"
   },
   "devDependencies": {

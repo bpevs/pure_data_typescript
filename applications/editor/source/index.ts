@@ -1,8 +1,8 @@
-import { deserializeFromFile } from "@pure-data/sdk"
 import { render } from "@pure-data/canvas"
-import { state } from "./globals"
-import { ContextMenu } from "./utilities/ContextMenu"
-import { downloadPatch, loadPatch } from "./utilities/fileTransport"
+import { deserializeFromFile } from "@pure-data/core"
+import { state } from "../globals"
+import { ContextMenu } from "./ContextMenu"
+import { downloadPatch, loadPatch } from "./fileTransport"
 
 
 document.addEventListener("DOMContentLoaded", function initialize() {

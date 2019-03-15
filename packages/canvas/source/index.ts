@@ -24,18 +24,18 @@ context.fillStyle = "black"
 context.font = "10pt monaco"
 context.fillText("Drop file to start", window.innerWidth / 2.2, window.innerHeight / 2.8)
 
-class CanvasRenderer extends Renderer {
-  context = context
+export class CanvasRenderer extends Renderer {
+  public context = context
 
-  render(selector: string, chunks: Chunk[]) {
+  public render(selector: string, chunks: Chunk[]) {
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     chunks.forEach(item => {
       if (item.chunkType !== Chunk.TYPE.Element) {
-        return;
+        return
       }
 
       // If item has custom renderer, respect it
-      if (item.render.canvas) return item.render.canvas()
+      if (item.render.canvas) return item.render.canvas(this, selector)
 
       switch (item.elementType) {
         case TYPE.OBJ:

@@ -2,8 +2,8 @@ import * as ELEMENTS from "@pure-data/elements"
 import { chunkTypes, stringToChunkType } from "../../../models/chunk"
 const { ARRAY, NEW_WINDOW, OBJECT, UNKNOWN } = chunkTypes
 
-type Record = any;
-const newlines = /(\r\n|\r)/gm;
+type Record = any
+const newlines = /(\r\n|\r)/gm
 
 /**
  * Parse *.pd files
@@ -14,7 +14,7 @@ const newlines = /(\r\n|\r)/gm;
 export function parsePatch(text: string) {
   const records = pdToRecords(text)
   const patch: Record[] = []
-  let currSubPatch: string | null = null;
+  let currSubPatch: string | null = null
 
   records.forEach((record) => {
     if (!record) return

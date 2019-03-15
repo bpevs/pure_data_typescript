@@ -9,8 +9,8 @@
  */
 
 
-import { context as ctx } from "../globals"
 import { generics } from "../../../objects/source/generics"
+import { context as ctx } from "../globals"
 import * as draw from "../utilities/drawHelpers"
 
 

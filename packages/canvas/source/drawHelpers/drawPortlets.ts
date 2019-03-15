@@ -7,7 +7,7 @@ export function portlets(
   xPos: number,
   yPos: number,
   inlets: string[],
-  outlets: string[]
+  outlets: string[],
 ) {
   const { context, objectHeight, portletHeight, portletWidth } = renderer
   const inletY = yPos
