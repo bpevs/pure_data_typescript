@@ -1,3 +1,5 @@
+import { Element } from "@pure-data/models"
+
 /**
  * @class PDFloatatom
  * @description Defines a number box
@@ -10,13 +12,7 @@
  * @example
  *  #X floatatom 32 26 5 0 0 0 - - -;
  */
-
-
-import { context as ctx, OBJECT_HEIGHT } from "../globals"
-import * as draw from "../utilities/drawHelpers"
-
-
-export class PDFloatatom {
+export default class Floatatom extends Element {
   public readonly chunkType = "X"
   public readonly elementType = "floatatom"
   public readonly color = "black"
@@ -34,6 +30,7 @@ export class PDFloatatom {
   public yPos: number
 
   constructor([ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send ]: string[]) {
+    super()
     this.lowerLimit = Number(lowerLimit)
     this.label = String(label)
     this.labelPos = Number(labelPos)
@@ -45,16 +42,6 @@ export class PDFloatatom {
     this.yPos = Number(yPos)
   }
 
-  public render() {
-    const displayText = this.label.replace(/\\/g, "")
-    const length = draw.getDisplayLength(displayText, this.inlets, this.outlets)
-
-    ctx.strokeStyle = this.color
-    drawOutline(this.xPos, this.yPos, length)
-    draw.text(this.xPos, this.yPos, displayText)
-    draw.inlets(length, this.xPos, this.yPos, this.inlets, this.outlets)
-  }
-
   public toString() {
     let str = `#X floatatom ${this.xPos} ${this.yPos} ${this.width}` +
       ` ${this.lowerLimit} ${this.upperLimit} ${this.labelPos}`
@@ -63,17 +50,4 @@ export class PDFloatatom {
     str += (this.send || "-")
     return str
   }
-}
-
-
-// Number box has a custom shaped outline
-function drawOutline(xPos: number, yPos: number, length: number) {
-  ctx.beginPath()
-  ctx.moveTo(xPos, yPos)
-  ctx.lineTo(xPos + length, yPos)
-  ctx.lineTo(xPos + length + 5, yPos + 5)
-  ctx.lineTo(xPos + length + 5, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos)
-  ctx.stroke()
 }

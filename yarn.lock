@@ -695,6 +695,20 @@
     universal-user-agent "^2.0.0"
     url-template "^2.0.8"
 
+"@pure-data/canvas@file:packages/canvas":
+  version "0.0.1"
+  dependencies:
+    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-canvas-0.0.1-fdee8780-bb27-4b02-a194-48823acb377e-1552744355445/node_modules/@pure-data/models"
+
+"@pure-data/core@file:packages/core":
+  version "0.0.1"
+  dependencies:
+    "@pure-data/canvas" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-d464873f-a0ae-4623-b618-099a3b137c01-1552744355455/node_modules/@pure-data/canvas"
+    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-d464873f-a0ae-4623-b618-099a3b137c01-1552744355455/node_modules/@pure-data/models"
+
+"@pure-data/models@file:packages/models":
+  version "0.0.1"
+
 "@types/estree@0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"

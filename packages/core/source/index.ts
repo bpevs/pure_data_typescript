@@ -1,4 +1,4 @@
-import canvasRenderer from "@pure-data/canvas"
+import { CanvasRenderer } from "@pure-data/canvas"
 import { Chunk, Renderer } from "@pure-data/models"
 import { parsePatch } from "./parsePatch/parsePatch"
 
@@ -10,12 +10,12 @@ export class Patch {
    * @param patchFileString The actual pd file content
    */
   public static from(patchFileString: string) {
-    this.chunks = parsePatch(patchFileString)
+    return new Patch(parsePatch(patchFileString))
   }
   private readonly chunks: Chunk[] = []
   private readonly inlets: any[] = []
   private readonly outlets: any[] = []
-  private renderer = canvasRenderer
+  private renderer: Renderer = new CanvasRenderer()
 
   // State variables that are expected to change during patch use
   private state = {
@@ -23,13 +23,14 @@ export class Patch {
     editMode: false,
   }
 
-  constructor(options= {}) {
+  constructor(chunks: Chunk[], options = {}) {
+    this.chunks = chunks
     this.state = {...this.state, ...options}
   }
 
   // Render patch to
   public render(selector: string) {
-    this.renderer(selector, this.chunks)
+    this.renderer.render(selector, this.chunks)
   }
 
   /**

@@ -1,3 +1,5 @@
+import { Element } from "@pure-data/models"
+
 /**
  * @class PDCoords
  * @description Visual ranges of a frameset (window)
@@ -11,7 +13,7 @@
  *  #X connect 0 1 1 1;
  */
 
-export class PDCoords {
+export default class Coords extends Element {
   public readonly chunkType = "X"
   public readonly elementType = "coords"
 
@@ -24,6 +26,7 @@ export class PDCoords {
   public yTo: number
 
   constructor([ xFrom, yTo, xTo, yFrom, width, height, graphOnParent ]: string[]) {
+    super()
     this.xFrom = Number(xFrom)
     this.xTo = Number(xTo)
     this.yFrom = Number(yFrom)

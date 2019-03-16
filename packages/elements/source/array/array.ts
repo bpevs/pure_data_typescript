@@ -1,3 +1,5 @@
+import { Element } from "@pure-data/models"
+
 /**
  * @class PDArray
  * @description Array of Numbers
@@ -5,8 +7,7 @@
  * @example
  */
 
-
-export class PDArray {
+export default class Array extends Element {
   public readonly chunkType = "X"
   public readonly elementType = "array"
 
@@ -17,6 +18,7 @@ export class PDArray {
   public saveFlag: boolean
 
   constructor([ name, size, format, saveFlag ]: string[]) {
+    super()
     this.data = []
     this.name = String(name)
     this.size = Number(size)

@@ -1,3 +1,5 @@
+import { Element } from "@pure-data/models"
+
 /**
  * @class PDConnect
  * @description Wires GUI-elements
@@ -11,7 +13,7 @@
  *  #X connect 0 1 1 1;
  */
 
-export class PDConnect {
+export default class Connect extends Element {
   public readonly chunkType = "X"
   public readonly elementType = "connect"
 
@@ -21,6 +23,7 @@ export class PDConnect {
   public target: number
 
   constructor([ source, outlet, target, inlet ]: string[]) {
+    super()
     this.inlet = Number(inlet)
     this.outlet = Number(outlet)
     this.source = Number(source)

@@ -1,38 +1,32 @@
-import { context as ctx } from "../globals"
-import * as draw from "../utilities/drawHelpers"
-
+import { Element } from "@pure-data/models"
 
 /**
- * @class PDtext
+ * @class PDMsg
  * @description Defines a message
  *
  * @example
- *  #X text 61 48 read audio.wav;
+ *  #X msg 61 48 read audio.wav;
  */
 
-
-export class PDText {
+export default class Msg extends Element {
   public readonly chunkType = "X"
-  public readonly elementType = "text"
+  public readonly elementType = "msg"
+  public readonly color = "black"
+  public readonly inlets = [ "control" ]
+  public readonly outlets = [ "signal" ]
 
   public text: string // The content of the message
   public xPos: number // Horizontal position within the window
   public yPos: number // Vertical position within the window
 
   constructor([ xPos, yPos, ...params ]: string[]) {
+    super()
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
     this.text = params.join(" ")
   }
 
-  public render() {
-    const displayText = this.text.replace(/\\/g, "")
-
-    ctx.strokeStyle = "black"
-    draw.text(this.xPos, this.yPos, displayText)
-  }
-
   public toString() {
-    return `#X text ${this.xPos} ${this.yPos} ${this.text}`
+    return `#X msg ${this.xPos} ${this.yPos} ${this.text}`
   }
 }

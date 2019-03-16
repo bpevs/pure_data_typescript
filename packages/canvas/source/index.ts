@@ -1,6 +1,6 @@
-import { Chunk, Element, Renderer } from "@pure-data/models"
+import { Obj } from "@pure-data/elements"
+import { Chunk, Renderer } from "@pure-data/models"
 import renderObj from "./renderers/objRenderer"
-const { TYPE } = Element
 
 // Canvas Setup
 const canvas: HTMLCanvasElement | any = document.getElementById("pd")
@@ -25,21 +25,23 @@ context.font = "10pt monaco"
 context.fillText("Drop file to start", window.innerWidth / 2.2, window.innerHeight / 2.8)
 
 export class CanvasRenderer extends Renderer {
-  public context = context
+  public context: any = context
+  public objectHeight: number = 18
+  public portletHeight: number = 3
+  public portletWidth: number = 8
 
   public render(selector: string, chunks: Chunk[]) {
     this.context.clearRect(0, 0, canvas.width, canvas.height)
-    chunks.forEach(item => {
-      if (item.chunkType !== Chunk.TYPE.Element) {
+    chunks.forEach(chunk => {
+      if (chunk.chunkType !== Chunk.TYPE.Element) {
         return
       }
 
       // If item has custom renderer, respect it
-      if (item.render.canvas) return item.render.canvas(this, selector)
+      if (typeof chunk.render.canvas === "function") return chunk.render.canvas(this, selector)
 
-      switch (item.elementType) {
-        case TYPE.OBJ:
-        default: renderObj(this, item)
+      if (chunk instanceof Obj) {
+        renderObj(this, chunk)
       }
     })
   }

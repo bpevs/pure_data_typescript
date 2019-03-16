@@ -13,8 +13,8 @@
     "noUnusedLocals": true,
     "paths": {
       "*": [
-        "build/*",
         "node_modules/*",
+        "/node_modules/*"
       ]
     },
     "sourceMap": true,
@@ -28,7 +28,6 @@
     "**/*.test.js"
   ],
   "include": [
-    "./applications/**/*",
     "./definitions.d.ts",
     "./packages/**/*"
   ]

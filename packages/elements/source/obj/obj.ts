@@ -1,3 +1,5 @@
+import { Element } from "@pure-data/models"
+
 /**
  * @class PDObject
  * @description An object
@@ -8,13 +10,7 @@
  *  #X obj 26 59 midiout;
  */
 
-
-import { generics } from "../../../objects/source/generics"
-import { context as ctx } from "../globals"
-import * as draw from "../utilities/drawHelpers"
-
-
-export class PDObj {
+export default class Obj extends Element {
   public readonly chunkType = "X"
   public readonly elementType = "obj"
   public behavior: (...args: any[]) => any | void
@@ -31,26 +27,11 @@ export class PDObj {
   protected displayText: string
 
   constructor([ xPos, yPos, name, ...params ]: string[]) {
+    super()
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
     this.name = String(name || "")
     this.params = params
-  }
-
-  public render() {
-    if (generics[this.name]) {
-      this.inlets = generics[this.name][0]
-      this.outlets = generics[this.name][1]
-      this.behavior = generics[this.name][2]
-    }
-
-    this.displayText = this.name.replace(/\\/g, "")
-    this.length = draw.getDisplayLength(this.displayText, this.inlets, this.outlets)
-
-    ctx.strokeStyle = this.color
-    draw.rectOutline(this.xPos, this.yPos, this.length)
-    draw.text(this.xPos, this.yPos, this.displayText)
-    draw.inlets(this.length, this.xPos, this.yPos, this.inlets, this.outlets)
   }
 
   public toString() {

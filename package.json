@@ -11,6 +11,8 @@
     "packages/*"
   ],
   "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
     "cleanup": "lerna clean --yes && rm -rf ./node_modules",
     "default": "lerna bootstrap --ci && yarn build && yarn test:lint && yarn test:ci",
     "lerna": "lerna",

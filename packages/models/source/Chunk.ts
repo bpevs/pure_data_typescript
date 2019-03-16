@@ -13,10 +13,13 @@ export const chunkTypeRecordMap: ConstMap = {
   X: chunkTypes.OBJECT,
 }
 
-export function stringToChunkType(text: string): symbol {
-  return chunkTypeRecordMap[text] || chunkTypes.UNKNOWN
-}
-
 export default class Chunk {
+  public static TYPE: { [name: string]: any } = chunkTypes
+  public static stringToChunkType = (text: string): symbol => {
+    return chunkTypeRecordMap[text] || chunkTypes.UNKNOWN
+  }
 
+  public chunkType: string = ""
+  public elementType: string = ""
+  public render: { [name: string]: any } = {}
 }

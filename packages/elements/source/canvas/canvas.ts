@@ -1,13 +1,13 @@
+import { Element } from "@pure-data/models"
+
 /**
  * @class PDCanvas
  * @description Defines window properties
+ * TODO: Doesn't support initial path canvas declaration (different 1-off format)
  *
  * @example
  */
-
-
-// TODO: Doesn't support initial path canvas declaration (different 1-off format)
-export class PDCanvas {
+export default class PDCanvas extends Element {
   public readonly chunkType = "N"
   public readonly elementType = "canvas"
   public readonly isSubPatch: boolean
@@ -20,6 +20,7 @@ export class PDCanvas {
   public ySize: number
 
   constructor([ xPos, yPos, xSize, ySize, name, openOnLoad ]: string[]) {
+    super()
     this.isSubPatch = isNaN(parseInt(name, 10))
     this.name = this.isSubPatch ? name : null
     this.xPos = Number(xPos)

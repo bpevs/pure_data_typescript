@@ -1,5 +1,4 @@
-import { render } from "@pure-data/canvas"
-import { deserializeFromFile } from "@pure-data/core"
+import { Patch } from "@pure-data/core"
 import { state } from "../globals"
 import { ContextMenu } from "./ContextMenu"
 import { downloadPatch, loadPatch } from "./fileTransport"
@@ -20,7 +19,11 @@ function listenForHeaderChanges() {
   })
 
   const exportButton = document.getElementById("export") as HTMLButtonElement
-  exportButton.addEventListener("click", () => downloadPatch(state.currentPatch))
+  exportButton.addEventListener("click", () => {
+    if (state.currentPatch != null) {
+      downloadPatch(state.currentPatch.toString())
+    }
+  })
 }
 
 
@@ -37,8 +40,8 @@ function listenForCanvasChanges() {
   // When dropping a file over canvas, render it as a patch
   patchCanvas.addEventListener("drop", async (e: any) => {
     const patchText = String(await loadPatch(e))
-    state.currentPatch = deserializeFromFile(patchText)
-    render(state.currentPatch)
+    state.currentPatch = Patch.from(patchText)
+    state.currentPatch.render("#pd")
   })
 
   // On right-click on canvas, render custom contextmenu

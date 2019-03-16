@@ -3,9 +3,24 @@
   "version": "0.0.1",
   "description": "Pure-Data canvas renderer",
   "main": "dist/index.js",
-  "scripts": {
-    "test": "jest"
-  },
+  "typings": "dist/index.d.ts",
   "author": "Ben Pevsner",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "build": "run-p build:* --aggregate-output",
+    "build:commonjs": "tsc -p 'tsconfig.json' --outDir 'dist' --module 'commonjs'",
+    "link": "npm link",
+    "start": "npm run build:commonjs -- --watch"
+  },
+  "dependencies": {
+    "@pure-data/elements": "file:../elements",
+    "@pure-data/models": "file:../models"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "typescript": "^3.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
