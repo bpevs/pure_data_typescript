@@ -9,8 +9,10 @@
   "scripts": {
     "build": "run-p build:* --aggregate-output",
     "build:commonjs": "tsc -p 'tsconfig.json' --outDir 'dist' --module 'commonjs'",
-    "link": "npm link",
     "start": "npm run build:commonjs -- --watch"
+  },
+  "dependencies": {
+    "@pure-data/models": "file:../models"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",

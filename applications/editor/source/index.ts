@@ -52,12 +52,23 @@ function listenForCanvasChanges() {
     e.preventDefault()
 
     menu.render(e.pageX, e.pageY, [
-      { name: "Properties", method: () => { console.log("Properties") } },
-      { name: "Object ⌘1", method: () => { console.log("Object ⌘1") } },
-      { name: "Message ⌘2", method: () => { console.log("Message ⌘2")} },
-      { name: "Number ⌘3", method: () => { console.log("Number ⌘3")} },
-      { name: "Symbol ⌘4", method: () => { console.log("Symbol ⌘4")} },
-      { name: "Comment ⌘5", method: () => { console.log("Comment ⌘5")} },
+      {
+        method: (evt: any) => { console.log(`Properties, ${evt}`) },
+        name: "Properties",
+      },
+      {
+        method: (evt: any) => { console.log(`Open, ${evt}`) },
+        name: "Open",
+      },
+      {
+        method: async () => {
+          const patchResponse = await fetch("/doc/5.reference/help-intro.pd")
+          const patchText = await patchResponse.text()
+          state.currentPatch = Patch.from(patchText)
+          state.currentPatch.render("#pd")
+        },
+        name: "Help",
+      },
     ])
   })
 }

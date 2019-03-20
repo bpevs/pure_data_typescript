@@ -2,15 +2,15 @@ export interface ConstMap { [key: string]: symbol }
 
 export const chunkTypes: ConstMap = {
   ARRAY: Symbol("ARRAY"),
+  ELEMENT: Symbol("ELEMENT"),
   NEW_WINDOW: Symbol("NEW_WINDOW"),
-  OBJECT: Symbol("OBJECT"),
   UNKNOWN: Symbol("UNKNOWN"),
 }
 
 export const chunkTypeRecordMap: ConstMap = {
   A: chunkTypes.ARRAY,
   N: chunkTypes.NEW_WINDOW,
-  X: chunkTypes.OBJECT,
+  X: chunkTypes.ELEMENT,
 }
 
 export default class Chunk {

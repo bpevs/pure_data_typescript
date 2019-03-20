@@ -1,4 +1,5 @@
 import { Element } from "@pure-data/models"
+const noop = () => { return }
 
 /**
  * @class PDObject
@@ -13,10 +14,10 @@ import { Element } from "@pure-data/models"
 export default class Obj extends Element {
   public readonly chunkType = "X"
   public readonly elementType = "obj"
-  public behavior: (...args: any[]) => any | void
+  public behavior: (...args: any[]) => any | void = noop
   public color = "black"
-  public inlets = []
-  public outlets = []
+  public inlets: symbol[] = []
+  public outlets: symbol[] = []
   public length: number = 0
 
   public xPos: number

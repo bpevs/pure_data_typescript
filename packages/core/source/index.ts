@@ -1,6 +1,6 @@
 import { CanvasRenderer } from "@pure-data/canvas"
 import { Chunk, Renderer } from "@pure-data/models"
-import { parsePatch } from "./parsePatch/parsePatch"
+import { parsePatch } from "./parsePatch"
 
 
 export class Patch {
@@ -12,6 +12,7 @@ export class Patch {
   public static from(patchFileString: string) {
     return new Patch(parsePatch(patchFileString))
   }
+
   private readonly chunks: Chunk[] = []
   private readonly inlets: any[] = []
   private readonly outlets: any[] = []
