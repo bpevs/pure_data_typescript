@@ -1,3 +1,7 @@
+import PDObject from "./Object"
+
+// TODO: Introduce global object registry
+const objectRegistry: { [name: string]: PDObject } = {}
 const noop = () => { return }
 
 // Elements are the parts that together make up the entire layout of a patch,
@@ -5,12 +9,14 @@ const noop = () => { return }
 export default class Element {
   public static TYPE: { [name: string]: any } = {}
 
-  public static from(params: string[]) {
-    const name = params[2]
+  public static from([ name, xPos, yPos, ...rest ]: string[]) {
+    let object: PDObject | undefined
 
-    if (objectRegistry[name]) {
-      return new objectRegistry[name](params)
+    if (objectRegistry && objectRegistry[name]) {
+      object = PDObject.from(name, rest)
     }
+
+    return new Element({ child: object, name, xPos, yPos })
   }
 
   public readonly chunkType = "X"
@@ -20,10 +26,10 @@ export default class Element {
   public outlets: symbol[] = []
   public length: number = 0
 
+  public child: string[] | PDObject | undefined
   public xPos: number
   public yPos: number
   public name: string
-  public params: string[]
 
   protected displayText: string
 
@@ -32,6 +38,14 @@ export default class Element {
   }
 
   public toString() {
-    return `#X msg ${this.xPos} ${this.yPos} ${this.name} ${this.params.join(" ")}`
+    let output = `${this.xPos} ${this.yPos} ${this.name}`
+
+    if (Array.isArray(this.child)) {
+      output += ` ${this.child.join(" ")}`
+    } else if (this.child) {
+      output += ` ${this.child.toString()}`
+    }
+
+    return output
   }
 }

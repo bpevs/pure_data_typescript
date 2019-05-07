@@ -68,7 +68,6 @@
     "arrow-parens": false,
     "class-name": true,
     "curly": false,
-    "deprecation": true,
     "eofline": true,
     "encoding": true,
     "indent": [
