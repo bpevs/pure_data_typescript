@@ -16,3 +16,7 @@ export const chunkTypeRecordMap: constMap = {
 export function stringToChunkType(text: string): symbol {
   return chunkTypeRecordMap[text] || chunkTypes.UNKNOWN
 }
+
+export default class Chunk {
+
+}

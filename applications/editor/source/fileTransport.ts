@@ -1,4 +1,4 @@
-import { serializeToFile } from "@pure-data/sdk"
+import { serializeToFile } from "@pure-data/core"
 
 
 export function downloadPatch(patch: any[]) {

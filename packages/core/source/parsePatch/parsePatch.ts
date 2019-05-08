@@ -64,14 +64,14 @@ function lineToRecord(text: string) {
   switch (chunkType) {
     case ARRAY: return args.map(Number)
     case NEW_WINDOW: return new Canvas(args)
-    case OBJECT: return createElement(args)
+    case OBJECT: return createElementChunk(args)
     case UNKNOWN:
     default:
       return null
   }
 }
 
-function createElement(elementName: string, ...args: any[]) {
+function createElementChunk(elementName: string, ...args: any[]) {
   const elementType = stringToElementType(elementName)
   if (ELEMENTS.has(elementType)) {
     return new ELEMENTS.get(elementType)(args)
