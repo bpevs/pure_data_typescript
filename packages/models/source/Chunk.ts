@@ -1,17 +1,13 @@
 import createTypeMaps from "./createTypeMaps"
 
-const ARRAY = Symbol("ARRAY")
-const ELEMENT = Symbol("ELEMENT")
-const NEW_WINDOW = Symbol("NEW_WINDOW")
-
 const { types, stringToType, typeToString } = createTypeMaps([
-  [ ARRAY, "ARRAY", "A"],
-  [ NEW_WINDOW, "NEW_WINDOW", "N"],
-  [ ELEMENT, "ELEMENT", "X"],
+  [ Symbol("ARRAY"), "ARRAY", "A"],
+  [ Symbol("ELEMENT"), "ELEMENT", "X"],
+  [ Symbol("NEW_WINDOW"), "NEW_WINDOW", "N"],
 ])
 
 export default class Chunk {
-  public static TYPE: { [name: string]: any } = types
+  public static TYPE = types
 
   public static from = ([ name ]: string[]): Chunk => {
     const type = stringToType.get(name)

@@ -1,7 +1,42 @@
-// Objects are Elements that contain functionality,
-// gui-related or not.
+import createTypeMaps from "./createTypeMaps"
+import Element from "./Element"
+
+const { types, stringToType, typeToString } = createTypeMaps([
+  [ Symbol("BUTTON"), "BUTTON", "button"],
+  [ Symbol("UNKNOWN"), "UNKNOWN", "unknown"],
+])
+
+/**
+ * Objects are Elements that contain functionality,
+ * gui-related or not.
+ * @ref http://puredata.info/docs/developer/PdFileFormat#r36
+ * @example #X obj 132 72 trigger bang float;
+ */
 export default class PDObject {
-  public static from = (...args: any[]) => {
-    return new PDObject()
+  public static TYPE = types
+  public static from = ([ xPos, yPos, name ]: any[]) => {
+    return new PDObject({ type: stringToType.get(name) , xPos, yPos })
+  }
+
+  public element = new Element({ type: Element.TYPE.OBJECT })
+  public color = "black"
+  public inlets: symbol[] = []
+  public outlets: symbol[] = []
+  public length: number = 0
+  public type: symbol
+  public xPos: number
+  public yPos: number
+
+  constructor(params: any) {
+    Object.assign(this, params)
+  }
+
+  public toString() {
+    return [
+      this.element.toString(),
+      this.xPos,
+      this.yPos,
+      typeToString.get(this.type),
+    ].join(" ")
   }
 }

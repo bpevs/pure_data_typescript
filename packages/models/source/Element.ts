@@ -1,12 +1,10 @@
-import PDChunk from "./Chunk"
+import Chunk from "./Chunk"
 import createTypeMaps from "./createTypeMaps"
 
-const CONNECT = Symbol("CONNECT")
-const UNKNOWN = Symbol("UNKNOWN")
-
 const { types, stringToType, typeToString } = createTypeMaps([
-  [ CONNECT, "CONNECT", "connect"],
-  [ UNKNOWN, "UNKNOWN", "unknown"],
+  [ Symbol("CONNECT"), "CONNECT", "connect"],
+  [ Symbol("OBJECT"), "OBJECT", "object"],
+  [ Symbol("UNKNOWN"), "UNKNOWN", "unknown"],
 ])
 
 /**
@@ -14,34 +12,27 @@ const { types, stringToType, typeToString } = createTypeMaps([
  * including windowsizes and position.
  *
  * @ref http://puredata.info/docs/developer/PdFileFormat#r3
+ * @syntax #X [element];\r\n
+ * @example #X obj 50 36;
  */
 export default class Element {
   public static TYPE = types
 
-  public static from([ name, xPos, yPos ]: string[]) {
-    const type = stringToType.get(name) || UNKNOWN
-    return new Element({ type, xPos, yPos })
+  public static from([ name ]: string[]) {
+    const type = stringToType.get(name) || Element.TYPE.UNKNOWN
+    return new Element({ type })
   }
 
-  public readonly chunk = new PDChunk({ type: PDChunk.TYPE.ELEMENT })
-  public color = "black"
-  public inlets: symbol[] = []
-  public outlets: symbol[] = []
-  public length: number = 0
-
-  public xPos: number
-  public yPos: number
+  public readonly chunk = new Chunk({ type: Chunk.TYPE.ELEMENT })
   public type: symbol
 
-  constructor(params: any) {
-    Object.assign(this, params)
+  constructor({ type }: { type: symbol }) {
+    this.type = type
   }
 
   public toString() {
     return [
       this.chunk.toString(),
-      this.xPos,
-      this.yPos,
       typeToString.get(this.type),
     ].join(" ")
   }
