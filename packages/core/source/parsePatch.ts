@@ -1,4 +1,10 @@
-import { Chunk } from "@pure-data/models"
+import {
+  Array as PDArray,
+  Canvas as PDCanvas,
+  Chunk as PDChunk,
+  Element as PDElement,
+} from "@pure-data/models"
+const { ARRAY, ELEMENT, NEW_WINDOW } = PDChunk.TYPE
 
 type Record = any
 const newlines = /(\r\n|\r)/gm
@@ -33,10 +39,16 @@ function pdToRecords(text: string): Record[] {
 }
 
 function lineToRecord(text: string) {
-  const args = text
+  const [ chunkName, ...rest ] = text
     .substring(1)
     .replace(/\n/gm, " ")
     .split(/\s+/)
 
-  return Chunk.from(args)
+  const type = PDChunk.stringToChunkType(chunkName)
+
+  switch (type) {
+    case ARRAY: return PDArray.from(rest)
+    case ELEMENT: return PDElement.from(rest)
+    case NEW_WINDOW: return PDCanvas.from(rest)
+  }
 }

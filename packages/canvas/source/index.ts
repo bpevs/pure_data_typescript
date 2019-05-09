@@ -33,7 +33,7 @@ export class CanvasRenderer extends Renderer {
   public render(selector: string, chunks: Chunk[]) {
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     chunks.forEach(chunk => {
-      if (chunk.chunkType !== Chunk.TYPE.Element) {
+      if (chunk.type !== Chunk.TYPE.Element) {
         return
       }
 
