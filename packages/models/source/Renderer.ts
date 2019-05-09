@@ -1,4 +1,3 @@
-
 export default class Renderer {
   // Default UI constants are in pixels
   public context: any

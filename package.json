@@ -56,7 +56,8 @@
   "jest": {
     "clearMocks": true,
     "collectCoverageFrom": [
-      "**/packages/**/*.ts"
+      "packages/**/*.{ts}",
+      "!**/node_modules/**"
     ],
     "coverageDirectory": "./coverage",
     "coveragePathIgnorePatterns": [
@@ -67,6 +68,9 @@
     "moduleFileExtensions": [
       "ts",
       "js"
+    ],
+    "roots": [
+      "packages/"
     ],
     "testMatch": [
       "**/*.test.js"
