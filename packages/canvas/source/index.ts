@@ -1,5 +1,5 @@
 import { Obj } from "@pure-data/elements"
-import { Chunk, Renderer } from "@pure-data/models"
+import { Chunk, Element, Renderer } from "@pure-data/models"
 import renderObj from "./renderers/objRenderer"
 
 // Canvas Setup
@@ -33,16 +33,12 @@ export class CanvasRenderer extends Renderer {
   public render(selector: string, chunks: Chunk[]) {
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     chunks.forEach(chunk => {
-      if (chunk.type !== Chunk.TYPE.Element) {
-        return
-      }
-
       // If item has custom renderer, respect it
-      if (typeof chunk.render.canvas === "function") return chunk.render.canvas(this, selector)
+      const hasRenderMethod = typeof chunk.render.canvas === "function"
+      if (hasRenderMethod) return chunk.render.canvas(this, selector)
 
-      if (chunk instanceof Obj) {
-        renderObj(this, chunk)
-      }
+      const isObject = chunk instanceof Obj
+      if (isObject) return renderObj(this, chunk)
     })
   }
 }

@@ -1,11 +1,12 @@
 {
   "name": "pure-data-typescript",
+  "license": "BSD-3-Clause",
   "author": "Ben Pevsner",
   "version": "0.0.1",
   "description": "Pure Data Environment Implementation in Typescript",
   "main": "dist/index.js",
   "scripts": {
-    "start": "run-p build watch serve",
+    "start": "run-p build watch serve --aggregate-output",
     "build": "rollup -c",
     "serve": "static ./ -c 1",
     "watch": "rollup -c -w"

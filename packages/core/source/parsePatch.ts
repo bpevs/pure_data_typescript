@@ -1,12 +1,9 @@
-import {
-  Array as PDArray,
-  Canvas as PDCanvas,
-  Chunk as PDChunk,
-  Element as PDElement,
-} from "@pure-data/models"
-const { ARRAY, ELEMENT, NEW_WINDOW } = PDChunk.TYPE
+import { Array as PDArray, Canvas, Chunk, Element } from "@pure-data/models"
 
-type Record = any
+export interface Patch {
+  canvas: Canvas,
+  elements: { [id: string]: Element },
+}
 const newlines = /(\r\n|\r)/gm
 
 /**
@@ -16,39 +13,50 @@ const newlines = /(\r\n|\r)/gm
  * @param text *.pd file text
  */
 export function parsePatch(text: string) {
-  const records = pdToRecords(text)
-  const patch: Record[] = []
+  const patch: Patch = Object.freeze({
+    canvas: {},
+    elements: {},
+  })
 
-  records.forEach((record) => {
-    if (!record) return
+  const chunks = pdToChunks(text)
+  const openWindows: Chunk[] = []
+  chunks.forEach((chunk, index) => {
+    if (!chunk) return
 
-    // TODO: subpatch record mutations
-    patch.push(record)
+    const indexToId = (i: number) => i
+    const id = indexToId(index)
+
+    if (index === 0) {
+      patch.canvas = Canvas.from(chunk)
+    } else if (chunk.type === Chunk.TYPE.NEW_WINDOW) {
+      openWindows.push(chunk)
+    } else if (chunk.type === Chunk.TYPE.ARRAY) {
+      const prevId = indexToId(index - 1)
+      const prevEl = patch.elements[prevId]
+      prevEl.data = PDArray.from(chunk)
+    } else if (chunk.type === Chunk.TYPE.ELEMENT) {
+      if (chunk.subType === Chunk.SUB_TYPE.RESTORE) {
+        openWindows.pop()
+      }
+      patch.elements[id] = Element.from(chunk)
+    } else {
+      console.error("UNKNOWN CHUNK:", chunk)
+    }
   })
 
   return patch
 }
 
-function pdToRecords(text: string): Record[] {
+/**
+ * Chunks are line-by-line entities.
+ * They do not take into account multi-line entities,
+ * ala inline subpatches, arrays.
+ */
+function pdToChunks(text: string): Chunk[] {
   const normalized = text.replace(newlines, "\n")
   return normalized
     .substring(0, normalized.length - 1)
     .split(/;\n/)
     .filter(Boolean)
-    .map(lineToRecord)
-}
-
-function lineToRecord(text: string) {
-  const [ chunkName, ...rest ] = text
-    .substring(1)
-    .replace(/\n/gm, " ")
-    .split(/\s+/)
-
-  const type = PDChunk.stringToChunkType(chunkName)
-
-  switch (type) {
-    case ARRAY: return PDArray.from(rest)
-    case ELEMENT: return PDElement.from(rest)
-    case NEW_WINDOW: return PDCanvas.from(rest)
-  }
+    .map(Chunk.from)
 }

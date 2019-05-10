@@ -9,7 +9,16 @@ const { types, stringToType, typeToString } = createTypeMaps([
 export default class Chunk {
   public static TYPE = types
 
-  public static from = ([ name ]: string[]): Chunk => {
+  /**
+   * Parse a record into a chunk. Meant to consume a
+   * line from a *.pd file (defined by an ending semi-colon)
+   * @example #N canvas 0 0 450 300 graph4 0;
+   */
+  public static from = (line: string): Chunk => {
+    const [ name ] = line
+      .substring(1)
+      .replace(/\n/gm, " ")
+      .split(/\s+/)
     const type = stringToType.get(name)
     return new Chunk({ type })
   }
