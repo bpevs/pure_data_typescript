@@ -1,4 +1,4 @@
-import Chunk from "./Chunk"
+import Record from "./Record"
 
 /**
  * Defines window properties
@@ -19,7 +19,7 @@ export default class PDCanvas {
     })
   }
 
-  public readonly chunk = new Chunk(Chunk.TYPE.NEW_WINDOW)
+  public readonly record = new Record(Record.CHUNK_TYPE.NEW_WINDOW)
   public fontSize: number
   public name: string
   public openOnLoad: boolean
@@ -33,8 +33,8 @@ export default class PDCanvas {
   }
 
   public toString() {
-    const chunk = this.chunk.toString()
-    const params: any[] = [ chunk, this.xPos, this.yPos, this.xSize, this.ySize ]
+    const record = this.record.toString()
+    const params: any[] = [ record, this.xPos, this.yPos, this.xSize, this.ySize ]
     const additionalParams = typeof this.fontSize === "number"
       ? [ this.fontSize ]
       : [ this.name, this.openOnLoad ]

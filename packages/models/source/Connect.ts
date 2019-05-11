@@ -4,6 +4,7 @@ const CONTROL = Symbol("CONTROL")
 const SIGNAL = Symbol("SIGNAL")
 
 /**
+ * @ref http://puredata.info/docs/developer/PdFileFormat#3
  * @ref http://puredata.info/docs/developer/PdFileFormat#r32
  * @syntax #X connect [source] [outlet] [target] [inlet];\r\n
  * @example

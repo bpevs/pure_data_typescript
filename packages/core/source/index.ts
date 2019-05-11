@@ -1,5 +1,5 @@
 import { CanvasRenderer } from "@pure-data/canvas"
-import { Chunk, Renderer } from "@pure-data/models"
+import { Record, Renderer } from "@pure-data/models"
 import { parsePatch } from "./parsePatch"
 
 
@@ -13,7 +13,7 @@ export class Patch {
     return new Patch(parsePatch(patchFileString))
   }
 
-  private readonly chunks: Chunk[] = []
+  private readonly records: Record[] = []
   private readonly inlets: any[] = []
   private readonly outlets: any[] = []
   private renderer: Renderer = new CanvasRenderer()
@@ -24,14 +24,14 @@ export class Patch {
     editMode: false,
   }
 
-  constructor(chunks: Chunk[], options = {}) {
-    this.chunks = chunks
+  constructor(records: Record[], options = {}) {
+    this.records = records
     this.state = {...this.state, ...options}
   }
 
   // Render patch to
   public render(selector: string) {
-    this.renderer.render(selector, this.chunks)
+    this.renderer.render(selector, this.records)
   }
 
   /**
@@ -70,11 +70,11 @@ export class Patch {
 
   /**
    * Write a patch to a string. This doesn't actually do too much, since it
-   * depends on chunks having toString methods of their own.
+   * depends on records having toString methods of their own.
    */
   public toString() {
-    return this.chunks
-      .map(chunk => chunk.toString())
+    return this.records
+      .map(record => record.toString())
       .join(";\r\n") + ";\r\n"
   }
 }

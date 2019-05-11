@@ -1,5 +1,5 @@
 import { Obj } from "@pure-data/elements"
-import { Chunk, Element, Renderer } from "@pure-data/models"
+import { Record, Renderer } from "@pure-data/models"
 import renderObj from "./renderers/objRenderer"
 
 // Canvas Setup
@@ -30,15 +30,15 @@ export class CanvasRenderer extends Renderer {
   public portletHeight: number = 3
   public portletWidth: number = 8
 
-  public render(selector: string, chunks: Chunk[]) {
+  public render(selector: string, records: Record[]) {
     this.context.clearRect(0, 0, canvas.width, canvas.height)
-    chunks.forEach(chunk => {
+    records.forEach(record => {
       // If item has custom renderer, respect it
-      const hasRenderMethod = typeof chunk.render.canvas === "function"
-      if (hasRenderMethod) return chunk.render.canvas(this, selector)
+      const hasRenderMethod = typeof record.render.canvas === "function"
+      if (hasRenderMethod) return record.render.canvas(this, selector)
 
-      const isObject = chunk instanceof Obj
-      if (isObject) return renderObj(this, chunk)
+      const isObject = record instanceof Obj
+      if (isObject) return renderObj(this, record)
     })
   }
 }

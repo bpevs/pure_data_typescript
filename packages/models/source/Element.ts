@@ -1,5 +1,5 @@
-import Chunk from "./Chunk"
 import createTypeMaps from "./createTypeMaps"
+import Record from "./Record"
 
 const { types, stringToType, typeToString } = createTypeMaps([
   [ Symbol("CONNECT"), "CONNECT", "connect"],
@@ -23,7 +23,7 @@ export default class Element {
     return new Element({ type })
   }
 
-  public readonly chunk = new Chunk({ type: Chunk.TYPE.ELEMENT })
+  public readonly record = new Record({ chunkType: Record.CHUNK_TYPE.ELEMENT })
   public type: symbol
 
   constructor({ type }: { type: symbol }) {
@@ -32,7 +32,7 @@ export default class Element {
 
   public toString() {
     return [
-      this.chunk.toString(),
+      this.record.toString(),
       typeToString.get(this.type),
     ].join(" ")
   }

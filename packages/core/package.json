@@ -12,6 +12,7 @@
     "start": "npm run build:commonjs -- --watch"
   },
   "dependencies": {
+    "@civility/utilities": "^0.2.1",
     "@pure-data/canvas": "file:../canvas",
     "@pure-data/elements": "file:../elements",
     "@pure-data/models": "file:../models"

@@ -1,10 +1,12 @@
-import { Array as PDArray, Canvas, Chunk, Element } from "@pure-data/models"
+import { Array as PDArray, Canvas, Element, Record } from "@pure-data/models"
 
 export interface Patch {
   canvas: Canvas,
   elements: { [id: string]: Element },
 }
+
 const newlines = /(\r\n|\r)/gm
+const { CHUNK_TYPE, ELEMENT_TYPE } = Record
 
 /**
  * Parse *.pd files
@@ -18,45 +20,45 @@ export function parsePatch(text: string) {
     elements: {},
   })
 
-  const chunks = pdToChunks(text)
-  const openWindows: Chunk[] = []
-  chunks.forEach((chunk, index) => {
-    if (!chunk) return
+  const normalized = text.replace(newlines, "\n")
+  const record = text
+    .replace(newlines, "\n")
+    .substring(0, normalized.length - 1)
+    .split(/;\n/)
+    .filter(Boolean)
+    .map(Record.from)
+
+  const openWindows: Record[] = []
+  record.forEach((record, index) => {
+    if (!record) return
+    const { chunkType, elementType } = record
 
     const indexToId = (i: number) => i
     const id = indexToId(index)
 
     if (index === 0) {
-      patch.canvas = Canvas.from(chunk)
-    } else if (chunk.type === Chunk.TYPE.NEW_WINDOW) {
-      openWindows.push(chunk)
-    } else if (chunk.type === Chunk.TYPE.ARRAY) {
-      const prevId = indexToId(index - 1)
-      const prevEl = patch.elements[prevId]
-      prevEl.data = PDArray.from(chunk)
-    } else if (chunk.type === Chunk.TYPE.ELEMENT) {
-      if (chunk.subType === Chunk.SUB_TYPE.RESTORE) {
-        openWindows.pop()
-      }
-      patch.elements[id] = Element.from(chunk)
-    } else {
-      console.error("UNKNOWN CHUNK:", chunk)
+      patch.canvas = Canvas.from(record)
+    }
+
+    switch (chunkType) {
+      case CHUNK_TYPE.NEW_WINDOW:
+        openWindows.push(record)
+        break
+      case CHUNK_TYPE.ARRAY:
+        const prevId = indexToId(index - 1)
+        const prevEl = patch.elements[prevId]
+        prevEl.data = PDArray.from(record)
+        break
+      case CHUNK_TYPE.ELEMENT:
+        if (elementType === ELEMENT_TYPE.RESTORE) {
+          openWindows.pop()
+        }
+        patch.elements[id] = Element.from(record)
+        break
+      default:
+        console.error("UNKNOWN RECORD:", record)
     }
   })
 
   return patch
-}
-
-/**
- * Chunks are line-by-line entities.
- * They do not take into account multi-line entities,
- * ala inline subpatches, arrays.
- */
-function pdToChunks(text: string): Chunk[] {
-  const normalized = text.replace(newlines, "\n")
-  return normalized
-    .substring(0, normalized.length - 1)
-    .split(/;\n/)
-    .filter(Boolean)
-    .map(Chunk.from)
 }

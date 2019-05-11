@@ -131,6 +131,11 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@civility/utilities@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@civility/utilities/-/utilities-0.2.1.tgz#bffd70b7e68a73a7b3569e4031a9176e1bb36ccb"
+  integrity sha512-D2bsC3996bG2nN/QxQSb3/tnsiqyFpbJ8iWNoSeh4usgpGlIiw/r3liJvTpXgfskd8+uAKmtwPE/c+IIw5gaJQ==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -1096,20 +1101,20 @@
 "@pure-data/canvas@file:packages/canvas":
   version "0.0.1"
   dependencies:
-    "@pure-data/elements" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-canvas-0.0.1-ac109e09-da23-4812-ab53-112b5c59a69d-1557328628221/node_modules/@pure-data/elements"
-    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-canvas-0.0.1-ac109e09-da23-4812-ab53-112b5c59a69d-1557328628221/node_modules/@pure-data/models"
+    "@pure-data/elements" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-canvas-0.0.1-33038b4e-b048-422f-a93a-27ae5b126d74-1557503486022/node_modules/@pure-data/elements"
+    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-canvas-0.0.1-33038b4e-b048-422f-a93a-27ae5b126d74-1557503486022/node_modules/@pure-data/models"
 
 "@pure-data/core@file:packages/core":
   version "0.0.1"
   dependencies:
-    "@pure-data/canvas" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-1b2f7991-005f-413a-bbe9-081826d26781-1557328628223/node_modules/@pure-data/canvas"
-    "@pure-data/elements" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-1b2f7991-005f-413a-bbe9-081826d26781-1557328628223/node_modules/@pure-data/elements"
-    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-1b2f7991-005f-413a-bbe9-081826d26781-1557328628223/node_modules/@pure-data/models"
+    "@pure-data/canvas" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-a959f3f2-e99e-446b-9a59-73375e0124f4-1557503486021/node_modules/@pure-data/canvas"
+    "@pure-data/elements" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-a959f3f2-e99e-446b-9a59-73375e0124f4-1557503486021/node_modules/@pure-data/elements"
+    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-core-0.0.1-a959f3f2-e99e-446b-9a59-73375e0124f4-1557503486021/node_modules/@pure-data/models"
 
 "@pure-data/elements@file:packages/elements":
   version "0.0.1"
   dependencies:
-    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-elements-0.0.1-530264ad-83c1-49d8-b26b-163a11df450e-1557328628224/node_modules/@pure-data/models"
+    "@pure-data/models" "file:../../../../Library/Caches/Yarn/v4/npm-@pure-data-elements-0.0.1-9ed8b975-beba-47c3-a488-a7984903401e-1557503486022/node_modules/@pure-data/models"
 
 "@pure-data/models@file:packages/models":
   version "0.0.1"

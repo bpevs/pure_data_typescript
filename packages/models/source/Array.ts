@@ -1,4 +1,4 @@
-import Chunk from "./Chunk"
+import Record from "./Record"
 
 /**
  * @ref http://puredata.info/docs/developer/PdFileFormat#r31
@@ -9,7 +9,7 @@ export default class PDArray {
     return new PDArray(values.map(Number))
   }
 
-  public readonly chunk = new Chunk(Chunk.TYPE.ARRAY)
+  public readonly record = new Record({ chunkType: Record.CHUNK_TYPE.ARRAY })
   public values: number[]
 
   constructor(values: number[]) {
@@ -18,7 +18,7 @@ export default class PDArray {
 
   public toString() {
     return [
-      this.chunk.toString(),
+      this.record.toString(),
       this.values.join(" "),
     ].join(" ")
   }
