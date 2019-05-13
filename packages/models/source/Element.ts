@@ -23,10 +23,11 @@ export default class Element {
     return new Element({ type })
   }
 
-  public readonly record = new Record({ chunkType: Record.CHUNK_TYPE.ELEMENT })
+  public record: Record
   public type: symbol
 
   constructor({ type }: { type: symbol }) {
+    this.record = new Record({ chunkType: Record.CHUNK_TYPE.ELEMENT })
     this.type = type
   }
 

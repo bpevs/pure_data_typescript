@@ -1,29 +1,39 @@
 import { Element } from "@pure-data/models"
 
 /**
- * @class PDArray
+ * @class ArrayElement
  * @description Array of Numbers
  *
  * @example
  */
+export interface ArrayElementProps {
+  name: string
+  size: number
+  format: string
+  saveFlag: boolean
+}
 
-export default class Array extends Element {
-  public readonly chunkType = "X"
-  public readonly elementType = "array"
+export default class ArrayElement extends Element {
+  public static type = Symbol("array")
 
-  public data: number[]
+  public static from([ name, size, format, saveFlag ]: string[]) {
+    return new ArrayElement({
+      format: String(format),
+      name: String(name),
+      saveFlag: Boolean(saveFlag) || false,
+      size: Number(size) || 0,
+    })
+  }
+
+  public data: number[] = []
   public name: string
-  public size: number
+  public size: number = 0
   public format: string
-  public saveFlag: boolean
+  public saveFlag: boolean = false
 
-  constructor([ name, size, format, saveFlag ]: string[]) {
-    super()
-    this.data = []
-    this.name = String(name)
-    this.size = Number(size)
-    this.format = String(format)
-    this.saveFlag = Boolean(saveFlag)
+  constructor({ format, name, saveFlag, size }: ArrayElementProps) {
+    super({ type: ArrayElement.type })
+    Object.assign(this, { format, name, saveFlag, size })
   }
 
   public addData(data: string[]) {

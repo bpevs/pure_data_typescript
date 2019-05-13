@@ -12,9 +12,35 @@ import { Element } from "@pure-data/models"
  * @example
  *  #X floatatom 32 26 5 0 0 0 - - -;
  */
+export interface FloatatomProps {
+  lowerLimit: number
+  label: string
+  labelPos: number
+  receive: string
+  send: string
+  upperLimit: number
+  width: number
+  xPos: number
+  yPos: number
+}
+
 export default class Floatatom extends Element {
-  public readonly chunkType = "X"
-  public readonly elementType = "floatatom"
+  public static readonly type = Symbol("floatatom")
+
+  public static from([ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send ]: string[]) {
+    return new Floatatom({
+      label: String(label),
+      labelPos: Number(labelPos),
+      lowerLimit: Number(lowerLimit),
+      receive: String(receive),
+      send: String(send),
+      upperLimit: Number(upperLimit),
+      width: Number(width),
+      xPos: Number(xPos),
+      yPos: Number(yPos),
+    })
+  }
+
   public readonly color = "black"
   public readonly inlets = [ "control" ]
   public readonly outlets = [ "signal" ]
@@ -29,25 +55,24 @@ export default class Floatatom extends Element {
   public xPos: number
   public yPos: number
 
-  constructor([ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send ]: string[]) {
-    super()
-    this.lowerLimit = Number(lowerLimit)
-    this.label = String(label)
-    this.labelPos = Number(labelPos)
-    this.receive = String(receive)
-    this.send = String(send)
-    this.upperLimit = Number(upperLimit)
-    this.width = Number(width)
-    this.xPos = Number(xPos)
-    this.yPos = Number(yPos)
+  constructor(props: FloatatomProps) {
+    super({ type: Floatatom.type })
+    Object.assign(this, props)
   }
 
   public toString() {
-    let str = `#X floatatom ${this.xPos} ${this.yPos} ${this.width}` +
-      ` ${this.lowerLimit} ${this.upperLimit} ${this.labelPos}`
-    str += (this.label || "-")
-    str += (this.receive || "-")
-    str += (this.send || "-")
-    return str
+    return [
+      this.record.toString(),
+      "floatatom",
+      this.xPos,
+      this.yPos,
+      this.width,
+      this.lowerLimit,
+      this.upperLimit,
+      this.labelPos,
+      this.label || "-",
+      this.receive || "-",
+      this.send || "-",
+    ].join(" ")
   }
 }

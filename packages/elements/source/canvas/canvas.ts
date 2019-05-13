@@ -1,15 +1,36 @@
 import { Element } from "@pure-data/models"
 
 /**
- * @class PDCanvas
+ * @class CanvasElement
  * @description Defines window properties
  * TODO: Doesn't support initial path canvas declaration (different 1-off format)
  *
  * @example
  */
-export default class PDCanvas extends Element {
-  public readonly chunkType = "N"
-  public readonly elementType = "canvas"
+export interface CanvasElementProps {
+  name: string | null
+  openOnLoad: boolean
+  xPos: number
+  xSize: number
+  yPos: number
+  ySize: number
+}
+
+export default class CanvasElement extends Element {
+  public static type = Symbol("canvas")
+
+  public static from([ xPos, yPos, xSize, ySize, name, openOnLoad ]: string[]) {
+    const isSubPatch = isNaN(parseInt(name, 10))
+    return new CanvasElement({
+      name: isSubPatch ? name : null,
+      openOnLoad: Boolean(openOnLoad),
+      xPos: Number(xPos),
+      xSize: Number(xSize),
+      yPos: Number(yPos),
+      ySize: Number(ySize),
+    })
+  }
+
   public readonly isSubPatch: boolean
 
   public name: null | string
@@ -19,18 +40,21 @@ export default class PDCanvas extends Element {
   public yPos: number
   public ySize: number
 
-  constructor([ xPos, yPos, xSize, ySize, name, openOnLoad ]: string[]) {
-    super()
-    this.isSubPatch = isNaN(parseInt(name, 10))
-    this.name = this.isSubPatch ? name : null
-    this.xPos = Number(xPos)
-    this.yPos = Number(yPos)
-    this.xSize = Number(xSize)
-    this.ySize = Number(ySize)
-    this.openOnLoad = Boolean(openOnLoad)
+  constructor({ name, openOnLoad, xPos, xSize, yPos, ySize }: CanvasElementProps) {
+    super({ type: CanvasElement.type })
+    Object.assign(this, { name, openOnLoad, xPos, xSize, yPos, ySize })
   }
 
   public toString() {
-    return `#N canvas ${this.xPos} ${this.yPos} ${this.xSize} ${this.ySize} ${this.name} ${this.openOnLoad}`
+    return [
+      this.record.toString(),
+      "canvas",
+      this.xPos,
+      this.yPos,
+      this.xSize,
+      this.ySize,
+      this.name,
+      this.openOnLoad,
+    ].join(" ")
   }
 }

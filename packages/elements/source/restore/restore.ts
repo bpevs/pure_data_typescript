@@ -8,16 +8,18 @@ import { Element } from "@pure-data/models"
  *  #X restore 61 48 read audio.wav;
  */
 
-
 export default class Restore extends Element {
-  public readonly chunkType = "X"
-  public readonly elementType = "restore"
+  public static type = Symbol("restore")
+
+  public static from([ ...params ]: string[]) {
+    return new Restore({ name: params.join(" ") })
+  }
 
   public name: string = ""
 
-  constructor([ ...params ]: string[]) {
-    super()
-    this.name = params.join(" ")
+  constructor({ name }: { name: string }) {
+    super({ type: Restore.type })
+    Object.assign(this, { name })
   }
 
   public toString() {
