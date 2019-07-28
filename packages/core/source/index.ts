@@ -1,6 +1,6 @@
 import { CanvasRenderer } from "@pure-data/canvas"
 import { Record, Renderer } from "@pure-data/models"
-import { parsePatch } from "./parsePatch"
+import { parsePatch } from "../../models/source/utils/parsePatch"
 
 
 export class Patch {

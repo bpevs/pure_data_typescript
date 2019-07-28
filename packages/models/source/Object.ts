@@ -1,9 +1,9 @@
-import createTypeMaps from "./createTypeMaps"
 import Element from "./Element"
+import createTypeMaps from "./typeMaps/createTypeMaps"
 
 const { types, stringToType, typeToString } = createTypeMaps([
-  [ Symbol("BUTTON"), "BUTTON", "button"],
-  [ Symbol("UNKNOWN"), "UNKNOWN", "unknown"],
+  [ "BUTTON", "button"],
+  [ "UNKNOWN", "unknown"],
 ])
 
 /**
@@ -12,7 +12,7 @@ const { types, stringToType, typeToString } = createTypeMaps([
  * @ref http://puredata.info/docs/developer/PdFileFormat#r36
  * @example #X obj 132 72 trigger bang float;
  */
-export default class PDObject {
+export default class PDObject extends Element {
   public static TYPE = types
   public static from = ([ xPos, yPos, name ]: any[]) => {
     return new PDObject({ type: stringToType.get(name) , xPos, yPos })

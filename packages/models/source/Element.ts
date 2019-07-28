@@ -1,11 +1,6 @@
-import createTypeMaps from "./createTypeMaps"
+import Chunk from "./Chunk"
 import Record from "./Record"
-
-const { types, stringToType, typeToString } = createTypeMaps([
-  [ Symbol("CONNECT"), "CONNECT", "connect"],
-  [ Symbol("OBJECT"), "OBJECT", "object"],
-  [ Symbol("UNKNOWN"), "UNKNOWN", "unknown"],
-])
+import { ELEMENT_TYPES } from "./typeMaps"
 
 /**
  * Elements are the parts that together make up the entire layout of a patch,
@@ -15,26 +10,28 @@ const { types, stringToType, typeToString } = createTypeMaps([
  * @syntax #X [element];\r\n
  * @example #X obj 50 36;
  */
-export default class Element {
-  public static TYPE = types
+export default class Element extends Record {
+  public static TYPE = ELEMENT_TYPES.types
 
-  public static from([ name ]: string[]) {
-    const type = stringToType.get(name) || Element.TYPE.UNKNOWN
-    return new Element({ type })
+  public static from(chunk: Chunk) {
+    const { elementType } = chunk
+    if (!elementType) throw new Error("Element type is mandatory")
+    return new Element(elementType, chunk.params)
   }
 
-  public record: Record
-  public type: symbol
+  public elementType: symbol
+  public params: string[]
 
-  constructor({ type }: { type: symbol }) {
-    this.record = new Record({ chunkType: Record.CHUNK_TYPE.ELEMENT })
-    this.type = type
+  constructor(elementType: symbol, params: string[]) {
+    super(Record.TYPE.ELEMENT)
+    this.elementType = elementType
+    this.params = params
   }
 
   public toString() {
     return [
-      this.record.toString(),
-      typeToString.get(this.type),
+      super.toString(),
+      ELEMENT_TYPES.toString.get(this.elementType),
     ].join(" ")
   }
 }

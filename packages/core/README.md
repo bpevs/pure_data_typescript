@@ -13,13 +13,14 @@ This is the unofficial javascript module for Pure-Data. It from-the-ground-up im
 
 # Usage
 ```js
-import { pdToPatch, startPatch } from "@pure-data/core"
+import { Patch, startPatch } from "@pure-data/core"
 import renderPatch from "@pure-data/canvas"
 
-const patch = pdToPatch("#N canvas 624 103 899 784 10;")
+const patch = Patch.from("#N canvas 624 103 899 784 10;")
 renderPatch("#puredata", patch)
-patch.setInlet(1, 100)
-patch.streamInlet(0, audioInput)
 
-startPatch(patch) // Turn on DSP. By default, outlet is default output
+patch.inlets(1) = 100 // Set inlet #1 to the integer value 100
+patch.inlets(0) = audioBuffer // Set inlet #0 to an audio stream
+patch2.inlet(0) = patch.outlet(2) // Also can connect patches
+patch.start() // Turn on DSP. outlet[0] and outlet[1] are default output
 ```
