@@ -1,6 +1,6 @@
-import Chunk from "./Chunk"
-import Element from "./Element"
-import { OBJECT_TYPES } from "./typeMaps"
+import Chunk from "../Chunk"
+import Element from "../Element"
+import { OBJECT } from "../types"
 
 export interface ObjectParams {
   name: string
@@ -15,7 +15,9 @@ export interface ObjectParams {
  * @example #X obj 132 72 trigger bang float;
  */
 export default class PDObject extends Element {
-  public static TYPE = OBJECT_TYPES.types
+  public static TYPE = OBJECT.TYPE
+  public static toString = (a: symbol) => OBJECT.toString.get(a)
+  public static toType = (a: string) => OBJECT.toType.get(a)
 
   public static from = ({ objectType, params }: Chunk) => {
     if (!objectType) throw new Error("Object type required")
@@ -50,7 +52,7 @@ export default class PDObject extends Element {
       super.toString(),
       this.xPos,
       this.yPos,
-      OBJECT_TYPES.toString.get(this.objectType),
+      OBJECT.toString.get(this.objectType),
     ].join(" ")
   }
 }

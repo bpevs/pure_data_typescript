@@ -1,6 +1,6 @@
-import Chunk from "./Chunk"
-import Record from "./Record"
-import { ELEMENT_TYPES } from "./typeMaps"
+import Chunk from "../Chunk"
+import Record from "../Record"
+import { ELEMENT } from "../types"
 
 /**
  * Elements are the parts that together make up the entire layout of a patch,
@@ -11,7 +11,9 @@ import { ELEMENT_TYPES } from "./typeMaps"
  * @example #X obj 50 36;
  */
 export default class Element extends Record {
-  public static TYPE = ELEMENT_TYPES.types
+  public static TYPE = ELEMENT.TYPE
+  public static toString = (a: symbol) => ELEMENT.toString.get(a)
+  public static toType = (a: string) => ELEMENT.toType.get(a)
 
   public static from(chunk: Chunk) {
     const { elementType } = chunk
@@ -31,7 +33,7 @@ export default class Element extends Record {
   public toString() {
     return [
       super.toString(),
-      ELEMENT_TYPES.toString.get(this.elementType),
+      ELEMENT.toString.get(this.elementType),
     ].join(" ")
   }
 }

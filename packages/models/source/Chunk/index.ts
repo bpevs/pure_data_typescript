@@ -1,4 +1,8 @@
-import { ELEMENT_TYPES, OBJECT_TYPES, RECORD_TYPES } from "./typeMaps"
+import {
+  Element as El,
+  Object as Obj,
+  Record,
+} from ".."
 
 /**
  * A line of text representing a Record.
@@ -17,14 +21,14 @@ export default class Chunk {
   }
 
   get recordType(): symbol | null {
-    return RECORD_TYPES.toType.get(this.params[0]) || null
+    return Record.toType(this.params[0]) || null
   }
 
   get elementType(): symbol | null {
-    return ELEMENT_TYPES.toType.get(this.params[3]) || null
+    return El.toType(this.params[3]) || null
   }
 
   get objectType(): symbol | null {
-    return OBJECT_TYPES.toType.get(this.params[5]) || null
+    return Obj.toType(this.params[5]) || null
   }
 }

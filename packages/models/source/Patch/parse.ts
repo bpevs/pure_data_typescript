@@ -1,9 +1,11 @@
-import Canvas from "../Canvas"
-import Chunk from "../Chunk"
-import PDElement from "../Element"
-import PDObject from "../Object"
-import Patch, { Records } from "../Patch"
-import Record from "../Record"
+import Patch, { Records } from "."
+import {
+  Canvas,
+  Chunk,
+  Element,
+  Object as Obj,
+  Record,
+} from ".."
 
 const newlines = /(\r\n|\r)/gm
 
@@ -54,7 +56,7 @@ function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Records } {
 
     // Handle special cases of
     const isSubPatch = openSubPatches.length
-    const subPatchIsClosed = isSubPatch && elementType === PDElement.TYPE.RESTORE
+    const subPatchIsClosed = isSubPatch && elementType === Element.TYPE.RESTORE
     const subPatchShouldOpen = recordType === Record.TYPE.NEW_WINDOW
     if (subPatchIsClosed) return openSubPatches.pop()
     else if (subPatchShouldOpen) openSubPatches.push(index)
@@ -63,10 +65,10 @@ function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Records } {
     if (openArrays.length) return
 
     // Generic flow of single-chunk entities
-    const object = PDObject.from(chunk)
+    const object = Obj.from(chunk)
     if (object) return records[index] = object
 
-    const element = PDElement.from(chunk)
+    const element = Element.from(chunk)
     if (element) return records[index] = element
 
     const record = Record.from(chunk)

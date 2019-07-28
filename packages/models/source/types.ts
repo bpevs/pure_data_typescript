@@ -1,7 +1,24 @@
+export const ELEMENT = createTypeMaps({
+  CONNECT: "connect",
+  OBJECT: "object",
+  UNKNOWN: "unknown",
+})
+
+export const RECORD = createTypeMaps({
+  ARRAY: "A",
+  ELEMENT: "X",
+  NEW_WINDOW: "N",
+})
+
+export const OBJECT = createTypeMaps({
+  BUTTON: "button",
+  UNKNOWN: "unknown",
+})
+
 export default function createTypeMaps(
   typeInfo: { [name: string]: string },
 ) {
-  const types: { [name: string]: symbol } = {}
+  const TYPE: { [name: string]: symbol } = {}
   const stringToType: Map<string, symbol> = new Map()
   const typeToString: Map<symbol, string> = new Map()
 
@@ -9,13 +26,13 @@ export default function createTypeMaps(
     const stringified = typeInfo[name]
     const type = Symbol(name)
 
-    types[name] = type
+    TYPE[name] = type
     stringToType.set(stringified, type)
     typeToString.set(type, stringified)
   })
 
   return {
-    types,
+    TYPE,
     toString: typeToString,
     toType: stringToType,
   }

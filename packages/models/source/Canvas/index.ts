@@ -1,5 +1,4 @@
-import Chunk from "./Chunk"
-import Record from "./Record"
+import { Chunk, Record } from ".."
 
 export interface CanvasParams {
   xPos: number

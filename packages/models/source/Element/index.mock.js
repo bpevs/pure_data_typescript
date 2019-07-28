@@ -1,5 +1,5 @@
-import PDElement from "../Element"
-import Chunk from "./Chunk"
+import PDElement from "."
+import Chunk from "../Chunk"
 
 export default class Element {
   static TYPE = PDElement.TYPE

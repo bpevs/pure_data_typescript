@@ -1,8 +1,12 @@
-import Canvas from "./Canvas"
-import Portlet from "./Portlet"
-import parsePatch from "./utils/parsePatch"
+import {
+  Canvas,
+  Portlet,
+  Record,
+} from ".."
 
-export interface Records { [id: string]: Record<any, any> }
+import parsePatch from "./parse"
+
+export interface Records { [id: string]: Record }
 
 export default class Patch {
   /**

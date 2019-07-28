@@ -1,4 +1,4 @@
-import Element from "./Element"
+import Element from "../Element/index.mock"
 
 export default class Connect {
   static constructed = jest.fn()

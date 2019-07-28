@@ -1,10 +1,10 @@
-import Chunk from "./Chunk"
+import Record from "../Record"
 
 export default class Array {
   static constructed = jest.fn()
   static from = jest.fn()
 
-  chunk = new Chunk(Chunk.TYPE.NEW_WINDOW)
+  recordType = Record.TYPE.NEW_WINDOW
 
   constructor(args) {
     Array.constructed(args)
