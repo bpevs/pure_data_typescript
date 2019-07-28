@@ -22,7 +22,7 @@ export default class Element extends Record {
   public elementType: symbol
   public params: string[]
 
-  constructor(elementType: symbol, params: string[]) {
+  constructor(elementType: symbol, params: string[] = []) {
     super(Record.TYPE.ELEMENT)
     this.elementType = elementType
     this.params = params

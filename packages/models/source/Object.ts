@@ -1,10 +1,12 @@
+import Chunk from "./Chunk"
 import Element from "./Element"
-import createTypeMaps from "./typeMaps/createTypeMaps"
+import { OBJECT_TYPES } from "./typeMaps"
 
-const { types, stringToType, typeToString } = createTypeMaps([
-  [ "BUTTON", "button"],
-  [ "UNKNOWN", "unknown"],
-])
+export interface ObjectParams {
+  name: string
+  xPos: number
+  yPos: number
+}
 
 /**
  * Objects are Elements that contain functionality,
@@ -13,30 +15,41 @@ const { types, stringToType, typeToString } = createTypeMaps([
  * @example #X obj 132 72 trigger bang float;
  */
 export default class PDObject extends Element {
-  public static TYPE = types
-  public static from = ([ xPos, yPos, name ]: any[]) => {
-    return new PDObject({ type: stringToType.get(name) , xPos, yPos })
+  public static TYPE = OBJECT_TYPES.types
+
+  public static from = ({ objectType, params }: Chunk) => {
+    if (!objectType) throw new Error("Object type required")
+    const [ xPos, yPos, name= "" ] = params
+
+    return new PDObject(objectType , {
+      name,
+      xPos: Number(xPos),
+      yPos: Number(yPos),
+    })
   }
 
-  public element = new Element({ type: Element.TYPE.OBJECT })
   public color = "black"
   public inlets: symbol[] = []
-  public outlets: symbol[] = []
   public length: number = 0
-  public type: symbol
+  public name: string
+  public objectType: symbol
+  public outlets: symbol[] = []
   public xPos: number
   public yPos: number
 
-  constructor(params: any) {
-    Object.assign(this, params)
+  constructor(objectType: symbol, params: ObjectParams) {
+    super(Element.TYPE.OBJECT)
+    this.name = params.name
+    this.xPos = params.xPos
+    this.yPos = params.yPos
   }
 
   public toString() {
     return [
-      this.element.toString(),
+      super.toString(),
       this.xPos,
       this.yPos,
-      typeToString.get(this.type),
+      OBJECT_TYPES.toString.get(this.objectType),
     ].join(" ")
   }
 }
