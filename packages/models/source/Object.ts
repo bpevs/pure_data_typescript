@@ -39,6 +39,7 @@ export default class PDObject extends Element {
 
   constructor(objectType: symbol, params: ObjectParams) {
     super(Element.TYPE.OBJECT)
+    this.objectType = objectType
     this.name = params.name
     this.xPos = params.xPos
     this.yPos = params.yPos

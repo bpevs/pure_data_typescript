@@ -2,13 +2,13 @@ import Chunk from "./Chunk"
 import Record from "./Record"
 
 export interface CanvasParams {
-  fontSize?: number
-  name?: string
-  openOnLoad?: boolean
   xPos: number
   xSize: number
   yPos: number
   ySize: number
+  fontSize?: number
+  name?: string
+  openOnLoad?: boolean
 }
 
 /**
@@ -31,13 +31,15 @@ export default class PDCanvas extends Record {
     })
   }
 
-  public fontSize?: number
-  public name?: string
-  public openOnLoad?: boolean
+  public children: { [key: string]: Record } = {}
   public xPos: number
   public xSize: number
   public yPos: number
   public ySize: number
+
+  public fontSize?: number
+  public name?: string
+  public openOnLoad?: boolean
 
   constructor(params: CanvasParams) {
     super(Record.TYPE.NEW_WINDOW)
@@ -48,6 +50,10 @@ export default class PDCanvas extends Record {
     this.xSize = params.xSize
     this.yPos = params.yPos
     this.ySize = params.ySize
+  }
+
+  public addChild(key: string, record: Record) {
+    this.children[key] = record
   }
 
   public toString() {

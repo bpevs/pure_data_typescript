@@ -1,12 +1,9 @@
-import PDObject from "@pure-data/models/dist/Object"
 import Canvas from "../Canvas"
 import Chunk from "../Chunk"
 import PDElement from "../Element"
-import Patch, { Elements } from "../Patch"
+import PDObject from "../Object"
+import Patch, { Records } from "../Patch"
 import Record from "../Record"
-
-const RECORD = Record.TYPE
-const ELEMENT = Element.TYPE
 
 const newlines = /(\r\n|\r)/gm
 
@@ -26,19 +23,19 @@ export default function parsePatch(fileText: string): Patch {
     .filter(Boolean)
     .map(paramsString => new Chunk(paramsString))
 
-  const { canvas, elements } = parseChunks(chunks)
-  return new Patch(canvas, elements)
+  const { canvas, records } = parseChunks(chunks)
+  return new Patch(records, canvas)
 }
 
 
 /**
- * Parse chunks into Elements and the Patch Canvas properties
+ * Parse chunks into Records and the Patch Canvas properties
  * Think of chunks as a tree; lines can open/close for subpatches
  * @param chunks
  */
-function parseChunks(chunks: Chunk[]): { canvas: Canvas, elements: Elements } {
-  const elements: Elements = {}
-  let canvas: Canvas
+function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Records } {
+  const records: Records = {}
+  let canvas: Canvas | undefined
 
   const openArrays: number[] = []
   const openSubPatches: number[] = []
@@ -53,7 +50,7 @@ function parseChunks(chunks: Chunk[]): { canvas: Canvas, elements: Elements } {
 
     if (arrayHasEnded) openArrays.pop()
     else if (isArray) openArrays.push(index)
-    else elements[openArrays.length - 1].append(chunk)
+    else records[openArrays.length - 1].append(chunk)
 
     // Handle special cases of
     const isSubPatch = openSubPatches.length
@@ -67,16 +64,16 @@ function parseChunks(chunks: Chunk[]): { canvas: Canvas, elements: Elements } {
 
     // Generic flow of single-chunk entities
     const object = PDObject.from(chunk)
-    if (object) return elements[index] = object
+    if (object) return records[index] = object
 
     const element = PDElement.from(chunk)
-    if (element) return elements[index] = element
+    if (element) return records[index] = element
 
     const record = Record.from(chunk)
-    if (record) return elements[index] = record
+    if (record) return records[index] = record
 
     console.error("UNKNOWN RECORD:", record)
   })
 
-  return { canvas, elements }
+  return { canvas, records }
 }

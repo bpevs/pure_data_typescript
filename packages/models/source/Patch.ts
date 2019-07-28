@@ -2,7 +2,7 @@ import Canvas from "./Canvas"
 import Portlet from "./Portlet"
 import parsePatch from "./utils/parsePatch"
 
-export interface Elements { [id: string]: Element }
+export interface Records { [id: string]: Record<any, any> }
 
 export default class Patch {
   /**
@@ -15,13 +15,13 @@ export default class Patch {
   }
 
   public canvas: Canvas | null
-  public elements: Elements
+  public records: Records
   public inlets: Portlet[] = []
   public outlets: Portlet[] = []
 
-  constructor(canvas: Canvas | null, elements: Elements) {
+  constructor(records: Records, canvas?: Canvas) {
     this.canvas = canvas || null
-    this.elements = elements
+    this.records = records
   }
 
   public getInlet(index: number) {
