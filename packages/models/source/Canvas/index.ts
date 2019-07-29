@@ -1,12 +1,13 @@
 import { Chunk, Record } from ".."
 
-export interface CanvasParams {
+export interface CanvasProps {
   xPos: number
   xSize: number
   yPos: number
   ySize: number
   fontSize?: number
   name?: string
+  params?: string[]
   openOnLoad?: boolean
 }
 
@@ -17,9 +18,10 @@ export interface CanvasParams {
  */
 export default class PDCanvas extends Record {
   public static from = (chunk: Chunk) => {
-    const [ xPos, yPos, xSize, ySize, param1, param2 ] = chunk.params
+    const [ xPos, yPos, xSize, ySize, param1, param2, ...params ] = chunk.params
     const isFirstRecord = isNaN(Number(param1))
     return new PDCanvas({
+      params,
       fontSize: isFirstRecord ? Number(param1) : undefined,
       name: isFirstRecord ? undefined : param1,
       openOnLoad: isFirstRecord ? undefined : Boolean(Number(param2)),
@@ -40,15 +42,15 @@ export default class PDCanvas extends Record {
   public name?: string
   public openOnLoad?: boolean
 
-  constructor(params: CanvasParams) {
+  constructor(props: CanvasProps) {
     super(Record.TYPE.NEW_WINDOW)
-    this.fontSize = params.fontSize
-    this.name = params.name
-    this.openOnLoad = params.openOnLoad
-    this.xPos = params.xPos
-    this.xSize = params.xSize
-    this.yPos = params.yPos
-    this.ySize = params.ySize
+    this.fontSize = props.fontSize
+    this.name = props.name
+    this.openOnLoad = props.openOnLoad
+    this.xPos = props.xPos
+    this.xSize = props.xSize
+    this.yPos = props.yPos
+    this.ySize = props.ySize
   }
 
   public addChild(key: string, record: Record) {
@@ -57,11 +59,11 @@ export default class PDCanvas extends Record {
 
   public toString() {
     const record = super.toString()
-    const params: any[] = [ record, this.xPos, this.yPos, this.xSize, this.ySize ]
-    const additionalParams = this.fontSize == null
+    const props: any[] = [ record, this.xPos, this.yPos, this.xSize, this.ySize ]
+    const additionalProps = this.fontSize == null
       ? [ this.name, this.openOnLoad ]
       : [ this.fontSize ]
 
-    return params.concat(additionalParams).join(" ")
+    return props.concat(additionalProps).join(" ")
   }
 }

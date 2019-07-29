@@ -8,6 +8,5 @@ npm-debug.log
 .DS_Store
 .Spotlight-V100
 .Trashes
-.vscode
 ._*
 **/*.log

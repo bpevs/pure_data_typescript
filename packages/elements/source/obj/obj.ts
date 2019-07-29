@@ -1,4 +1,5 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
+
 const noop = () => { return }
 
 /**
@@ -12,8 +13,12 @@ const noop = () => { return }
  */
 
 export default class Obj extends Element {
-  public readonly chunkType = "X"
-  public readonly elementType = "obj"
+  public static readonly type = Symbol("obj")
+
+  public static from({ children, params }: Chunk) {
+    return new Obj({ children, params })
+  }
+
   public behavior: (...args: any[]) => any | void = noop
   public color = "black"
   public inlets: symbol[] = []
@@ -27,8 +32,9 @@ export default class Obj extends Element {
 
   protected displayText: string
 
-  constructor([ xPos, yPos, name, ...params ]: string[]) {
-    super()
+  constructor(props: { children: Chunk[], params: string[] }) {
+    super(Obj.type, props)
+    const [ xPos, yPos, name, ...params ] = props.params
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
     this.name = String(name || "")

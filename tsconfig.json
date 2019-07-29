@@ -25,6 +25,7 @@
     "node_modules",
     "**/*node_modules/**/*",
     "**/*dist/**/*",
+    "**/*.mock.js",
     "**/*.test.js"
   ],
   "include": [

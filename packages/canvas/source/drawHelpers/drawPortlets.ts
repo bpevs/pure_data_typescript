@@ -1,13 +1,13 @@
+import { Connect } from "@pure-data/elements"
 import { Renderer } from "@pure-data/models"
-export type connectType = "control" | "signal"
 
 export function portlets(
   renderer: Renderer,
   length: number,
   xPos: number,
   yPos: number,
-  inlets: string[],
-  outlets: string[],
+  inlets: symbol[],
+  outlets: symbol[],
 ) {
   const { context, objectHeight, portletHeight, portletWidth } = renderer
   const inletY = yPos
@@ -17,18 +17,18 @@ export function portlets(
   const outletDistance = actualLength / Math.max(1, outlets.length - 2)
 
 
-  inlets.forEach((type: connectType, index: number) => {
+  inlets.forEach((type: symbol, index: number) => {
     const nextInletLocation = xPos + index * inletDistance
-    if (type === "signal") {
+    if (type === Connect.TYPE.SIGNAL) {
       context.fillRect(nextInletLocation, inletY, portletWidth, portletHeight)
     } else {
       context.strokeRect(nextInletLocation, inletY, portletWidth, portletHeight)
     }
   })
 
-  outlets.forEach((type: connectType, index: number) => {
+  outlets.forEach((type: symbol, index: number) => {
     const nextOutletLocation = xPos + index * outletDistance
-    if (type === "signal") {
+    if (type === Connect.TYPE.SIGNAL) {
       context.fillRect(nextOutletLocation, outletY, portletWidth, portletHeight)
     } else {
       context.strokeRect(nextOutletLocation, outletY, portletWidth, portletHeight)

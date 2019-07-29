@@ -34,11 +34,11 @@ export class CanvasRenderer extends Renderer {
     this.context.clearRect(0, 0, canvas.width, canvas.height)
     records.forEach(record => {
       // If item has custom renderer, respect it
-      const hasRenderMethod = typeof record.render.canvas === "function"
-      if (hasRenderMethod) return record.render.canvas(this, selector)
+      if (typeof record.render.canvas === "function")
+        return record.render.canvas(this, selector)
 
-      const isObject = record instanceof Obj
-      if (isObject) return renderObj(this, record)
+      if (record instanceof Obj)
+        return renderObj(this, record)
     })
   }
 }

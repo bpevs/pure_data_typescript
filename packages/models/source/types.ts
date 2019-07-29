@@ -12,6 +12,7 @@ export const RECORD = createTypeMaps({
 
 export const OBJECT = createTypeMaps({
   BUTTON: "button",
+  OBJ: "obj",
   UNKNOWN: "unknown",
 })
 

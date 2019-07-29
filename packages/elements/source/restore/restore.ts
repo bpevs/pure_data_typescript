@@ -1,4 +1,4 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
 
 /**
  * @class Restore
@@ -11,15 +11,15 @@ import { Element } from "@pure-data/models"
 export default class Restore extends Element {
   public static type = Symbol("restore")
 
-  public static from([ ...params ]: string[]) {
+  public static from({ params }: Chunk) {
     return new Restore({ name: params.join(" ") })
   }
 
   public name: string = ""
 
-  constructor({ name }: { name: string }) {
-    super({ type: Restore.type })
-    Object.assign(this, { name })
+  constructor(params: { name: string }) {
+    super(Restore.type, { children: [], params: [] })
+    this.name = params.name
   }
 
   public toString() {

@@ -1,21 +1,21 @@
 import { CanvasRenderer } from "@pure-data/canvas"
-import { Record, Renderer } from "@pure-data/models"
-import { parsePatch } from "../../models/source/utils/parsePatch"
-
+import { Canvas, Portlet, Record, Renderer } from "@pure-data/models"
+import parsePatch from "./parsePatch"
 
 export class Patch {
-
   /**
+   * Create a Patch from a *.pd file string
    * @example const patch = Patch.from("#N canvas 624 103 899 784 10;")
    * @param patchFileString The actual pd file content
    */
   public static from(patchFileString: string) {
-    return new Patch(parsePatch(patchFileString))
+    return parsePatch(patchFileString)
   }
 
+  public canvas: Canvas | null
   private readonly records: Record[] = []
-  private readonly inlets: any[] = []
-  private readonly outlets: any[] = []
+  private readonly inlets: Portlet[] = []
+  private readonly outlets: Portlet[] = []
   private renderer: Renderer = new CanvasRenderer()
 
   // State variables that are expected to change during patch use
@@ -24,8 +24,9 @@ export class Patch {
     editMode: false,
   }
 
-  constructor(records: Record[], options = {}) {
-    this.records = records
+  constructor({ canvas, records, ...options }: any = {}) {
+    this.canvas = options.canvas
+    this.records = options.records
     this.state = {...this.state, ...options}
   }
 
@@ -41,7 +42,19 @@ export class Patch {
    * @param value a value to pass to the patch
    */
   public setInlet(index: number, value: any) {
-    this.inlets[index] = value
+    if (this.inlets[index]) {
+      this.inlets[index].value = value
+    } else {
+      this.inlets[index] = new Portlet(value)
+    }
+  }
+
+  public setOutlet(index: number, value: any) {
+    if (this.outlets[index]) {
+      this.outlets[index].value = value
+    } else {
+      this.outlets[index] = new Portlet(value)
+    }
   }
 
   public setRenderer(renderer: Renderer) {
@@ -52,6 +65,10 @@ export class Patch {
   // Will expose helpers in the future. Turn on DSP, edit mode.
   public setState(options= {}) {
     this.state = {...this.state, ...options}
+  }
+
+  public start() {
+    console.log(this)
   }
 
   /**

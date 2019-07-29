@@ -1,4 +1,4 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
 
 /**
  * @class PDCoords
@@ -8,8 +8,10 @@ import { Element } from "@pure-data/models"
  */
 
 export interface CoordsProps {
+  children: Chunk[]
   graphOnParent: boolean
   height: number
+  params: string[]
   width: number
   xFrom: number
   xTo: number
@@ -20,10 +22,13 @@ export interface CoordsProps {
 export default class Coords extends Element {
   public static type = Symbol("coords")
 
-  public static from([ xFrom, yTo, xTo, yFrom, width, height, graphOnParent ]: string[]) {
+  public static from({ children, params }: Chunk) {
+    const [ xFrom, yTo, xTo, yFrom, width, height, graphOnParent, ...other ] = params
     return new Coords({
+      children,
       graphOnParent: Boolean(graphOnParent),
       height: Number(height),
+      params: other,
       width: Number(width),
       xFrom: Number(xFrom),
       xTo: Number(xTo),
@@ -41,13 +46,19 @@ export default class Coords extends Element {
   public yTo: number
 
   constructor(props: CoordsProps) {
-    super({ type: Coords.type })
-    Object.assign(this, props)
+    super(Coords.type, props)
+    this.graphOnParent = props.graphOnParent
+    this.height = props.height
+    this.width = props.width
+    this.xFrom = props.xFrom
+    this.xTo = props.xTo
+    this.yFrom = props.yFrom
+    this.yTo = props.yTo
   }
 
   public toString() {
     return [
-      this.record.toString(),
+      super.toString(),
       "coords",
       this.xFrom,
       this.yFrom,

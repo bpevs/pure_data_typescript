@@ -1,4 +1,4 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
 
 /**
  * @class PDMsg
@@ -8,7 +8,7 @@ import { Element } from "@pure-data/models"
  *  #X msg 61 48 read audio.wav;
  */
 
-export interface MsgProps {
+export interface MsgParams {
   text: string
   xPos: number
   yPos: number
@@ -17,9 +17,10 @@ export interface MsgProps {
 export default class Msg extends Element {
   public static type = Symbol("msg")
 
-  public static from([ xPos, yPos, ...params ]: string[]) {
+  public static from({ params }: Chunk) {
+    const [ xPos, yPos, ...texts ] = params
     return new Msg({
-      text: params.join(" "),
+      text: texts.join(" "),
       xPos: Number(xPos),
       yPos: Number(yPos),
     })
@@ -33,9 +34,11 @@ export default class Msg extends Element {
   public xPos: number // Horizontal position within the window
   public yPos: number // Vertical position within the window
 
-  constructor({ text, xPos, yPos }: MsgProps) {
-    super({ type: Msg.type })
-    Object.assign(this, { text, xPos, yPos })
+  constructor(params: MsgParams) {
+    super(Msg.type, { children: [], params: [] })
+    this.text = params.text
+    this.xPos = params.xPos
+    this.yPos = params.yPos
   }
 
   public toString() {

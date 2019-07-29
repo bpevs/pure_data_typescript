@@ -1,28 +1,37 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
 
-/**
- * @class ArrayElement
- * @description Array of Numbers
- *
- * @example
- */
-export interface ArrayElementProps {
+export interface ArrayElementParams {
+  children: Chunk[]
   name: string
   size: number
   format: string
+  params: string[]
   saveFlag: boolean
 }
 
+/**
+ * @class ArrayElement
+ * @description A visual representation of an Array
+ *
+ * @example
+ */
 export default class ArrayElement extends Element {
-  public static type = Symbol("array")
+  public static readonly type = Symbol("array")
 
-  public static from([ name, size, format, saveFlag ]: string[]) {
+  public static from({ children, params }: Chunk) {
+    const [ name, size, format, saveFlag, ...other ] = params
     return new ArrayElement({
+      children,
       format: String(format),
       name: String(name),
+      params: other,
       saveFlag: Boolean(saveFlag) || false,
       size: Number(size) || 0,
     })
+  }
+
+  public static isArray(chunk: any): chunk is ArrayElement {
+    return chunk && chunk.elementType === ArrayElement.type
   }
 
   public data: number[] = []
@@ -31,12 +40,16 @@ export default class ArrayElement extends Element {
   public format: string
   public saveFlag: boolean = false
 
-  constructor({ format, name, saveFlag, size }: ArrayElementProps) {
-    super({ type: ArrayElement.type })
-    Object.assign(this, { format, name, saveFlag, size })
+  constructor(params: ArrayElementParams) {
+    super(ArrayElement.type, params)
+    this.format = params.format
+    this.name = params.name
+    this.saveFlag = params.saveFlag
+    this.size = params.size
+    this.addData(params.children)
   }
 
-  public addData(data: string[]) {
+  public addData(data: Chunk[]) {
     this.data = this.data.concat(data.map(Number))
   }
 

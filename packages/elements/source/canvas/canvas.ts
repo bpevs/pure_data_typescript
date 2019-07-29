@@ -1,4 +1,4 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
 
 /**
  * @class CanvasElement
@@ -8,8 +8,10 @@ import { Element } from "@pure-data/models"
  * @example
  */
 export interface CanvasElementProps {
+  children: Chunk[]
   name: string | null
   openOnLoad: boolean
+  params: string[]
   xPos: number
   xSize: number
   yPos: number
@@ -17,21 +19,22 @@ export interface CanvasElementProps {
 }
 
 export default class CanvasElement extends Element {
-  public static type = Symbol("canvas")
+  public static readonly type = Symbol("canvas")
 
-  public static from([ xPos, yPos, xSize, ySize, name, openOnLoad ]: string[]) {
+  public static from({ children, params }: Chunk) {
+    const [ xPos, yPos, xSize, ySize, name, openOnLoad, ...other ] = params
     const isSubPatch = isNaN(parseInt(name, 10))
     return new CanvasElement({
+      children,
       name: isSubPatch ? name : null,
       openOnLoad: Boolean(openOnLoad),
+      params: other,
       xPos: Number(xPos),
       xSize: Number(xSize),
       yPos: Number(yPos),
       ySize: Number(ySize),
     })
   }
-
-  public readonly isSubPatch: boolean
 
   public name: null | string
   public openOnLoad: boolean
@@ -40,14 +43,19 @@ export default class CanvasElement extends Element {
   public yPos: number
   public ySize: number
 
-  constructor({ name, openOnLoad, xPos, xSize, yPos, ySize }: CanvasElementProps) {
-    super({ type: CanvasElement.type })
-    Object.assign(this, { name, openOnLoad, xPos, xSize, yPos, ySize })
+  constructor(props: CanvasElementProps) {
+    super(CanvasElement.type, props)
+    this.name = props.name
+    this.openOnLoad = props.openOnLoad
+    this.xPos = props.xPos
+    this.xSize = props.xSize
+    this.yPos = props.yPos
+    this.ySize = props.ySize
   }
 
   public toString() {
     return [
-      this.record.toString(),
+      super.toString(),
       "canvas",
       this.xPos,
       this.yPos,

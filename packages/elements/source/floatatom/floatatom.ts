@@ -1,4 +1,4 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
 
 /**
  * @class PDFloatatom
@@ -13,9 +13,11 @@ import { Element } from "@pure-data/models"
  *  #X floatatom 32 26 5 0 0 0 - - -;
  */
 export interface FloatatomProps {
+  children: Chunk[]
   lowerLimit: number
   label: string
   labelPos: number
+  params: string[]
   receive: string
   send: string
   upperLimit: number
@@ -27,11 +29,14 @@ export interface FloatatomProps {
 export default class Floatatom extends Element {
   public static readonly type = Symbol("floatatom")
 
-  public static from([ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send ]: string[]) {
+  public static from({ children, params }: Chunk) {
+    const [ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send, ...other ] = params
     return new Floatatom({
+      children,
       label: String(label),
       labelPos: Number(labelPos),
       lowerLimit: Number(lowerLimit),
+      params: other,
       receive: String(receive),
       send: String(send),
       upperLimit: Number(upperLimit),
@@ -56,13 +61,21 @@ export default class Floatatom extends Element {
   public yPos: number
 
   constructor(props: FloatatomProps) {
-    super({ type: Floatatom.type })
-    Object.assign(this, props)
+    super(Floatatom.type, props)
+    this.label = props.label
+    this.labelPos = props.labelPos
+    this.lowerLimit = props.lowerLimit
+    this.receive = props.receive
+    this.send = props.send
+    this.upperLimit = props.upperLimit
+    this.width = props.width
+    this.xPos = props.xPos
+    this.yPos = props.yPos
   }
 
   public toString() {
     return [
-      this.record.toString(),
+      super.toString(),
       "floatatom",
       this.xPos,
       this.yPos,

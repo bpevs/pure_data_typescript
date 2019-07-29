@@ -1,11 +1,13 @@
-import Patch, { Records } from "."
+import { Array as ArrayEl } from "@pure-data/elements"
 import {
+  Array as Arr,
   Canvas,
   Chunk,
   Element,
   Object as Obj,
   Record,
-} from ".."
+} from "@pure-data/models"
+import { Patch } from "."
 
 const newlines = /(\r\n|\r)/gm
 
@@ -25,8 +27,7 @@ export default function parsePatch(fileText: string): Patch {
     .filter(Boolean)
     .map(paramsString => new Chunk(paramsString))
 
-  const { canvas, records } = parseChunks(chunks)
-  return new Patch(records, canvas)
+  return new Patch(parseChunks(chunks))
 }
 
 
@@ -35,46 +36,40 @@ export default function parsePatch(fileText: string): Patch {
  * Think of chunks as a tree; lines can open/close for subpatches
  * @param chunks
  */
-function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Records } {
-  const records: Records = {}
+function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Record[] } {
+  const records: Record[] = []
   let canvas: Canvas | undefined
 
-  const openArrays: number[] = []
   const openSubPatches: number[] = []
 
   chunks.forEach((chunk, index) => {
     if (!index) return canvas = Canvas.from(chunk)
     const { elementType, recordType } = chunk
 
-    // Handle special cases of multi-chunk arrays
-    const isArray = recordType !== Record.TYPE.ARRAY
-    const arrayHasEnded = !isArray && openArrays.length
+    // if Array data:
+    const prev = records[records.length - 1]
+    if (
+      chunk.recordType === Arr.type &&
+      prev &&
+      ArrayEl.isArray(prev)
+    ) return prev.addData(chunk.children)
+    else if (chunk.recordType === Arr.type) return
 
-    if (arrayHasEnded) openArrays.pop()
-    else if (isArray) openArrays.push(index)
-    else records[openArrays.length - 1].append(chunk)
-
-    // Handle special cases of
+    // Handle special cases of Subpatches
     const isSubPatch = openSubPatches.length
     const subPatchIsClosed = isSubPatch && elementType === Element.TYPE.RESTORE
     const subPatchShouldOpen = recordType === Record.TYPE.NEW_WINDOW
     if (subPatchIsClosed) return openSubPatches.pop()
     else if (subPatchShouldOpen) openSubPatches.push(index)
 
-    // Handle special cases of nested chunks
-    if (openArrays.length) return
-
     // Generic flow of single-chunk entities
-    const object = Obj.from(chunk)
-    if (object) return records[index] = object
+    if (chunk.elementType === Obj.type)
+      records.push(Obj.from(chunk))
 
-    const element = Element.from(chunk)
-    if (element) return records[index] = element
+    if (chunk.elementType === Element.type)
+      records.push(Element.from(chunk))
 
-    const record = Record.from(chunk)
-    if (record) return records[index] = record
-
-    console.error("UNKNOWN RECORD:", record)
+    records.push(Record.from(chunk))
   })
 
   return { canvas, records }

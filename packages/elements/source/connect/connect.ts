@@ -1,4 +1,4 @@
-import { Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/models"
 
 /**
  * @class PDConnect
@@ -16,44 +16,51 @@ import { Element } from "@pure-data/models"
  *  #X connect 0 1 1 1;
  */
 
-const CONTROL = Symbol("CONTROL_CONNECT")
-const SIGNAL = Symbol("SIGNAL_CONNECT")
+export const CONTROL = Symbol("CONTROL_CONNECT")
+export const SIGNAL = Symbol("SIGNAL_CONNECT")
 
 export interface ConnectProps {
+  children: Chunk[]
   inlet: number
+  params: string[]
   outlet: number
   source: number
   target: number
 }
 
 export default class Connect extends Element {
-  public static TYPE = { CONTROL, SIGNAL }
+  public static readonly TYPE = Object.freeze({ CONTROL, SIGNAL })
+  public static readonly type = CONTROL
 
   // TODO: Map source/target number to Element (in core parser?)
-  public static from([ source, outlet, target, inlet ]: string[]) {
+  public static from({ children, params }: Chunk) {
+    const [ source, outlet, target, inlet, ...other ] = params
     return new Connect({
+      children,
       inlet: Number(inlet),
       outlet: Number(outlet),
+      params: other,
       source: Number(source),
       target: Number(target),
     })
   }
-
-  public readonly type = CONTROL
 
   public inlet: number
   public outlet: number
   public source: number
   public target: number
 
-  constructor({ inlet, outlet, source, target }: ConnectProps) {
-    super({ type: CONTROL })
-    Object.assign(this, { inlet, outlet, source, target })
+  constructor(props: ConnectProps) {
+    super(Connect.TYPE.CONTROL, props)
+    this.inlet = props.inlet
+    this.outlet = props.outlet
+    this.source = props.source
+    this.target = props.target
   }
 
   public toString() {
     return [
-      this.record.toString(),
+      super.toString(),
       "connect",
       this.outlet,
       this.target,

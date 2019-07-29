@@ -6,12 +6,16 @@ import { Chunk, Record } from ".."
  */
 export default class PDArray extends Record {
   public static from = (chunk: Chunk) => {
-    return new PDArray(chunk.params)
+    return new PDArray({ params: chunk.params })
+  }
+
+  public static isArray(chunk: any): chunk is PDArray {
+    return chunk && chunk.recordType === Record.TYPE.ARRAY
   }
 
   public values: number[]
 
-  constructor(...params: any[]) {
+  constructor({ params }: { params: any[] }) {
     super(Record.TYPE.ARRAY)
     this.values = params.map(Number)
   }

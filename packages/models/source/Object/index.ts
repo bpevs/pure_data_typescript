@@ -2,8 +2,10 @@ import Chunk from "../Chunk"
 import Element from "../Element"
 import { OBJECT } from "../types"
 
-export interface ObjectParams {
+export interface ObjectProps {
+  children: Chunk[]
   name: string
+  params: string[]
   xPos: number
   yPos: number
 }
@@ -15,16 +17,19 @@ export interface ObjectParams {
  * @example #X obj 132 72 trigger bang float;
  */
 export default class PDObject extends Element {
-  public static TYPE = OBJECT.TYPE
+  public static readonly TYPE = Object.freeze(OBJECT.TYPE)
+  public static readonly type = Element.TYPE.OBJECT
   public static toString = (a: symbol) => OBJECT.toString.get(a)
   public static toType = (a: string) => OBJECT.toType.get(a)
 
-  public static from = ({ objectType, params }: Chunk) => {
+  public static from = ({ children, objectType, params }: Chunk) => {
     if (!objectType) throw new Error("Object type required")
-    const [ xPos, yPos, name= "" ] = params
+    const [ xPos, yPos, name= "", ...other ] = params
 
     return new PDObject(objectType , {
+      children,
       name,
+      params: other,
       xPos: Number(xPos),
       yPos: Number(yPos),
     })
@@ -39,12 +44,13 @@ export default class PDObject extends Element {
   public xPos: number
   public yPos: number
 
-  constructor(objectType: symbol, params: ObjectParams) {
-    super(Element.TYPE.OBJECT)
+  constructor(objectType: symbol, props: ObjectProps) {
+    super(Element.TYPE.OBJECT, props)
     this.objectType = objectType
-    this.name = params.name
-    this.xPos = params.xPos
-    this.yPos = params.yPos
+    this.params = props.params
+    this.name = props.name
+    this.xPos = props.xPos
+    this.yPos = props.yPos
   }
 
   public toString() {
