@@ -1,5 +1,5 @@
+import { Record, Renderer } from "@pure-data/core"
 import { Obj } from "@pure-data/elements"
-import { Record, Renderer } from "@pure-data/models"
 import renderObj from "./renderers/objRenderer"
 
 // Canvas Setup

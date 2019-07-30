@@ -1,4 +1,4 @@
-import { parseColor } from "../parseColor"
+import parseColor from "../parseColor"
 
 test("should parse color", () => {
   expect(parseColor("-262144")).toBe("rgb(128, 0, 256)")

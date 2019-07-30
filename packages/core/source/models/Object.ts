@@ -1,6 +1,6 @@
-import Chunk from "../Chunk"
-import Element from "../Element"
 import { OBJECT } from "../types"
+import Chunk from "./Chunk"
+import Element from "./Element"
 
 export interface ObjectProps {
   children: Chunk[]
@@ -17,16 +17,16 @@ export interface ObjectProps {
  * @example #X obj 132 72 trigger bang float;
  */
 export default class PDObject extends Element {
-  public static readonly TYPE = Object.freeze(OBJECT.TYPE)
+  public static readonly TYPE = OBJECT.types
   public static readonly type = Element.TYPE.OBJECT
-  public static toString = (a: symbol) => OBJECT.toString.get(a)
-  public static toType = (a: string) => OBJECT.toType.get(a)
+  public static serializeType = (a: symbol) => OBJECT.serialize(a)
+  public static getType = (a: string) => OBJECT.getType(a)
 
   public static from = ({ children, objectType, params }: Chunk) => {
     if (!objectType) throw new Error("Object type required")
-    const [ xPos, yPos, name= "", ...other ] = params
+    const [xPos, yPos, name = "", ...other] = params
 
-    return new PDObject(objectType , {
+    return new PDObject(objectType, {
       children,
       name,
       params: other,
@@ -58,7 +58,7 @@ export default class PDObject extends Element {
       super.toString(),
       this.xPos,
       this.yPos,
-      OBJECT.toString.get(this.objectType),
+      PDObject.serializeType(this.objectType),
     ].join(" ")
   }
 }

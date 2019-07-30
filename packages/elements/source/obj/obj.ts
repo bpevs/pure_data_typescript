@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 const noop = () => { return }
 
@@ -34,7 +34,7 @@ export default class Obj extends Element {
 
   constructor(props: { children: Chunk[], params: string[] }) {
     super(Obj.type, props)
-    const [ xPos, yPos, name, ...params ] = props.params
+    const [xPos, yPos, name, ...params] = props.params
     this.xPos = Number(xPos)
     this.yPos = Number(yPos)
     this.name = String(name || "")

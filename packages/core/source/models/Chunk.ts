@@ -1,8 +1,6 @@
-import {
-  Element as El,
-  Object as Obj,
-  Record,
-} from ".."
+import El from "./Element"
+import Obj from "./Object"
+import Record from "./Record"
 
 /**
  * A line of text representing a Record. This is what is directly
@@ -27,14 +25,14 @@ export default class Chunk {
   }
 
   get recordType(): symbol | null {
-    return Record.toType(this.params[0]) || null
+    return Record.getType(this.params[0]) || null
   }
 
   get elementType(): symbol | null {
-    return El.toType(this.params[3]) || null
+    return El.getType(this.params[3]) || null
   }
 
   get objectType(): symbol | null {
-    return Obj.toType(this.params[5]) || null
+    return Obj.getType(this.params[5]) || null
   }
 }

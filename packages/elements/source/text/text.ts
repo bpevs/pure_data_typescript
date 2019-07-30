@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 /**
  * @class PDtext
@@ -17,7 +17,7 @@ export default class Text extends Element {
   public static type = Symbol("text")
 
   public static from({ params }: Chunk) {
-    const [ xPos, yPos, ...texts ] = params
+    const [xPos, yPos, ...texts] = params
     return new Text({
       text: texts.join(" "),
       xPos: Number(xPos),

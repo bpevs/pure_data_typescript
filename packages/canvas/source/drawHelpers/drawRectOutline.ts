@@ -1,4 +1,4 @@
-import { Renderer } from "@pure-data/models"
+import { Renderer } from "@pure-data/core"
 
 export function rectOutline(
   renderer: Renderer,

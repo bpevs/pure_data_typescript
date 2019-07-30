@@ -12,7 +12,6 @@
     "packages/canvas",
     "packages/core",
     "packages/elements",
-    "packages/models",
     "packages/objects"
   ]
 }

@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 /**
  * @class PDCoords
@@ -23,7 +23,7 @@ export default class Coords extends Element {
   public static type = Symbol("coords")
 
   public static from({ children, params }: Chunk) {
-    const [ xFrom, yTo, xTo, yFrom, width, height, graphOnParent, ...other ] = params
+    const [xFrom, yTo, xTo, yFrom, width, height, graphOnParent, ...other] = params
     return new Coords({
       children,
       graphOnParent: Boolean(graphOnParent),

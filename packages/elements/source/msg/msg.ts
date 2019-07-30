@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 /**
  * @class PDMsg
@@ -18,7 +18,7 @@ export default class Msg extends Element {
   public static type = Symbol("msg")
 
   public static from({ params }: Chunk) {
-    const [ xPos, yPos, ...texts ] = params
+    const [xPos, yPos, ...texts] = params
     return new Msg({
       text: texts.join(" "),
       xPos: Number(xPos),
@@ -27,8 +27,8 @@ export default class Msg extends Element {
   }
 
   public readonly color = "black"
-  public readonly inlets = [ "control" ]
-  public readonly outlets = [ "signal" ]
+  public readonly inlets = ["control"]
+  public readonly outlets = ["signal"]
 
   public text: string // The content of the message
   public xPos: number // Horizontal position within the window

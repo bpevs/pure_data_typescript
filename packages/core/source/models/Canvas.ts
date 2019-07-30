@@ -1,4 +1,5 @@
-import { Chunk, Record } from ".."
+import Chunk from "./Chunk"
+import Record from "./Record"
 
 export interface CanvasProps {
   xPos: number
@@ -18,7 +19,7 @@ export interface CanvasProps {
  */
 export default class PDCanvas extends Record {
   public static from = (chunk: Chunk) => {
-    const [ xPos, yPos, xSize, ySize, param1, param2, ...params ] = chunk.params
+    const [xPos, yPos, xSize, ySize, param1, param2, ...params] = chunk.params
     const isFirstRecord = isNaN(Number(param1))
     return new PDCanvas({
       params,
@@ -59,10 +60,10 @@ export default class PDCanvas extends Record {
 
   public toString() {
     const record = super.toString()
-    const props: any[] = [ record, this.xPos, this.yPos, this.xSize, this.ySize ]
+    const props: any[] = [record, this.xPos, this.yPos, this.xSize, this.ySize]
     const additionalProps = this.fontSize == null
-      ? [ this.name, this.openOnLoad ]
-      : [ this.fontSize ]
+      ? [this.name, this.openOnLoad]
+      : [this.fontSize]
 
     return props.concat(additionalProps).join(" ")
   }

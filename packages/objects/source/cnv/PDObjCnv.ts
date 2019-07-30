@@ -9,7 +9,7 @@
  */
 
 
-import { PDObj } from "../../../elements/source"
+import { PDObj } from "@pure-data/elements"
 import { context as ctx } from "../globals"
 import * as draw from "../utilities/drawHelpers"
 

@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 /**
  * @class Restore

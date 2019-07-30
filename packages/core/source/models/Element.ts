@@ -1,6 +1,6 @@
-import Chunk from "../Chunk"
-import Record from "../Record"
 import { ELEMENT } from "../types"
+import Chunk from "./Chunk"
+import Record from "./Record"
 
 export interface ElementProps {
   children: Chunk[]
@@ -17,10 +17,13 @@ export interface ElementProps {
  * @example #X obj 50 36;
  */
 export default class Element extends Record {
-  public static readonly TYPE = Object.freeze(ELEMENT.TYPE)
+  public static readonly TYPE = ELEMENT.types
   public static type = Record.TYPE.ELEMENT
-  public static toString = (a: symbol) => ELEMENT.toString.get(a)
-  public static toType = (a: string) => ELEMENT.toType.get(a)
+  public static getType = (a: string) => ELEMENT.getType(a)
+  public static is = (type: symbol, record: any): boolean => {
+    return type === Element.getType(record.elementType)
+  }
+  public static serializeType = (a: symbol) => ELEMENT.serialize(a)
 
   public static from({ children, elementType, params }: Chunk) {
     if (!elementType) throw new Error("Element type is mandatory")
@@ -38,7 +41,7 @@ export default class Element extends Record {
   public toString() {
     return [
       super.toString(),
-      ELEMENT.toString.get(this.elementType),
+      Element.serializeType(this.elementType),
     ].join(" ")
   }
 }

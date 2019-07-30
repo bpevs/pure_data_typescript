@@ -1,17 +1,18 @@
-import { Canvas, Chunk, Element } from ".."
-import Arr from "../Array"
 import { RECORD } from "../types"
-const { TYPE, toString, toType } = RECORD
+import Arr from "./Array"
+import Canvas from "./Canvas"
+import Chunk from "./Chunk"
+import Element from "./Element"
 
 /**
  * Base class of all PD Entities
  * All records
  */
 export default class Record {
-  public static readonly TYPE = TYPE
+  public static readonly TYPE = RECORD.types
   public static type: symbol
-  public static toString = (a: symbol) => toString.get(a)
-  public static toType = (a: string) => toType.get(a)
+  public static serializeType = (a: symbol) => RECORD.serialize(a)
+  public static getType = (a: string) => RECORD.getType(a)
 
   /**
    * Translate a chunk to a Record. Should only need to run once for
@@ -21,9 +22,9 @@ export default class Record {
   public static from = (chunk: Chunk): Record => {
     if (!chunk.recordType) throw new Error("Record type cannot be null")
     switch (chunk.recordType) {
-      case TYPE.ARRAY: return Arr.from(chunk)
-      case TYPE.ELEMENT: return Element.from(chunk)
-      case TYPE.NEW_WINDOW: return Canvas.from(chunk)
+      case Record.TYPE.ARRAY: return Arr.from(chunk)
+      case Record.TYPE.ELEMENT: return Element.from(chunk)
+      case Record.TYPE.NEW_WINDOW: return Canvas.from(chunk)
       default: return new Record(chunk.recordType, { params: chunk.params })
     }
   }
@@ -51,7 +52,7 @@ export default class Record {
    * We should only stringify params that we are sure that we use
    */
   public toString() {
-    const type = Record.toString(this.recordType)
+    const type = Record.serializeType(this.recordType)
     const params = this.params.join(" ")
     return `#${type} ${params}`
   }

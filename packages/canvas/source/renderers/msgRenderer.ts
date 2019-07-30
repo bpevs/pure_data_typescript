@@ -1,5 +1,5 @@
+import { Renderer } from "@pure-data/core"
 import { Msg } from "@pure-data/elements"
-import { Renderer } from "@pure-data/models"
 import * as draw from "../drawHelpers"
 import * as math from "../mathHelpers"
 

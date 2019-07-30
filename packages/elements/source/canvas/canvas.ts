@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 /**
  * @class CanvasElement
@@ -22,7 +22,7 @@ export default class CanvasElement extends Element {
   public static readonly type = Symbol("canvas")
 
   public static from({ children, params }: Chunk) {
-    const [ xPos, yPos, xSize, ySize, name, openOnLoad, ...other ] = params
+    const [xPos, yPos, xSize, ySize, name, openOnLoad, ...other] = params
     const isSubPatch = isNaN(parseInt(name, 10))
     return new CanvasElement({
       children,

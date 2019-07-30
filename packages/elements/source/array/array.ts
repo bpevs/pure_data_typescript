@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 export interface ArrayElementParams {
   children: Chunk[]
@@ -19,7 +19,7 @@ export default class ArrayElement extends Element {
   public static readonly type = Symbol("array")
 
   public static from({ children, params }: Chunk) {
-    const [ name, size, format, saveFlag, ...other ] = params
+    const [name, size, format, saveFlag, ...other] = params
     return new ArrayElement({
       children,
       format: String(format),

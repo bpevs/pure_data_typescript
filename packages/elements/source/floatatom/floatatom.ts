@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 /**
  * @class PDFloatatom
@@ -30,7 +30,7 @@ export default class Floatatom extends Element {
   public static readonly type = Symbol("floatatom")
 
   public static from({ children, params }: Chunk) {
-    const [ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send, ...other ] = params
+    const [xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send, ...other] = params
     return new Floatatom({
       children,
       label: String(label),
@@ -47,8 +47,8 @@ export default class Floatatom extends Element {
   }
 
   public readonly color = "black"
-  public readonly inlets = [ "control" ]
-  public readonly outlets = [ "signal" ]
+  public readonly inlets = ["control"]
+  public readonly outlets = ["signal"]
 
   public lowerLimit: number
   public label: string

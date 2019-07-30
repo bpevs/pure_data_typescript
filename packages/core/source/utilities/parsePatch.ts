@@ -1,13 +1,10 @@
-import { Array as ArrayEl } from "@pure-data/elements"
-import {
-  Array as Arr,
-  Canvas,
-  Chunk,
-  Element,
-  Object as Obj,
-  Record,
-} from "@pure-data/models"
-import { Patch } from "."
+import Arr from "../models/Array"
+import Canvas from "../models/Canvas"
+import Chunk from "../models/Chunk"
+import Element from "../models/Element"
+import Obj from "../models/Object"
+import Patch from "../models/Patch"
+import Record from "../models/Record"
 
 const newlines = /(\r\n|\r)/gm
 
@@ -46,14 +43,15 @@ function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Record[] } {
     if (!index) return canvas = Canvas.from(chunk)
     const { elementType, recordType } = chunk
 
+    // TODO: Fix Array references
     // if Array data:
-    const prev = records[records.length - 1]
-    if (
-      chunk.recordType === Arr.type &&
-      prev &&
-      ArrayEl.isArray(prev)
-    ) return prev.addData(chunk.children)
-    else if (chunk.recordType === Arr.type) return
+    // const prev = records[records.length - 1]
+    // if (
+    //   chunk.recordType === Arr.type &&
+    //   prev &&
+    //   Element.is(Element.TYPE.ARRAY, prev)
+    // ) return prev.addData(chunk.children)
+    if (chunk.recordType === Arr.type) return
 
     // Handle special cases of Subpatches
     const isSubPatch = openSubPatches.length

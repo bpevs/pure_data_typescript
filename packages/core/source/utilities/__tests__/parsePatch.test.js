@@ -1,5 +1,3 @@
-jest.mock("..")
-
 import parsePatch from "../parsePatch"
 import text from "../__mocks__/sampleFile"
 

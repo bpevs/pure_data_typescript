@@ -1,4 +1,4 @@
-import { Chunk, Element } from "@pure-data/models"
+import { Chunk, Element } from "@pure-data/core"
 
 /**
  * @class PDConnect
@@ -34,7 +34,7 @@ export default class Connect extends Element {
 
   // TODO: Map source/target number to Element (in core parser?)
   public static from({ children, params }: Chunk) {
-    const [ source, outlet, target, inlet, ...other ] = params
+    const [source, outlet, target, inlet, ...other] = params
     return new Connect({
       children,
       inlet: Number(inlet),

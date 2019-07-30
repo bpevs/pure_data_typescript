@@ -1,5 +1,5 @@
+import { Renderer } from "@pure-data/core"
 import { Connect } from "@pure-data/elements"
-import { Renderer } from "@pure-data/models"
 
 export function portlets(
   renderer: Renderer,

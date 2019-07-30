@@ -1,7 +1,0 @@
-export { default as Array } from "../Array/index.mock"
-export { default as Canvas } from "../Canvas/index.mock"
-export { default as Chunk } from "./Chunk/index.mock"
-export { default as Connect } from "./Connect/index.mock"
-export { default as Element } from "./Element/index.mock"
-export { default as Object } from "./Object/index.mock"
-export { default as Renderer } from "./Renderer/index.mock"

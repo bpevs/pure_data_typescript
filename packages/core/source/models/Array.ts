@@ -1,4 +1,5 @@
-import { Chunk, Record } from ".."
+import Chunk from "./Chunk"
+import Record from "./Record"
 
 /**
  * @ref http://puredata.info/docs/developer/PdFileFormat#r31
