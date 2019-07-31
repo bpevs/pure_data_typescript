@@ -20,10 +20,10 @@ export default class Element extends Record {
   public static readonly TYPE = ELEMENT.types
   public static type = Record.TYPE.ELEMENT
   public static getType = (a: string) => ELEMENT.getType(a)
-  public static is = (type: symbol, record: any): boolean => {
+  public static isType = (type: symbol, record: any): boolean => {
     return type === Element.getType(record.elementType)
   }
-  public static serializeType = (a: symbol) => ELEMENT.serialize(a)
+  public static serializeType = (a: symbol) => ELEMENT.serializeType(a)
 
   public static from({ children, elementType, params }: Chunk) {
     if (!elementType) throw new Error("Element type is mandatory")

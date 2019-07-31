@@ -33,7 +33,7 @@ export default class PDCanvas extends Record {
     })
   }
 
-  public children: { [key: string]: Record } = {}
+  public children: Record[]
   public xPos: number
   public xSize: number
   public yPos: number
@@ -55,7 +55,7 @@ export default class PDCanvas extends Record {
   }
 
   public addChild(key: string, record: Record) {
-    this.children[key] = record
+    this.children.push(record)
   }
 
   public toString() {

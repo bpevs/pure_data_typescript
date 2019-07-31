@@ -48,7 +48,7 @@ export default class TypeMap {
    * Get the serialized string associated with our type
    * @param type Our local access symbol name
    */
-  public serialize(type: symbol): string | void {
+  public serializeType(type: symbol): string | void {
     const serialized = this.typeToSerialized.get(name)
     if (!serialized) {
       console.warn(`Type ${String(type)} does not exist, and could not serialize`)

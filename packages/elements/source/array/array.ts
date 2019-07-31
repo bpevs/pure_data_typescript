@@ -1,4 +1,5 @@
-import { Chunk, Element } from "@pure-data/core"
+import { Array as PDArray, Chunk, Element } from "@pure-data/core"
+
 
 export interface ArrayElementParams {
   children: Chunk[]
@@ -30,10 +31,6 @@ export default class ArrayElement extends Element {
     })
   }
 
-  public static isArray(chunk: any): chunk is ArrayElement {
-    return chunk && chunk.elementType === ArrayElement.type
-  }
-
   public data: number[] = []
   public name: string
   public size: number = 0
@@ -46,11 +43,11 @@ export default class ArrayElement extends Element {
     this.name = params.name
     this.saveFlag = params.saveFlag
     this.size = params.size
-    this.addData(params.children)
+    this.children = []
   }
 
-  public addData(data: Chunk[]) {
-    this.data = this.data.concat(data.map(Number))
+  set children(data: PDArray[]) {
+    this.data = data.flatMap(arr => arr.values).map(Number)
   }
 
   // TODO: This currently breaks for two reasons:

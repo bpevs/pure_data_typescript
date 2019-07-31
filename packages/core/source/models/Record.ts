@@ -11,7 +11,7 @@ import Element from "./Element"
 export default class Record {
   public static readonly TYPE = RECORD.types
   public static type: symbol
-  public static serializeType = (a: symbol) => RECORD.serialize(a)
+  public static serializeType = (a: symbol) => RECORD.serializeType(a)
   public static getType = (a: string) => RECORD.getType(a)
 
   /**
@@ -29,6 +29,7 @@ export default class Record {
     }
   }
 
+  public children: Record[]
   public params: string[]
   public recordType: symbol
   public render: { [key: string]: (...params: any[]) => any | void } // Renderers can be added to any record
@@ -43,6 +44,7 @@ export default class Record {
     recordType: symbol,
     props: { params: string[] } = { params: [] },
   ) {
+    this.children = []
     this.params = props.params
     this.recordType = recordType
   }

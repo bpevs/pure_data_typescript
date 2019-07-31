@@ -19,7 +19,7 @@ export interface ObjectProps {
 export default class PDObject extends Element {
   public static readonly TYPE = OBJECT.types
   public static readonly type = Element.TYPE.OBJECT
-  public static serializeType = (a: symbol) => OBJECT.serialize(a)
+  public static serializeType = (a: symbol) => OBJECT.serializeType(a)
   public static getType = (a: string) => OBJECT.getType(a)
 
   public static from = ({ children, objectType, params }: Chunk) => {

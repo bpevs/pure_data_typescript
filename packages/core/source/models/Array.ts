@@ -10,10 +10,6 @@ export default class PDArray extends Record {
     return new PDArray({ params: chunk.params })
   }
 
-  public static isArray(chunk: any): chunk is PDArray {
-    return chunk && chunk.recordType === Record.TYPE.ARRAY
-  }
-
   public values: number[]
 
   constructor({ params }: { params: any[] }) {

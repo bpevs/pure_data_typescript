@@ -27,10 +27,10 @@ export default function parsePatch(fileText: string): Patch {
   return new Patch(parseChunks(chunks))
 }
 
-
 /**
  * Parse chunks into Records and the Patch Canvas properties
- * Think of chunks as a tree; lines can open/close for subpatches
+ * Think of chunks as a tree; lines can open/close for subpatches.
+ * Cannot be done line-by-line, because records can span multiple chunks.
  * @param chunks
  */
 function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Record[] } {
@@ -45,12 +45,12 @@ function parseChunks(chunks: Chunk[]): { canvas?: Canvas, records: Record[] } {
 
     // TODO: Fix Array references
     // if Array data:
-    // const prev = records[records.length - 1]
-    // if (
-    //   chunk.recordType === Arr.type &&
-    //   prev &&
-    //   Element.is(Element.TYPE.ARRAY, prev)
-    // ) return prev.addData(chunk.children)
+    const prev = records[records.length - 1]
+    if (
+      chunk.recordType === Arr.type &&
+      prev &&
+      Element.isType(Element.TYPE.ARRAY, prev)
+    ) return prev.children = prev.children.concat(parseChunks(chunk.children).records)
     if (chunk.recordType === Arr.type) return
 
     // Handle special cases of Subpatches
