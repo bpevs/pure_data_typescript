@@ -7,16 +7,16 @@
  */
 
 
-import { context as ctx, OBJECT_HEIGHT } from "../globals"
-import * as draw from "../utilities/drawHelpers"
+import { context as ctx, wireType, OBJECT_HEIGHT } from "../globals.ts"
+import * as draw from "../utilities/drawHelpers.ts"
 
 
 export class PDMsg {
   public readonly chunkType = "X"
   public readonly elementType = "msg"
   public readonly color = "black"
-  public readonly inlets = [ "control" ]
-  public readonly outlets = [ "signal" ]
+  public readonly inlets: wireType[] = [ "control" ]
+  public readonly outlets: wireType[] = [ "signal" ]
 
   public text: string // The content of the message
   public xPos: number // Horizontal position within the window

@@ -6,8 +6,16 @@
  */
 
 
-import { PDArray, PDCanvas, PDConnect, PDCoords, PDFloatatom, PDMsg, PDObj, PDText } from "../elements"
-import { objects } from "../objects"
+import { PDArray } from "../elements/PDArray.ts";
+import { PDCanvas } from "../elements/PDCanvas.ts";
+import { PDConnect } from "../elements/PDConnect.ts";
+import { PDCoords } from "../elements/PDCoords.ts";
+import { PDFloatatom } from "../elements/PDFloatatom.ts";
+import { PDMsg } from "../elements/PDMsg.ts";
+import { PDObj } from "../elements/PDObj.ts";
+import { PDText } from "../elements/PDText.ts";
+
+import { objects } from "../objects/objects.ts"
 let prev: PDArray | null = null
 let subPatchName: string | null = null
 

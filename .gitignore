@@ -1,7 +1,5 @@
 # Ignore Build Files
-dist
-node_modules
-.rpt2_cache
+./public/main.bundle.js
 
 # Ignore system-created files
 npm-debug.log

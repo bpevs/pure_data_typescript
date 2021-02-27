@@ -1,31 +1,13 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "allowSyntheticDefaultImports": false,
-    "baseUrl": ".",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "scripthost"
-    ],
-    "module": "es2015",
-    "moduleResolution": "node",
+    "lib": [ "dom", "esnext" ],
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "outDir": "dist",
-    "paths": {
-      "*": [
-        "node_modules/*",
-        "/node_modules/*"
-      ]
-    },
-    "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es5"
+    "strictPropertyInitialization": false,
   },
   "include": [
-    "./definitions.d.ts",
     "./source/**/*"
   ]
 }

@@ -1,5 +1,9 @@
-import { PDFloatatom, PDMsg, PDObj, PDText } from "../elements"
-import { canvas, context as ctx } from "../globals"
+import { canvas, context as ctx } from "../globals.ts"
+import { PDFloatatom } from "../elements/PDFloatatom.ts"
+import { PDMsg } from "../elements/PDMsg.ts"
+import { PDObj } from "../elements/PDObj.ts"
+import { PDText } from "../elements/PDText.ts"
+
 
 export function renderPatch(patch: any[]) {
   ctx.clearRect(0, 0, canvas.width, canvas.height)

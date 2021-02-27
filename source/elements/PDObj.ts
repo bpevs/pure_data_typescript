@@ -9,9 +9,9 @@
  */
 
 
-import { context as ctx } from "../globals"
-import { generics } from "../objects/generics"
-import * as draw from "../utilities/drawHelpers"
+import { context as ctx, wireType } from "../globals.ts"
+import { generics } from "../objects/generics.ts"
+import * as draw from "../utilities/drawHelpers.ts"
 
 
 export class PDObj {
@@ -19,8 +19,8 @@ export class PDObj {
   public readonly elementType = "obj"
   public behavior: (...args: any[]) => any | void
   public color = "black"
-  public inlets = []
-  public outlets = []
+  public inlets: wireType[] = []
+  public outlets: wireType[] = []
   public length: number = 0
 
   public xPos: number

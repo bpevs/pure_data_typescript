@@ -9,9 +9,9 @@
  */
 
 
-import { PDObj } from "../elements"
-import { context as ctx } from "../globals"
-import * as draw from "../utilities/drawHelpers"
+import { PDObj } from "../elements/PDObj.ts"
+import { context as ctx } from "../globals.ts"
+import * as draw from "../utilities/drawHelpers.ts"
 
 
 export class PDObjCnv extends PDObj {

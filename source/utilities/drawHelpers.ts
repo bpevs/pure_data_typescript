@@ -1,4 +1,4 @@
-import { context as ctx, OBJECT_HEIGHT, PORTLET_HEIGHT, PORTLET_WIDTH, wireType } from "../globals"
+import { context as ctx, wireType, OBJECT_HEIGHT, PORTLET_HEIGHT, PORTLET_WIDTH } from "../globals.ts"
 
 
 // Initialize draw settings
@@ -9,7 +9,7 @@ ctx.fillText("Drop file to start", window.innerWidth / 2.2, window.innerHeight /
 
 
 // Determine the longest visual length item to render
-export function getDisplayLength(drawText: string, inlets: string[], outlets: string[]) {
+export function getDisplayLength(drawText: string, inlets: wireType[], outlets: wireType[]) {
   const textLength = drawText.length * 6 + 5
   const inletLength = inlets.length * 20
   const outletLength = outlets.length * 20
@@ -17,7 +17,7 @@ export function getDisplayLength(drawText: string, inlets: string[], outlets: st
 }
 
 
-export function inlets(length: number, xPos: number, yPos: number, inlets: string[], outlets: string[]) {
+export function inlets(length: number, xPos: number, yPos: number, inlets: wireType[], outlets: wireType[]) {
   const inletY = yPos
   const outletY = yPos + OBJECT_HEIGHT - PORTLET_HEIGHT
   const actualLength = Math.max(length, 20) - PORTLET_WIDTH

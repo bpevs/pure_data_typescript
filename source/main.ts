@@ -1,8 +1,8 @@
-import { state } from "./globals"
-import { ContextMenu } from "./utilities/ContextMenu"
-import { downloadPatch, loadPatch } from "./utilities/fileTransport"
-import { renderPatch } from "./utilities/renderPatch"
-import { deserializeFromFile } from "./utilities/serialization"
+import { state } from "./globals.ts"
+import { ContextMenu } from "./utilities/ContextMenu.ts"
+import { downloadPatch, loadPatch } from "./utilities/fileTransport.ts"
+import { renderPatch } from "./utilities/renderPatch.ts"
+import { deserializeFromFile } from "./utilities/serialization.ts"
 
 
 document.addEventListener("DOMContentLoaded", function initialize() {
