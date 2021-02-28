@@ -12,22 +12,22 @@
  */
 
 export class PDConnect {
-  public readonly chunkType = "X"
-  public readonly elementType = "connect"
+  public readonly chunkType = "X";
+  public readonly elementType = "connect";
 
-  public inlet: number
-  public outlet: number
-  public source: number
-  public target: number
+  public inlet: number;
+  public outlet: number;
+  public source: number;
+  public target: number;
 
-  constructor([ source, outlet, target, inlet ]: string[]) {
-    this.inlet = Number(inlet)
-    this.outlet = Number(outlet)
-    this.source = Number(source)
-    this.target = Number(target)
+  constructor([source, outlet, target, inlet]: string[]) {
+    this.inlet = Number(inlet);
+    this.outlet = Number(outlet);
+    this.source = Number(source);
+    this.target = Number(target);
   }
 
   public toString() {
-    return `#X connect ${this.source} ${this.outlet} ${this.target} ${this.inlet}`
+    return `#X connect ${this.source} ${this.outlet} ${this.target} ${this.inlet}`;
   }
 }

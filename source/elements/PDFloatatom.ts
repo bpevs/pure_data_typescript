@@ -11,69 +11,73 @@
  *  #X floatatom 32 26 5 0 0 0 - - -;
  */
 
-
-import { context as ctx, wireType, OBJECT_HEIGHT } from "../globals.ts"
-import * as draw from "../utilities/drawHelpers.ts"
-
+import { context as ctx, OBJECT_HEIGHT, wireType } from "../globals.ts";
+import * as draw from "../utilities/drawHelpers.ts";
 
 export class PDFloatatom {
-  public readonly chunkType = "X"
-  public readonly elementType = "floatatom"
-  public readonly color = "black"
-  public readonly inlets: wireType[] = [ "control" ]
-  public readonly outlets: wireType[] = [ "signal" ]
+  public readonly chunkType = "X";
+  public readonly elementType = "floatatom";
+  public readonly color = "black";
+  public readonly inlets: wireType[] = ["control"];
+  public readonly outlets: wireType[] = ["signal"];
 
-  public lowerLimit: number
-  public label: string
-  public labelPos: number
-  public receive: string
-  public send: string
-  public upperLimit: number
-  public width: number
-  public xPos: number
-  public yPos: number
+  public lowerLimit: number;
+  public label: string;
+  public labelPos: number;
+  public receive: string;
+  public send: string;
+  public upperLimit: number;
+  public width: number;
+  public xPos: number;
+  public yPos: number;
 
-  constructor([ xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send ]: string[]) {
-    this.lowerLimit = Number(lowerLimit)
-    this.label = String(label)
-    this.labelPos = Number(labelPos)
-    this.receive = String(receive)
-    this.send = String(send)
-    this.upperLimit = Number(upperLimit)
-    this.width = Number(width)
-    this.xPos = Number(xPos)
-    this.yPos = Number(yPos)
+  constructor(
+    [xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send]:
+      string[],
+  ) {
+    this.lowerLimit = Number(lowerLimit);
+    this.label = String(label);
+    this.labelPos = Number(labelPos);
+    this.receive = String(receive);
+    this.send = String(send);
+    this.upperLimit = Number(upperLimit);
+    this.width = Number(width);
+    this.xPos = Number(xPos);
+    this.yPos = Number(yPos);
   }
 
   public render() {
-    const displayText = this.label.replace(/\\/g, "")
-    const length = draw.getDisplayLength(displayText, this.inlets, this.outlets)
+    const displayText = this.label.replace(/\\/g, "");
+    const length = draw.getDisplayLength(
+      displayText,
+      this.inlets,
+      this.outlets,
+    );
 
-    ctx.strokeStyle = this.color
-    drawOutline(this.xPos, this.yPos, length)
-    draw.text(this.xPos, this.yPos, displayText)
-    draw.inlets(length, this.xPos, this.yPos, this.inlets, this.outlets)
+    ctx.strokeStyle = this.color;
+    drawOutline(this.xPos, this.yPos, length);
+    draw.text(this.xPos, this.yPos, displayText);
+    draw.inlets(length, this.xPos, this.yPos, this.inlets, this.outlets);
   }
 
   public toString() {
     let str = `#X floatatom ${this.xPos} ${this.yPos} ${this.width}` +
-      ` ${this.lowerLimit} ${this.upperLimit} ${this.labelPos}`
-    str += (this.label || "-")
-    str += (this.receive || "-")
-    str += (this.send || "-")
-    return str
+      ` ${this.lowerLimit} ${this.upperLimit} ${this.labelPos}`;
+    str += (this.label || "-");
+    str += (this.receive || "-");
+    str += (this.send || "-");
+    return str;
   }
 }
 
-
 // Number box has a custom shaped outline
 function drawOutline(xPos: number, yPos: number, length: number) {
-  ctx.beginPath()
-  ctx.moveTo(xPos, yPos)
-  ctx.lineTo(xPos + length, yPos)
-  ctx.lineTo(xPos + length + 5, yPos + 5)
-  ctx.lineTo(xPos + length + 5, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos + OBJECT_HEIGHT)
-  ctx.lineTo(xPos, yPos)
-  ctx.stroke()
+  ctx.beginPath();
+  ctx.moveTo(xPos, yPos);
+  ctx.lineTo(xPos + length, yPos);
+  ctx.lineTo(xPos + length + 5, yPos + 5);
+  ctx.lineTo(xPos + length + 5, yPos + OBJECT_HEIGHT);
+  ctx.lineTo(xPos, yPos + OBJECT_HEIGHT);
+  ctx.lineTo(xPos, yPos);
+  ctx.stroke();
 }

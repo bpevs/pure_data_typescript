@@ -1,5 +1,5 @@
-import Chunk from "./Chunk.ts"
-import Record from "./Record.ts"
+import Chunk from "./Chunk.ts";
+import Record from "./Record.ts";
 
 /**
  * @ref http://puredata.info/docs/developer/PdFileFormat#r31
@@ -7,24 +7,24 @@ import Record from "./Record.ts"
  */
 export default class PDArray extends Record {
   public static from = (chunk: Chunk) => {
-    return new PDArray({ params: chunk.params })
-  }
+    return new PDArray({ params: chunk.params });
+  };
 
-  public values: number[]
+  public values: number[];
 
   constructor({ params }: { params: any[] }) {
-    super(Record.TYPE.ARRAY)
-    this.values = params.map(Number)
+    super(Record.TYPE.ARRAY);
+    this.values = params.map(Number);
   }
 
   public append(values: number[]) {
-    this.values = this.values.concat(values)
+    this.values = this.values.concat(values);
   }
 
   public toString() {
     return [
       super.toString(),
       this.values.join(" "),
-    ].join(" ")
+    ].join(" ");
   }
 }

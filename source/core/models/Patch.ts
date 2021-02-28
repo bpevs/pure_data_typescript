@@ -1,8 +1,8 @@
-import parsePatch from "../utilities/parsePatch.ts"
-import Canvas from "./Canvas.ts"
-import Portlet from "./Portlet.ts"
-import Record from "./Record.ts"
-import Renderer from "./Renderer.ts"
+import parsePatch from "../utilities/parsePatch.ts";
+import Canvas from "./Canvas.ts";
+import Portlet from "./Portlet.ts";
+import Record from "./Record.ts";
+import Renderer from "./Renderer.ts";
 
 export default class Patch {
   /**
@@ -11,31 +11,31 @@ export default class Patch {
    * @param patchFileString The actual pd file content
    */
   public static from(patchFileString: string) {
-    return parsePatch(patchFileString)
+    return parsePatch(patchFileString);
   }
 
-  public canvas: Canvas | null
-  private readonly records: Record[] = []
-  private readonly inlets: Portlet[] = []
-  private readonly outlets: Portlet[] = []
-  private renderer: Renderer
+  public canvas: Canvas | null;
+  private readonly records: Record[] = [];
+  private readonly inlets: Portlet[] = [];
+  private readonly outlets: Portlet[] = [];
+  private renderer: Renderer;
 
   // State variables that are expected to change during patch use
   private state = {
     dspEnabled: false,
     editMode: false,
-  }
+  };
 
   constructor({ canvas, records, ...options }: any = {}) {
-    this.canvas = options.canvas
-    this.records = options.records
-    this.renderer = options.renderer
-    this.state = { ...this.state, ...options }
+    this.canvas = options.canvas;
+    this.records = options.records;
+    this.renderer = options.renderer;
+    this.state = { ...this.state, ...options };
   }
 
   // Render patch to
   public render(selector: string) {
-    this.renderer.render(selector, this.records)
+    this.renderer.render(selector, this.records);
   }
 
   /**
@@ -46,32 +46,32 @@ export default class Patch {
    */
   public setInlet(index: number, value: any) {
     if (this.inlets[index]) {
-      this.inlets[index].value = value
+      this.inlets[index].value = value;
     } else {
-      this.inlets[index] = new Portlet(value)
+      this.inlets[index] = new Portlet(value);
     }
   }
 
   public setOutlet(index: number, value: any) {
     if (this.outlets[index]) {
-      this.outlets[index].value = value
+      this.outlets[index].value = value;
     } else {
-      this.outlets[index] = new Portlet(value)
+      this.outlets[index] = new Portlet(value);
     }
   }
 
   public setRenderer(renderer: Renderer) {
-    this.renderer = renderer
+    this.renderer = renderer;
   }
 
   // Change patch environment settings.
   // Will expose helpers in the future. Turn on DSP, edit mode.
   public setState(options = {}) {
-    this.state = { ...this.state, ...options }
+    this.state = { ...this.state, ...options };
   }
 
   public start() {
-    console.log(this)
+    console.log(this);
   }
 
   /**
@@ -81,11 +81,11 @@ export default class Patch {
    * @param source Source of the stream
    */
   public streamInlet(index: number, source: any) {
-    this.inlets[index] = source
+    this.inlets[index] = source;
   }
 
   public streamOutlet(index: number, target: any) {
-    this.outlets[index] = target
+    this.outlets[index] = target;
   }
 
   /**
@@ -94,7 +94,7 @@ export default class Patch {
    */
   public toString() {
     return this.records
-      .map(record => record.toString())
-      .join(";\r\n") + ";\r\n"
+      .map((record) => record.toString())
+      .join(";\r\n") + ";\r\n";
   }
 }

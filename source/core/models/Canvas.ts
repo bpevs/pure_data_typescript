@@ -1,15 +1,15 @@
-import Chunk from "./Chunk.ts"
-import Record from "./Record.ts"
+import Chunk from "./Chunk.ts";
+import Record from "./Record.ts";
 
 export interface CanvasProps {
-  xPos: number
-  xSize: number
-  yPos: number
-  ySize: number
-  fontSize?: number
-  name?: string
-  params?: string[]
-  openOnLoad?: boolean
+  xPos: number;
+  xSize: number;
+  yPos: number;
+  ySize: number;
+  fontSize?: number;
+  name?: string;
+  params?: string[];
+  openOnLoad?: boolean;
 }
 
 /**
@@ -19,8 +19,8 @@ export interface CanvasProps {
  */
 export default class PDCanvas extends Record {
   public static from = (chunk: Chunk) => {
-    const [xPos, yPos, xSize, ySize, param1, param2, ...params] = chunk.params
-    const isFirstRecord = isNaN(Number(param1))
+    const [xPos, yPos, xSize, ySize, param1, param2, ...params] = chunk.params;
+    const isFirstRecord = isNaN(Number(param1));
     return new PDCanvas({
       params,
       fontSize: isFirstRecord ? Number(param1) : undefined,
@@ -30,42 +30,41 @@ export default class PDCanvas extends Record {
       xSize: Number(xSize),
       yPos: Number(yPos),
       ySize: Number(ySize),
-    })
-  }
+    });
+  };
 
-  public children: Record[]
-  public xPos: number
-  public xSize: number
-  public yPos: number
-  public ySize: number
+  public children: Record[];
+  public xPos: number;
+  public xSize: number;
+  public yPos: number;
+  public ySize: number;
 
-  public fontSize?: number
-  public name?: string
-  public openOnLoad?: boolean
-
+  public fontSize?: number;
+  public name?: string;
+  public openOnLoad?: boolean;
 
   constructor(props: CanvasProps) {
-    super(Record.TYPE.NEW_WINDOW)
-    this.fontSize = props.fontSize
-    this.name = props.name
-    this.openOnLoad = props.openOnLoad
-    this.xPos = props.xPos
-    this.xSize = props.xSize
-    this.yPos = props.yPos
-    this.ySize = props.ySize
+    super(Record.TYPE.NEW_WINDOW);
+    this.fontSize = props.fontSize;
+    this.name = props.name;
+    this.openOnLoad = props.openOnLoad;
+    this.xPos = props.xPos;
+    this.xSize = props.xSize;
+    this.yPos = props.yPos;
+    this.ySize = props.ySize;
   }
 
   public addChild(key: string, record: Record) {
-    this.children.push(record)
+    this.children.push(record);
   }
 
   public toString() {
-    const record = super.toString()
-    const props: any[] = [record, this.xPos, this.yPos, this.xSize, this.ySize]
+    const record = super.toString();
+    const props: any[] = [record, this.xPos, this.yPos, this.xSize, this.ySize];
     const additionalProps = this.fontSize == null
       ? [this.name, this.openOnLoad]
-      : [this.fontSize]
+      : [this.fontSize];
 
-    return props.concat(additionalProps).join(" ")
+    return props.concat(additionalProps).join(" ");
   }
 }

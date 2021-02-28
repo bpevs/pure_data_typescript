@@ -5,13 +5,13 @@
  */
 
 export default class TypeMap {
-  public serializedToType: Map<string, symbol> = new Map()
-  public typeToSerialized: Map<symbol, string> = new Map()
-  public types: { [name: string]: symbol } = {}
+  public serializedToType: Map<string, symbol> = new Map();
+  public typeToSerialized: Map<symbol, string> = new Map();
+  public types: { [name: string]: symbol } = {};
 
   constructor(typeInfo: { [name: string]: string }) {
     Object.keys(typeInfo)
-      .forEach(name => this.setType(name, typeInfo[name]))
+      .forEach((name) => this.setType(name, typeInfo[name]));
   }
 
   /**
@@ -19,11 +19,11 @@ export default class TypeMap {
    * @param name The local access name
    */
   public getType(name: string): symbol | void {
-    return this.serializedToType.get(name)
+    return this.serializedToType.get(name);
   }
 
   public hasType(type: symbol): boolean {
-    return Boolean(this.typeToSerialized.get(type))
+    return Boolean(this.typeToSerialized.get(type));
   }
 
   /**
@@ -33,11 +33,11 @@ export default class TypeMap {
    * @param serializedName The *.pd file name
    */
   public setType(name: string, serializedName: string) {
-    const type = Symbol(name)
+    const type = Symbol(name);
 
-    this.types[name] = type
-    this.serializedToType.set(serializedName, type)
-    this.typeToSerialized.set(type, serializedName)
+    this.types[name] = type;
+    this.serializedToType.set(serializedName, type);
+    this.typeToSerialized.set(type, serializedName);
   }
 
   /**
@@ -45,10 +45,12 @@ export default class TypeMap {
    * @param name Our local access symbol name
    */
   public serializeType(name: symbol): string | void {
-    const serialized = this.typeToSerialized.get(name)
+    const serialized = this.typeToSerialized.get(name);
     if (!serialized) {
-      console.warn(`Type ${String(name)} does not exist, and could not serialize`)
+      console.warn(
+        `Type ${String(name)} does not exist, and could not serialize`,
+      );
     }
-    return serialized
+    return serialized;
   }
 }

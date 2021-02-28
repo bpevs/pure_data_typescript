@@ -1,6 +1,6 @@
-import El from "./Element.ts"
-import Obj from "./Object.ts"
-import Record from "./Record.ts"
+import El from "./Element.ts";
+import Obj from "./Object.ts";
+import Record from "./Record.ts";
 
 /**
  * A line of text representing a Record. This is what is directly
@@ -14,35 +14,35 @@ import Record from "./Record.ts"
  * entities.
  */
 export default class Chunk {
-  public children: Chunk[] = []
-  public params: string[]
+  public children: Chunk[] = [];
+  public params: string[];
 
   constructor(recordString: string) {
     this.params = recordString
       .substring(1)
       .replace(/\n/gm, " ")
-      .split(/\s+/) || []
+      .split(/\s+/) || [];
   }
 
   get recordType(): symbol | null {
-    return Record.getType(this.params[0]) || null
+    return Record.getType(this.params[0]) || null;
   }
 
   get elementType(): symbol | null {
-    return El.getType(this.params[1]) || null
+    return El.getType(this.params[1]) || null;
   }
 
   get objectType(): symbol | null {
-    return Obj.getType(this.params[5]) || null
+    return Obj.getType(this.params[5]) || null;
   }
 
   toString() {
-    return(
+    return (
       `recordType: ${String(this.recordType)}\n` +
       `elementType: ${String(this.elementType)}\n` +
       `objectType: ${String(this.objectType)}\n` +
       `params: ${String(this.params)}\n` +
       `children: ${String(this.children)}\n`
-    )
+    );
   }
 }
