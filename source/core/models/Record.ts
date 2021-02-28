@@ -13,7 +13,7 @@ export default class Record {
   public children: Record[];
   public params: string[];
   public recordType: symbol;
-  public render: { [key: string]: (...params: any[]) => any | void }; // Renderers can be added to any record
+  public render: (...params: any[]) => any | void = () => {}; // Renderers can be added to any record
 
   /**
    * Our common pattern for constructors is

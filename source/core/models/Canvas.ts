@@ -33,7 +33,7 @@ export default class PDCanvas extends Record {
     });
   };
 
-  public children: Record[];
+  public children: Record[] = [];
   public xPos: number;
   public xSize: number;
   public yPos: number;
