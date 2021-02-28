@@ -1,5 +1,5 @@
-import { context as ctx } from "../globals.ts";
-import * as draw from "../utilities/drawHelpers.ts";
+import { context as ctx } from "../../globals.ts";
+import * as draw from "../../utilities/drawHelpers.ts";
 
 /**
  * @class PDtext
