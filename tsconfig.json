@@ -8,6 +8,7 @@
     "strictPropertyInitialization": false,
   },
   "include": [
-    "./source/**/*"
+    "./source/**/*",
+    "./source/definitions.d.ts",
   ]
 }

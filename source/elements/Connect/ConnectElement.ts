@@ -1,5 +1,5 @@
-import Chunk from '../../models/Chunk.ts';
-import Element from '../../models/Element.ts';
+import Chunk from "../../models/Chunk.ts";
+import Element from "../../models/Element.ts";
 
 /**
  * @class PDConnect
@@ -17,25 +17,25 @@ import Element from '../../models/Element.ts';
  *  #X connect 0 1 1 1;
  */
 
-export const CONTROL = Symbol("CONTROL_CONNECT")
-export const SIGNAL = Symbol("SIGNAL_CONNECT")
+export const CONTROL = Symbol("CONTROL_CONNECT");
+export const SIGNAL = Symbol("SIGNAL_CONNECT");
 
 export interface ConnectProps {
-  children: Chunk[]
-  inlet: number
-  params: string[]
-  outlet: number
-  source: number
-  target: number
+  children: Chunk[];
+  inlet: number;
+  params: string[];
+  outlet: number;
+  source: number;
+  target: number;
 }
 
 export default class Connect extends Element {
-  public static readonly TYPE = Object.freeze({ CONTROL, SIGNAL })
-  public static readonly type = CONTROL
+  public static readonly TYPE = Object.freeze({ CONTROL, SIGNAL });
+  public static readonly type = CONTROL;
 
   // TODO: Map source/target number to Element (in core parser?)
   public static from({ children, params }: Chunk) {
-    const [source, outlet, target, inlet, ...other] = params
+    const [source, outlet, target, inlet, ...other] = params;
     return new Connect({
       children,
       inlet: Number(inlet),
@@ -43,20 +43,20 @@ export default class Connect extends Element {
       params: other,
       source: Number(source),
       target: Number(target),
-    })
+    });
   }
 
-  public inlet: number
-  public outlet: number
-  public source: number
-  public target: number
+  public inlet: number;
+  public outlet: number;
+  public source: number;
+  public target: number;
 
   constructor(props: ConnectProps) {
-    super(Connect.TYPE.CONTROL, props)
-    this.inlet = props.inlet
-    this.outlet = props.outlet
-    this.source = props.source
-    this.target = props.target
+    super(Connect.TYPE.CONTROL, props);
+    this.inlet = props.inlet;
+    this.outlet = props.outlet;
+    this.source = props.source;
+    this.target = props.target;
   }
 
   public toString() {
@@ -66,6 +66,6 @@ export default class Connect extends Element {
       this.outlet,
       this.target,
       this.inlet,
-    ].join(" ")
+    ].join(" ");
   }
 }

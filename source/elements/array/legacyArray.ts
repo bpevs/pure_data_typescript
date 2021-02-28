@@ -32,7 +32,8 @@ export class PDArray {
   // - #A is often split into multiple lines. Not sure why yet. Probably Dimensions or size constraint.
   public toString() {
     const saveFlag = this.saveFlag ? 1 : 0;
-    const meta = `#X array ${this.name} ${this.size} ${this.format} ${saveFlag};\r\n`;
+    const meta =
+      `#X array ${this.name} ${this.size} ${this.format} ${saveFlag};\r\n`;
     const data = `#A ${this.data.join(" ")}`;
     return meta + data;
   }

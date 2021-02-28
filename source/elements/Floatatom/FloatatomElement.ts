@@ -1,5 +1,5 @@
-import Chunk from '../../models/Chunk.ts';
-import Element from '../../models/Element.ts';
+import Chunk from "../../models/Chunk.ts";
+import Element from "../../models/Element.ts";
 
 /**
  * @class PDFloatatom
@@ -14,24 +14,35 @@ import Element from '../../models/Element.ts';
  *  #X floatatom 32 26 5 0 0 0 - - -;
  */
 export interface FloatatomProps {
-  children: Chunk[]
-  lowerLimit: number
-  label: string
-  labelPos: number
-  params: string[]
-  receive: string
-  send: string
-  upperLimit: number
-  width: number
-  xPos: number
-  yPos: number
+  children: Chunk[];
+  lowerLimit: number;
+  label: string;
+  labelPos: number;
+  params: string[];
+  receive: string;
+  send: string;
+  upperLimit: number;
+  width: number;
+  xPos: number;
+  yPos: number;
 }
 
 export default class Floatatom extends Element {
-  public static readonly type = Symbol("floatatom")
+  public static readonly type = Symbol("floatatom");
 
   public static from({ children, params }: Chunk) {
-    const [xPos, yPos, width, lowerLimit, upperLimit, labelPos, label, receive, send, ...other] = params
+    const [
+      xPos,
+      yPos,
+      width,
+      lowerLimit,
+      upperLimit,
+      labelPos,
+      label,
+      receive,
+      send,
+      ...other
+    ] = params;
     return new Floatatom({
       children,
       label: String(label),
@@ -44,34 +55,34 @@ export default class Floatatom extends Element {
       width: Number(width),
       xPos: Number(xPos),
       yPos: Number(yPos),
-    })
+    });
   }
 
-  public readonly color = "black"
-  public readonly inlets = ["control"]
-  public readonly outlets = ["signal"]
+  public readonly color = "black";
+  public readonly inlets = ["control"];
+  public readonly outlets = ["signal"];
 
-  public lowerLimit: number
-  public label: string
-  public labelPos: number
-  public receive: string
-  public send: string
-  public upperLimit: number
-  public width: number
-  public xPos: number
-  public yPos: number
+  public lowerLimit: number;
+  public label: string;
+  public labelPos: number;
+  public receive: string;
+  public send: string;
+  public upperLimit: number;
+  public width: number;
+  public xPos: number;
+  public yPos: number;
 
   constructor(props: FloatatomProps) {
-    super(Floatatom.type, props)
-    this.label = props.label
-    this.labelPos = props.labelPos
-    this.lowerLimit = props.lowerLimit
-    this.receive = props.receive
-    this.send = props.send
-    this.upperLimit = props.upperLimit
-    this.width = props.width
-    this.xPos = props.xPos
-    this.yPos = props.yPos
+    super(Floatatom.type, props);
+    this.label = props.label;
+    this.labelPos = props.labelPos;
+    this.lowerLimit = props.lowerLimit;
+    this.receive = props.receive;
+    this.send = props.send;
+    this.upperLimit = props.upperLimit;
+    this.width = props.width;
+    this.xPos = props.xPos;
+    this.yPos = props.yPos;
   }
 
   public toString() {
@@ -87,6 +98,6 @@ export default class Floatatom extends Element {
       this.label || "-",
       this.receive || "-",
       this.send || "-",
-    ].join(" ")
+    ].join(" ");
   }
 }

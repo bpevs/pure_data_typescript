@@ -6,6 +6,6 @@ export default function rectOutline(
   yPos: number,
   length: number,
 ) {
-  const { context, objectHeight } = renderer
-  context.strokeRect(xPos, yPos, Math.max(length, 20), objectHeight)
+  const { context, objectHeight } = renderer;
+  context.strokeRect(xPos, yPos, Math.max(length, 20), objectHeight);
 }

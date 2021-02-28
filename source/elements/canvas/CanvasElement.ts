@@ -1,5 +1,5 @@
-import Chunk from '../../models/Chunk.ts';
-import Element from '../../models/Element.ts';
+import Chunk from "../../models/Chunk.ts";
+import Element from "../../models/Element.ts";
 
 /**
  * @class CanvasElement
@@ -9,22 +9,22 @@ import Element from '../../models/Element.ts';
  * @example
  */
 export interface CanvasElementProps {
-  children: Chunk[]
-  name: string | null
-  openOnLoad: boolean
-  params: string[]
-  xPos: number
-  xSize: number
-  yPos: number
-  ySize: number
+  children: Chunk[];
+  name: string | null;
+  openOnLoad: boolean;
+  params: string[];
+  xPos: number;
+  xSize: number;
+  yPos: number;
+  ySize: number;
 }
 
 export default class CanvasElement extends Element {
-  public static readonly type = Symbol("canvas")
+  public static readonly type = Symbol("canvas");
 
   public static from({ children, params }: Chunk) {
-    const [xPos, yPos, xSize, ySize, name, openOnLoad, ...other] = params
-    const isSubPatch = isNaN(parseInt(name, 10))
+    const [xPos, yPos, xSize, ySize, name, openOnLoad, ...other] = params;
+    const isSubPatch = isNaN(parseInt(name, 10));
     return new CanvasElement({
       children,
       name: isSubPatch ? name : null,
@@ -34,24 +34,24 @@ export default class CanvasElement extends Element {
       xSize: Number(xSize),
       yPos: Number(yPos),
       ySize: Number(ySize),
-    })
+    });
   }
 
-  public name: null | string
-  public openOnLoad: boolean
-  public xPos: number
-  public xSize: number
-  public yPos: number
-  public ySize: number
+  public name: null | string;
+  public openOnLoad: boolean;
+  public xPos: number;
+  public xSize: number;
+  public yPos: number;
+  public ySize: number;
 
   constructor(props: CanvasElementProps) {
-    super(CanvasElement.type, props)
-    this.name = props.name
-    this.openOnLoad = props.openOnLoad
-    this.xPos = props.xPos
-    this.xSize = props.xSize
-    this.yPos = props.yPos
-    this.ySize = props.ySize
+    super(CanvasElement.type, props);
+    this.name = props.name;
+    this.openOnLoad = props.openOnLoad;
+    this.xPos = props.xPos;
+    this.xSize = props.xSize;
+    this.yPos = props.yPos;
+    this.ySize = props.ySize;
   }
 
   public toString() {
@@ -64,6 +64,6 @@ export default class CanvasElement extends Element {
       this.ySize,
       this.name,
       this.openOnLoad,
-    ].join(" ")
+    ].join(" ");
   }
 }

@@ -1,5 +1,5 @@
-import Chunk from '../../models/Chunk.ts';
-import Element from '../../models/Element.ts';
+import Chunk from "../../models/Chunk.ts";
+import Element from "../../models/Element.ts";
 
 /**
  * @class Restore
@@ -10,20 +10,20 @@ import Element from '../../models/Element.ts';
  */
 
 export default class Restore extends Element {
-  public static type = Symbol("restore")
+  public static type = Symbol("restore");
 
   public static from({ params }: Chunk) {
-    return new Restore({ name: params.join(" ") })
+    return new Restore({ name: params.join(" ") });
   }
 
-  public name: string = ""
+  public name: string = "";
 
   constructor(params: { name: string }) {
-    super(Restore.type, { children: [], params: [] })
-    this.name = params.name
+    super(Restore.type, { children: [], params: [] });
+    this.name = params.name;
   }
 
   public toString() {
-    return `#X restore ${this.name}`
+    return `#X restore ${this.name}`;
   }
 }

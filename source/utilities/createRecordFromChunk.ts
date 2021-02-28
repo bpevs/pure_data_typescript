@@ -18,7 +18,8 @@ export default function createRecordFromChunk(chunk: Chunk): Record {
       return Arr.from(chunk);
     case Record.TYPE.ELEMENT:
       return Element.from(chunk);
-    case Record.TYPE.NEW_WINDOW: return Canvas.from(chunk)
+    case Record.TYPE.NEW_WINDOW:
+      return Canvas.from(chunk);
     default:
       return new Record(chunk.recordType, { params: chunk.params });
   }
