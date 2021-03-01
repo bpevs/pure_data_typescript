@@ -21,7 +21,7 @@ export interface CoordsProps {
 }
 
 export default class Coords extends Element {
-  public static type = Symbol("coords");
+  public static type = Element.TYPE.COORDS;
 
   public static from({ children, params }: Chunk) {
     const [xFrom, yTo, xTo, yFrom, width, height, graphOnParent, ...other] =

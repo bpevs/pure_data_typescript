@@ -1,6 +1,6 @@
 import Renderer from "../../models/Renderer.ts";
 import Msg from "../../elements/Msg/MsgElement.ts";
-import drawText from "../draw/drawText.ts";
+import drawLabel from "../draw/drawLabel.ts";
 import drawPortlets from "../draw/drawPortlets.ts";
 import getDisplayLength from "../math/getDisplayLength.ts";
 
@@ -11,8 +11,8 @@ export default function renderMsg(renderer: Renderer, el: Msg) {
 
   context.strokeStyle = el.color;
   drawMsgOutline(renderer, el.xPos, el.yPos, length);
-  drawText(renderer, el.xPos, el.yPos, displayText);
-  drawPortlets(renderer, el.length, el.xPos, el.yPos, el.inlets, el.outlets);
+  drawLabel(renderer, el.xPos, el.yPos, displayText);
+  drawPortlets(renderer, length, el.xPos, el.yPos, el.inlets, el.outlets);
 }
 
 // Message box has a custom shaped outline

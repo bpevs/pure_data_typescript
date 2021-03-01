@@ -1,11 +1,3 @@
-/**
- * @class PDCanvas
- * @description Defines window properties
- *
- * @example
- */
-
-// TODO: Doesn't support initial path canvas declaration (different 1-off format)
 export class PDCanvas {
   public readonly chunkType = "N";
   public readonly elementType = "canvas";

@@ -1,5 +1,6 @@
 import Chunk from "../../models/Chunk.ts";
 import Element from "../../models/Element.ts";
+import Connect from "../connect/ConnectElement.ts";
 
 /**
  * @class PDMsg
@@ -16,7 +17,7 @@ export interface MsgParams {
 }
 
 export default class Msg extends Element {
-  public static type = Symbol("msg");
+  public static type = Element.TYPE.MSG;
 
   public static from({ params }: Chunk) {
     const [xPos, yPos, ...texts] = params;
@@ -28,8 +29,8 @@ export default class Msg extends Element {
   }
 
   public readonly color = "black";
-  public readonly inlets = ["control"];
-  public readonly outlets = ["signal"];
+  public readonly inlets = [Connect.TYPE.CONTROL];
+  public readonly outlets = [Connect.TYPE.SIGNAL];
 
   public text: string; // The content of the message
   public xPos: number; // Horizontal position within the window

@@ -4,6 +4,22 @@ import Portlet from "./Portlet.ts";
 import Record from "./Record.ts";
 import Renderer from "./Renderer.ts";
 
+interface PatchProps {
+  canvas?: Canvas | null;
+  inlets?: Portlet[];
+  outlet?: Portlet[];
+  records?: Record[];
+  renderer?: Renderer | null;
+}
+
+const DefaultPatchProps = Object.freeze({
+  canvas: null,
+  inlets: [],
+  outlets: [],
+  records: [],
+  renderer: null,
+});
+
 export default class Patch {
   /**
    * Create a Patch from a *.pd file string
@@ -14,11 +30,10 @@ export default class Patch {
     return parsePatch(patchFileString);
   }
 
-  public canvas: Canvas | null;
-  private readonly records: Record[] = [];
   private readonly inlets: Portlet[] = [];
   private readonly outlets: Portlet[] = [];
-  private renderer: Renderer;
+  private readonly records: Record[] = [];
+  private renderer: Renderer = new Renderer();
 
   // State variables that are expected to change during patch use
   private state = {
@@ -26,16 +41,17 @@ export default class Patch {
     editMode: false,
   };
 
-  constructor({ canvas, records, ...options }: any = {}) {
-    this.canvas = options.canvas;
-    this.records = options.records;
-    this.renderer = options.renderer;
+  constructor(
+    { records, renderer, ...options }: PatchProps = DefaultPatchProps,
+  ) {
+    if (records) this.records = records;
+    if (renderer) this.renderer = renderer;
     this.state = { ...this.state, ...options };
   }
 
   // Render patch to
-  public render(selector: string) {
-    this.renderer.render(selector, this.records);
+  public render(options: any) {
+    return this.renderer.render(this.records, options);
   }
 
   /**

@@ -15,7 +15,7 @@ export interface TextParams {
 }
 
 export default class Text extends Element {
-  public static type = Symbol("text");
+  public static type = Element.TYPE.TEXT;
 
   public static from({ params }: Chunk) {
     const [xPos, yPos, ...texts] = params;

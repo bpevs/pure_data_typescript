@@ -1,4 +1,5 @@
 import Patch from "../models/Patch.ts";
+import canvasRenderer from "../renderer-canvas/canvasRenderer.ts";
 import { appState } from "./appState.ts";
 import { ContextMenu } from "./ui/ContextMenu.ts";
 import { downloadPatch, loadPatch } from "./ui/fileTransport.ts";
@@ -38,7 +39,8 @@ function listenForCanvasChanges() {
   patchCanvas.addEventListener("drop", async (e: any) => {
     const patchText = String(await loadPatch(e));
     appState.currentPatch = Patch.from(patchText);
-    appState.currentPatch.render("#pd");
+    appState.currentPatch.setRenderer(canvasRenderer);
+    appState.currentPatch.render({ id: "#pd" });
   });
 
   // On right-click on canvas, render custom contextmenu
@@ -63,7 +65,7 @@ function listenForCanvasChanges() {
           const patchResponse = await fetch("/doc/5.reference/help-intro.pd");
           const patchText = await patchResponse.text();
           appState.currentPatch = Patch.from(patchText);
-          appState.currentPatch.render("#pd");
+          if (appState.currentPatch) appState.currentPatch.render("#pd");
         },
       },
       {

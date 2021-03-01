@@ -5,5 +5,5 @@ import text from "../__mocks__/sampleFile.ts";
 
 Deno.test("Should parse patch", () => {
   const patch = parsePatch(text);
-  assertNotEquals(patch, undefined);
+  assertNotEquals(patch.records.length, undefined);
 });

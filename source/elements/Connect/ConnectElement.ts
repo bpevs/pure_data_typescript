@@ -6,6 +6,9 @@ import Element from "../../models/Element.ts";
  * @description Wires GUI-elements
  * Objects are virtually numbered in order of appearance in the file,
  * starting from zero. Inlets and outlets of the objects are numbered likewise.
+ *
+ * This is a special Element class that has two types "CONTROL" and "SIGNAL"
+ *
  * @ref http://puredata.info/docs/developer/PdFileFormat#3
  * @ref http://puredata.info/docs/developer/PdFileFormat#r32
  * @syntax #X connect [source] [outlet] [target] [inlet];\r\n
@@ -31,7 +34,7 @@ export interface ConnectProps {
 
 export default class Connect extends Element {
   public static readonly TYPE = Object.freeze({ CONTROL, SIGNAL });
-  public static readonly type = CONTROL;
+  public static readonly type = Element.TYPE.CONTROL;
 
   // TODO: Map source/target number to Element (in core parser?)
   public static from({ children, params }: Chunk) {

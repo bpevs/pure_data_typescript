@@ -1,4 +1,4 @@
-import { OBJECT } from "../types.ts";
+import { OBJECT } from "../typeMaps.ts";
 import Chunk from "./Chunk.ts";
 import Element from "./Element.ts";
 

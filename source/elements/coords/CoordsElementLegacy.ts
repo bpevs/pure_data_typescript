@@ -3,12 +3,6 @@
  * @description Visual ranges of a frameset (window)
  * A coords statement must always be preceded with a canvas statement which also holds the graph name.
  * starting from zero. Inlets and outlets of the objects are numbered likewise.
- *
- * @example
- *  #X obj 30 27 midiin;
- *  #X obj 26 59 midiout;
- *  #X connect 0 0 1 0;
- *  #X connect 0 1 1 1;
  */
 
 export class PDCoords {

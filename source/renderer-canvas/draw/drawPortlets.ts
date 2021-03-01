@@ -1,5 +1,5 @@
 import Renderer from "../../models/Renderer.ts";
-import Connect from "../../elements/Connect/ConnectElement.ts";
+import Connect from "../../elements/connect/ConnectElement.ts";
 
 export default function drawPortlets(
   renderer: Renderer,

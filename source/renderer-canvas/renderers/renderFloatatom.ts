@@ -1,6 +1,6 @@
 import Renderer from "../../models/Renderer.ts";
 import FloatatomElement from "../../elements/FloatAtom/FloatatomElement.ts";
-import drawText from "../draw/drawText.ts";
+import drawLabel from "../draw/drawLabel.ts";
 import drawPortlets from "../draw/drawPortlets.ts";
 import getDisplayLength from "../math/getDisplayLength.ts";
 
@@ -9,13 +9,13 @@ export default function renderFloatatom(
   el: FloatatomElement,
 ) {
   const { context } = renderer;
-  const displayText = el.text.replace(/\\/g, "");
-  const length = getDisplayLength(displayText, el.inlets, el.outlets);
+  const labelText = el.label.replace(/\\/g, "");
+  const length = getDisplayLength(labelText, el.inlets, el.outlets);
 
   context.strokeStyle = el.color;
   drawFloatatomOutline(renderer, el.xPos, el.yPos, length);
-  drawText(renderer, el.xPos, el.yPos, displayText);
-  drawPortlets(renderer, el.length, el.xPos, el.yPos, el.inlets, el.outlets);
+  drawLabel(renderer, el.xPos, el.yPos, labelText);
+  drawPortlets(renderer, length, el.xPos, el.yPos, el.inlets, el.outlets);
 }
 
 // Number box has a custom shaped outline

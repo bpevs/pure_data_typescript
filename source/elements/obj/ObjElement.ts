@@ -16,7 +16,7 @@ const noop = () => {
  */
 
 export default class ObjElement extends Element {
-  public static readonly type = Symbol("obj");
+  public static readonly type = Element.TYPE.OBJ;
 
   public static from({ children, params }: Chunk) {
     return new ObjElement({ children, params });

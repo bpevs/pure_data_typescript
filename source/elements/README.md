@@ -5,5 +5,5 @@ Objects are the building blocks of PureData that contain functionality,
 gui-related or not.
 
 Object elements are numbered in order of appearance in the file, all other
-elements are excluded from numbering. These numbers are pure virtual and can not
+elements are excluded from numbering. These numbers are pure virtual and cannot
 be seen directly in the file.

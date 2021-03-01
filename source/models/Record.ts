@@ -1,4 +1,4 @@
-import { RECORD } from "../types.ts";
+import { RECORD } from "../typeMaps.ts";
 
 /**
  * Base class of all PD Entities
@@ -9,6 +9,9 @@ export default class Record {
   public static type: symbol;
   public static serializeType = (a: symbol) => RECORD.serializeType(a);
   public static getType = (a: string) => RECORD.getType(a);
+  public static isType = (type: symbol, record: any): boolean => {
+    return type === Record.getType(record.recordType);
+  };
 
   public children: Record[];
   public params: string[];

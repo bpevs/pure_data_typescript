@@ -10,7 +10,7 @@ import Element from "../../models/Element.ts";
  */
 
 export default class Restore extends Element {
-  public static type = Symbol("restore");
+  public static type = Element.TYPE.RESTORE;
 
   public static from({ params }: Chunk) {
     return new Restore({ name: params.join(" ") });

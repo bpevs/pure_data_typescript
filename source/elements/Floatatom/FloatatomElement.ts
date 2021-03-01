@@ -1,5 +1,6 @@
 import Chunk from "../../models/Chunk.ts";
 import Element from "../../models/Element.ts";
+import Connect from "../connect/ConnectElement.ts";
 
 /**
  * @class PDFloatatom
@@ -28,7 +29,7 @@ export interface FloatatomProps {
 }
 
 export default class Floatatom extends Element {
-  public static readonly type = Symbol("floatatom");
+  public static readonly type = Element.TYPE.FLOAT_ATOM;
 
   public static from({ children, params }: Chunk) {
     const [
@@ -59,8 +60,8 @@ export default class Floatatom extends Element {
   }
 
   public readonly color = "black";
-  public readonly inlets = ["control"];
-  public readonly outlets = ["signal"];
+  public readonly inlets = [Connect.TYPE.CONTROL];
+  public readonly outlets = [Connect.TYPE.SIGNAL];
 
   public lowerLimit: number;
   public label: string;

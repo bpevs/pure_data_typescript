@@ -1,8 +1,6 @@
-import Arr from "../models/Array.ts";
 import Canvas from "../models/Canvas.ts";
 import Chunk from "../models/Chunk.ts";
 import Element from "../models/Element.ts";
-import Obj from "../models/Object.ts";
 import Patch from "../models/Patch.ts";
 import Record from "../models/Record.ts";
 
@@ -44,19 +42,6 @@ function parseChunks(chunks: Chunk[]): { canvas?: Canvas; records: Record[] } {
 
     const { elementType, recordType } = chunk;
 
-    // TODO: Fix Array references
-    // if Array data:
-    const prev = records[records.length - 1];
-    if (
-      chunk.recordType === Arr.type &&
-      prev &&
-      Element.isType(Element.TYPE.ARRAY, prev)
-    ) {
-      const childrenToAdd = parseChunks(chunk.children).records;
-      return prev.children = prev.children.concat(childrenToAdd);
-    }
-    if (chunk.recordType === Arr.type) return;
-
     // Handle special cases of Subpatches
     const isSubPatch = openSubPatches.length;
     const subPatchIsClosed = isSubPatch && elementType === Element.TYPE.RESTORE;
@@ -64,13 +49,18 @@ function parseChunks(chunks: Chunk[]): { canvas?: Canvas; records: Record[] } {
     if (subPatchIsClosed) return openSubPatches.pop();
     else if (subPatchShouldOpen) openSubPatches.push(index);
 
-    // Generic flow of single-chunk entities
-    if (chunk.elementType === Obj.type) {
-      records.push(Obj.from(chunk));
-    }
-
-    if (chunk.elementType === Element.type) {
-      records.push(Element.from(chunk));
+    // Handle special case of Array Data
+    // array's "element" type is included in prev line
+    const prev = records[records.length - 1];
+    if (
+      chunk.recordType === Record.TYPE.ARRAY &&
+      prev &&
+      Element.isType(Element.TYPE.ARRAY, prev)
+    ) {
+      const childrenToAdd = parseChunks(chunk.children).records;
+      return prev.children = prev.children.concat(childrenToAdd);
+    } else if (chunk.recordType === Record.TYPE.ARRAY) {
+      return;
     }
 
     records.push(createRecordFromChunk(chunk));
@@ -86,17 +76,11 @@ function parseChunks(chunks: Chunk[]): { canvas?: Canvas; records: Record[] } {
  */
 function createRecordFromChunk(chunk: Chunk): Record {
   if (!chunk.recordType) throw new Error("Record type cannot be null");
-
   switch (chunk.recordType) {
-    case Record.TYPE.ARRAY:
-      return Arr.from(chunk);
     case Record.TYPE.NEW_WINDOW:
       return Canvas.from(chunk);
-    case Record.TYPE.ELEMENT: {
-      if (chunk.elementType) {
-        return Element.from(chunk);
-      }
-    }
+    case Record.TYPE.ELEMENT:
+      return Element.from(chunk);
     default:
       return new Record(chunk.recordType, { params: chunk.params });
   }
