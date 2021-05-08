@@ -19,7 +19,7 @@ export class ContextMenu {
     menu.style.top = yPos + "px";
     menu.style.left = xPos + "px";
     const menuItems = items.map(({ name }, i) =>
-      `<li class="context-${i}">${name}</li>`
+      `<li class='context-${i}'>${name}</li>`
     ).join("");
     menu.innerHTML = `<ul>${menuItems}</ul>`;
 

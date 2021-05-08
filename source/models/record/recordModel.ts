@@ -1,19 +1,19 @@
-import { RECORD } from "../typeMaps.ts";
+import { RECORD } from "../../typeMaps.ts";
 
 /**
  * Base class of all PD Entities
  * All records
  */
-export default class Record {
+export class PdRecord {
   public static readonly TYPE = RECORD.types;
   public static type: symbol;
   public static serializeType = (a: symbol) => RECORD.serializeType(a);
   public static getType = (a: string) => RECORD.getType(a);
   public static isType = (type: symbol, record: any): boolean => {
-    return type === Record.getType(record.recordType);
+    return type === PdRecord.getType(record.recordType);
   };
 
-  public children: Record[];
+  public children: PdRecord[];
   public params: string[];
   public recordType: symbol;
   public render: (...params: any[]) => any | void = () => {}; // Renderers can be added to any record
@@ -29,7 +29,7 @@ export default class Record {
     props: { params: string[] } = { params: [] },
   ) {
     this.children = [];
-    this.params = props.params;
+    this.params = props.params || [];
     this.recordType = recordType;
   }
 
@@ -38,7 +38,7 @@ export default class Record {
    * We should only stringify params that we are sure that we use
    */
   public toString() {
-    const type = Record.serializeType(this.recordType);
+    const type = PdRecord.serializeType(this.recordType);
     const params = this.params.join(" ");
     return `#${type} ${params}`;
   }

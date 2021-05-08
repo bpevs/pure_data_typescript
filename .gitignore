@@ -1,5 +1,5 @@
 # Ignore Build Files
-./public/main.bundle.js
+public/main.bundle.js
 
 # Ignore system-created files
 npm-debug.log

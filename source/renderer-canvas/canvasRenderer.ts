@@ -1,6 +1,6 @@
-import { ELEMENT } from "../typeMaps.ts";
-import Record from "../models/Record.ts";
-import Renderer from "../models/Renderer.ts";
+import { ELEMENT } from "../../typeMaps.ts";
+import { PDRecord } from "../models/record/main.ts";
+import { PDRenderer } from "../models/renderer/main.ts";
 
 import renderFloatatom from "./renderers/renderFloatatom.ts";
 import renderMsg from "./renderers/renderMsg.ts";
@@ -13,7 +13,7 @@ renderer.elementRenderers.set(ELEMENT.types.MSG, renderMsg);
 renderer.elementRenderers.set(ELEMENT.types.OBJ, renderObj);
 renderer.elementRenderers.set(ELEMENT.types.TEXT, renderText);
 
-const canvas: HTMLCanvasElement | any = document.getElementById('pd');
+const canvas: HTMLCanvasElement | any = document.getElementById("pd");
 const context = canvas.getContext("2d");
 
 const dpr = window.devicePixelRatio || 1;
@@ -38,7 +38,7 @@ renderer.render = function (records: Record[], options = {}) {
   records.forEach((record: any) => {
     const renderFunc = this.elementRenderers.get(record.elementType);
     if (renderFunc) {
-      console.log(record)
+      console.log(record);
       renderFunc(this, record);
     }
   });

@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "lib": [ "dom", "esnext" ],
+    "lib": ["dom", "esnext"],
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization": false
   },
   "include": [
-    "./source/**/*",
-    "./source/definitions.d.ts",
+    "./source/**/*"
   ]
 }

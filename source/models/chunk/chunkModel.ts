@@ -1,6 +1,6 @@
-import El from "./Element.ts";
-import Obj from "./Object.ts";
-import Record from "./Record.ts";
+import { PdElement } from "../element/main.ts";
+import { PdObject } from "../object/main.ts";
+import { PdRecord } from "../record/main.ts";
 
 /**
  * A line of text representing a Record. This is what is directly
@@ -13,8 +13,8 @@ import Record from "./Record.ts";
  * They are essentially used to split up a *.pd file into self-contained
  * entities.
  */
-export default class Chunk {
-  public children: Chunk[] = [];
+export class PdChunk {
+  public children: PdChunk[] = [];
   public params: string[];
 
   constructor(recordString: string) {
@@ -25,15 +25,15 @@ export default class Chunk {
   }
 
   get recordType(): symbol | null {
-    return Record.getType(this.params[0]) || null;
+    return PdRecord.getType(this.params[0]) || null;
   }
 
   get elementType(): symbol | null {
-    return El.getType(this.params[1]) || null;
+    return PdElement.getType(this.params[1]) || null;
   }
 
   get objectType(): symbol | null {
-    return Obj.getType(this.params[5]) || null;
+    return PdObject.getType(this.params[5]) || null;
   }
 
   toString() {

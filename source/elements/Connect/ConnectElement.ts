@@ -1,5 +1,5 @@
-import Chunk from "../../models/Chunk.ts";
-import Element from "../../models/Element.ts";
+import { PdChunk } from "../../models/chunk/main.ts";
+import { PdElement } from "../../models/element/main.ts";
 
 /**
  * @class PDConnect
@@ -24,7 +24,7 @@ export const CONTROL = Symbol("CONTROL_CONNECT");
 export const SIGNAL = Symbol("SIGNAL_CONNECT");
 
 export interface ConnectProps {
-  children: Chunk[];
+  children: PdChunk[];
   inlet: number;
   params: string[];
   outlet: number;
@@ -32,12 +32,12 @@ export interface ConnectProps {
   target: number;
 }
 
-export default class Connect extends Element {
+export default class Connect extends PdElement {
   public static readonly TYPE = Object.freeze({ CONTROL, SIGNAL });
-  public static readonly type = Element.TYPE.CONTROL;
+  public static readonly type = PdElement.TYPE.CONTROL;
 
   // TODO: Map source/target number to Element (in core parser?)
-  public static from({ children, params }: Chunk) {
+  public static from({ children, params }: PdChunk) {
     const [source, outlet, target, inlet, ...other] = params;
     return new Connect({
       children,

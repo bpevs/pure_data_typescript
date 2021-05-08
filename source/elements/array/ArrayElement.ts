@@ -1,9 +1,9 @@
-import ArrayModel from "../../models/Array.ts";
-import Chunk from "../../models/Chunk.ts";
-import Element from "../../models/Element.ts";
+import { PdArray } from "../../models/array/main.ts";
+import { PdChunk } from "../../models/chunk/main.ts";
+import { PdElement } from "../../models/element/main.ts";
 
 export interface ArrayElementParams {
-  children: Chunk[];
+  children: PdChunk[];
   name: string;
   size: number;
   format: string;
@@ -17,10 +17,10 @@ export interface ArrayElementParams {
  *
  * @example
  */
-export default class ArrayElement extends Element {
+export default class ArrayElement extends PdElement {
   public static readonly type = Symbol("array");
 
-  public static from({ children, params }: Chunk) {
+  public static from({ children, params }: PdChunk) {
     const [name, size, format, saveFlag, ...other] = params;
     return new ArrayElement({
       children,
@@ -34,20 +34,20 @@ export default class ArrayElement extends Element {
 
   public data: number[] = [];
   public name: string;
-  public size: number = 0;
+  public size: number;
   public format: string;
-  public saveFlag: boolean = false;
+  public saveFlag: boolean;
 
   constructor(params: ArrayElementParams) {
     super(ArrayElement.type, params);
     this.format = params.format;
     this.name = params.name;
-    this.saveFlag = params.saveFlag;
-    this.size = params.size;
+    this.saveFlag = params.saveFlag || false;
+    this.size = params.size || 0;
     this.children = [];
   }
 
-  set children(data: ArrayModel[]) {
+  addData(data: PdArray[]) {
     this.data = data.flatMap((arr) => arr.values).map(Number);
   }
 

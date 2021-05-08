@@ -1,19 +1,14 @@
-import Chunk from "./Chunk.ts";
-import Record from "./Record.ts";
+import { PdRecord } from "../record/main.ts";
 
 /**
  * @ref http://puredata.info/docs/developer/PdFileFormat#r31
  * @ref http://puredata.info/docs/developer/PdFileFormat#r1
  */
-export default class PDArray extends Record {
-  public static from = (chunk: Chunk) => {
-    return new PDArray({ params: chunk.params });
-  };
-
+export class PdArray extends PdRecord {
   public values: number[];
 
   constructor({ params }: { params: any[] }) {
-    super(Record.TYPE.ARRAY);
+    super(PdRecord.TYPE.ARRAY);
     this.values = params.map(Number);
   }
 

@@ -1,5 +1,4 @@
-import Chunk from "./Chunk.ts";
-import Record from "./Record.ts";
+import { PdRecord } from "../record/main.ts";
 
 export interface CanvasProps {
   xPos: number;
@@ -17,23 +16,7 @@ export interface CanvasProps {
  * @ref http://puredata.info/docs/developer/PdFileFormat#r21
  * @example #N canvas 0 0 452 302 12;
  */
-export default class PDCanvas extends Record {
-  public static from = (chunk: Chunk) => {
-    const [xPos, yPos, xSize, ySize, param1, param2, ...params] = chunk.params;
-    const isFirstRecord = isNaN(Number(param1));
-    return new PDCanvas({
-      params,
-      fontSize: isFirstRecord ? Number(param1) : undefined,
-      name: isFirstRecord ? undefined : param1,
-      openOnLoad: isFirstRecord ? undefined : Boolean(Number(param2)),
-      xPos: Number(xPos),
-      xSize: Number(xSize),
-      yPos: Number(yPos),
-      ySize: Number(ySize),
-    });
-  };
-
-  public children: Record[] = [];
+export class PdCanvas extends PdRecord {
   public xPos: number;
   public xSize: number;
   public yPos: number;
@@ -43,8 +26,13 @@ export default class PDCanvas extends Record {
   public name?: string;
   public openOnLoad?: boolean;
 
+  public children: PdRecord[] = [];
+  public params: string[];
+  public recordType: symbol;
+  public render: (...params: any[]) => any | void = () => {};
+
   constructor(props: CanvasProps) {
-    super(Record.TYPE.NEW_WINDOW);
+    super(PdRecord.TYPE.NEW_WINDOW);
     this.fontSize = props.fontSize;
     this.name = props.name;
     this.openOnLoad = props.openOnLoad;
@@ -54,7 +42,7 @@ export default class PDCanvas extends Record {
     this.ySize = props.ySize;
   }
 
-  public addChild(key: string, record: Record) {
+  public addChild(key: string, record: PdRecord) {
     this.children.push(record);
   }
 

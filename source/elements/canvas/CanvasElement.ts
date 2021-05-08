@@ -1,5 +1,5 @@
-import Chunk from "../../models/Chunk.ts";
-import Element from "../../models/Element.ts";
+import { PdChunk } from "../../models/chunk/main.ts";
+import { PdElement } from "../../models/element/main.ts";
 
 /**
  * @class CanvasElement
@@ -9,7 +9,7 @@ import Element from "../../models/Element.ts";
  * @example
  */
 export interface CanvasElementProps {
-  children: Chunk[];
+  children: PdChunk[];
   name: string | null;
   openOnLoad: boolean;
   params: string[];
@@ -19,10 +19,10 @@ export interface CanvasElementProps {
   ySize: number;
 }
 
-export default class CanvasElement extends Element {
-  public static readonly type = Element.TYPE.CANVAS;
+export default class CanvasElement extends PdElement {
+  public static readonly type = PdElement.TYPE.CANVAS;
 
-  public static from({ children, params }: Chunk) {
+  public static from({ children, params }: PdChunk) {
     const [xPos, yPos, xSize, ySize, name, openOnLoad, ...other] = params;
     const isSubPatch = isNaN(parseInt(name, 10));
     return new CanvasElement({

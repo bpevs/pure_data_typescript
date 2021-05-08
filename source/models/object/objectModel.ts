@@ -1,9 +1,9 @@
-import { OBJECT } from "../typeMaps.ts";
-import Chunk from "./Chunk.ts";
-import Element from "./Element.ts";
+import { OBJECT } from "../../typeMaps.ts";
+import { PdChunk } from "../chunk/main.ts";
+import { PdElement } from "../element/main.ts";
 
 export interface ObjectProps {
-  children: Chunk[];
+  children: PdChunk[];
   name: string;
   params: string[];
   xPos: number;
@@ -16,24 +16,11 @@ export interface ObjectProps {
  * @ref http://puredata.info/docs/developer/PdFileFormat#r36
  * @example #X obj 132 72 trigger bang float;
  */
-export default class PDObject extends Element {
+export class PdObject extends PdElement {
   public static readonly TYPE = OBJECT.types;
-  public static readonly type = Element.TYPE.OBJECT;
+  public static readonly type = PdElement.TYPE.OBJECT;
   public static serializeType = (a: symbol) => OBJECT.serializeType(a);
   public static getType = (a: string) => OBJECT.getType(a);
-
-  public static from = ({ children, objectType, params }: Chunk) => {
-    if (!objectType) throw new Error("Object type required");
-    const [xPos, yPos, name = "", ...other] = params;
-
-    return new PDObject(objectType, {
-      children,
-      name,
-      params: other,
-      xPos: Number(xPos),
-      yPos: Number(yPos),
-    });
-  };
 
   public color = "black";
   public inlets: symbol[] = [];
@@ -45,7 +32,7 @@ export default class PDObject extends Element {
   public yPos: number;
 
   constructor(objectType: symbol, props: ObjectProps) {
-    super(Element.TYPE.OBJECT, props);
+    super(PdElement.TYPE.OBJECT, props);
     this.objectType = objectType;
     this.params = props.params;
     this.name = props.name;
@@ -58,7 +45,7 @@ export default class PDObject extends Element {
       super.toString(),
       this.xPos,
       this.yPos,
-      PDObject.serializeType(this.objectType),
+      PdObject.serializeType(this.objectType),
     ].join(" ");
   }
 }

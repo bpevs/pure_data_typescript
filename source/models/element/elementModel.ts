@@ -1,9 +1,9 @@
-import { ELEMENT } from "../typeMaps.ts";
-import Chunk from "./Chunk.ts";
-import Record from "./Record.ts";
+import { ELEMENT } from "../../typeMaps.ts";
+import { PdChunk } from "../chunk/main.ts";
+import { PdRecord } from "../record/main.ts";
 
 export interface ElementProps {
-  children: Chunk[];
+  children: PdChunk[];
   params: string[];
   [key: string]: any;
 }
@@ -16,24 +16,24 @@ export interface ElementProps {
  * @syntax #X [element];\r\n
  * @example #X obj 50 36;
  */
-export default class Element extends Record {
+export class PdElement extends PdRecord {
   public static readonly TYPE = ELEMENT.types;
-  public static type = Record.TYPE.ELEMENT;
+  public static type = PdRecord.TYPE.ELEMENT;
   public static getType = (a: string) => ELEMENT.getType(a);
   public static isType = (type: symbol, record: any): boolean => {
-    return type === Element.getType(record.elementType);
+    return type === PdElement.getType(record.elementType);
   };
   public static serializeType = (a: symbol) => ELEMENT.serializeType(a);
 
-  public static from({ children, elementType, params }: Chunk) {
-    if (!elementType) throw new Error("Element type is mandatory");
-    return new Element(elementType, { children, params });
-  }
-
   public elementType: symbol;
 
+  public children: PdRecord[] = [];
+  public params: string[];
+  public recordType: symbol;
+  public render: (...params: any[]) => any | void = () => {};
+
   constructor(elementType: symbol, props: ElementProps) {
-    super(Record.TYPE.ELEMENT);
+    super(PdRecord.TYPE.ELEMENT);
     this.elementType = elementType;
     this.params = props.params;
   }
@@ -41,7 +41,7 @@ export default class Element extends Record {
   public toString() {
     return [
       super.toString(),
-      Element.serializeType(this.elementType),
+      PdElement.serializeType(this.elementType),
     ].join(" ");
   }
 }
