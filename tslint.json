@@ -13,7 +13,7 @@
       2
     ],
     "interface-name": false,
-    "linebreak-style": [ true, "LF" ],
+    "linebreak-style": [true, "LF"],
     "max-classes-per-file": false,
     "max-line-length": {
       "options": [
@@ -36,14 +36,14 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-callback-wrapper": true,
     "no-var-requires": false,
-    "object-literal-sort-keys": [ true, "ignore-case", "shorthand-first" ],
+    "object-literal-sort-keys": [true, "ignore-case", "shorthand-first"],
     "ordered-imports": true,
     "prefer-const": true,
     "prefer-function-over-method": true,
     "prefer-readonly": true,
-    "quotemark": [ true, "double", "jsx-double", "avoid-template" ],
-    "semicolon": [ true, "never" ],
-    "trailing-comma": [ true, {
+    "quotemark": [true, "double", "jsx-double", "avoid-template"],
+    "semicolon": [true, "never"],
+    "trailing-comma": [true, {
       "multiline": "always",
       "singleline": "never",
       "esSpecCompliant": true

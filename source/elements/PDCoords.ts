@@ -12,29 +12,31 @@
  */
 
 export class PDCoords {
-  public readonly chunkType = "X"
-  public readonly elementType = "coords"
+  public readonly chunkType = "X";
+  public readonly elementType = "coords";
 
-  public graphOnParent: boolean
-  public height: number
-  public width: number
-  public xFrom: number
-  public xTo: number
-  public yFrom: number
-  public yTo: number
+  public graphOnParent: boolean;
+  public height: number;
+  public width: number;
+  public xFrom: number;
+  public xTo: number;
+  public yFrom: number;
+  public yTo: number;
 
-  constructor([ xFrom, yTo, xTo, yFrom, width, height, graphOnParent ]: string[]) {
-    this.xFrom = Number(xFrom)
-    this.xTo = Number(xTo)
-    this.yFrom = Number(yFrom)
-    this.yTo = Number(yTo)
-    this.width = Number(width)
-    this.height = Number(height)
-    this.graphOnParent = Boolean(graphOnParent)
+  constructor(
+    [xFrom, yTo, xTo, yFrom, width, height, graphOnParent]: string[],
+  ) {
+    this.xFrom = Number(xFrom);
+    this.xTo = Number(xTo);
+    this.yFrom = Number(yFrom);
+    this.yTo = Number(yTo);
+    this.width = Number(width);
+    this.height = Number(height);
+    this.graphOnParent = Boolean(graphOnParent);
   }
 
   public toString() {
     return `#X coords ${this.xFrom} ${this.yTo} ${this.xTo} ${this.yFrom}` +
-      ` ${this.width} ${this.height} ${this.graphOnParent ? 1 : 0}`
+      ` ${this.width} ${this.height} ${this.graphOnParent ? 1 : 0}`;
   }
 }

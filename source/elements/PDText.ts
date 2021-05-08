@@ -1,6 +1,5 @@
-import { context as ctx } from "../globals.ts"
-import * as draw from "../utilities/drawHelpers.ts"
-
+import { context as ctx } from "../globals.ts";
+import * as draw from "../utilities/drawHelpers.ts";
 
 /**
  * @class PDtext
@@ -10,29 +9,28 @@ import * as draw from "../utilities/drawHelpers.ts"
  *  #X text 61 48 read audio.wav;
  */
 
-
 export class PDText {
-  public readonly chunkType = "X"
-  public readonly elementType = "text"
+  public readonly chunkType = "X";
+  public readonly elementType = "text";
 
-  public text: string // The content of the message
-  public xPos: number // Horizontal position within the window
-  public yPos: number // Vertical position within the window
+  public text: string; // The content of the message
+  public xPos: number; // Horizontal position within the window
+  public yPos: number; // Vertical position within the window
 
-  constructor([ xPos, yPos, ...params ]: string[]) {
-    this.xPos = Number(xPos)
-    this.yPos = Number(yPos)
-    this.text = params.join(" ")
+  constructor([xPos, yPos, ...params]: string[]) {
+    this.xPos = Number(xPos);
+    this.yPos = Number(yPos);
+    this.text = params.join(" ");
   }
 
   public render() {
-    const displayText = this.text.replace(/\\/g, "")
+    const displayText = this.text.replace(/\\/g, "");
 
-    ctx.strokeStyle = "black"
-    draw.text(this.xPos, this.yPos, displayText)
+    ctx.strokeStyle = "black";
+    draw.text(this.xPos, this.yPos, displayText);
   }
 
   public toString() {
-    return `#X text ${this.xPos} ${this.yPos} ${this.text}`
+    return `#X text ${this.xPos} ${this.yPos} ${this.text}`;
   }
 }
